@@ -1,5 +1,6 @@
 import React from 'react';
 import { InspironLogo } from '@/components/Branding/Logo';
+import { RevenueDashboard } from '@/components/ui/RevenueDashboard';
 import { ArrowUpRight, Shield, Zap, Database } from 'lucide-react';
 
 /**
@@ -54,6 +55,9 @@ export default function LandingPage() {
                     </div>
                 </div>
             </section>
+
+            {/* REVENUE DASHBOARD: THE PRECISION LEDGER */}
+            <RevenueDashboard />
 
             {/* VALUE NODES */}
             <section id="services" className="py-32 border-y border-white/5 px-8">
