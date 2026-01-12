@@ -35,7 +35,7 @@ export default function BrandManualPage() {
                         <h4 className="text-aqua font-bold uppercase text-[10px] tracking-widest mb-4">Primary Strategic Objective</h4>
                         <p className="text-base text-gray-300">Achieve <span className="text-white font-bold">0.1% error tolerance</span> across 10,000+ monthly transactions for clients with BDT 100 Crore+ turnover. Every byte of data must be recoverable and auditable.</p>
                     </div>
-                    <Link href="https://inspiron.tech/case-study/agro" target="_blank" className="shrink-0 bg-white/5 border border-white/10 px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-aqua hover:text-navy transition-all flex items-center gap-2">
+                    <Link href="https://inspiron.tech/precision-audit" target="_blank" className="shrink-0 bg-white/5 border border-white/10 px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-aqua hover:text-navy transition-all flex items-center gap-2">
                         View Evidence <ExternalLink size={12} />
                     </Link>
                 </div>

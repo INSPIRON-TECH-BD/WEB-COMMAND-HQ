@@ -1,7 +1,8 @@
 import React from 'react';
 import { InspironLogo } from '@/components/Branding/Logo';
 import { RevenueDashboard } from '@/components/ui/RevenueDashboard';
-import { ArrowUpRight, Shield, Zap, Database } from 'lucide-react';
+import { InstitutionalHero } from '@/components/ui/InstitutionalHero';
+import { Shield, Zap, Database } from 'lucide-react';
 import Link from 'next/link';
 
 /**
@@ -17,45 +18,14 @@ export default function LandingPage() {
             <nav className="border-b border-white/5 py-6 px-8 flex justify-between items-center bg-black/50 backdrop-blur-xl sticky top-0 z-50">
                 <div className="w-40"><InspironLogo /></div>
                 <div className="hidden md:flex gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">
-                    <a href="#services" className="hover:text-aqua transition-colors">Services</a>
-                    <Link href="/case-study/agro" className="hover:text-aqua transition-colors">Case Studies</Link>
-                    <a href="#consultation" className="text-aqua">Book Consultation</a>
+                    <Link href="/services" className="hover:text-aqua transition-colors">Services</Link>
+                    <Link href="/precision-audit" className="hover:text-aqua transition-colors">Precision Audit</Link>
+                    <a href="https://wa.me/8801601618030" className="text-aqua">Initiate Audit</a>
                 </div>
             </nav>
 
-            {/* HERO SECTION */}
-            <section className="relative pt-32 pb-48 px-8 overflow-hidden">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full opacity-10 pointer-events-none"
-                    style={{ backgroundImage: 'radial-gradient(circle at center, #00ffff 1px, transparent 1px)', backgroundSize: '60px 60px' }}></div>
-
-                <div className="max-w-6xl mx-auto text-center relative z-10">
-                    <div className="inline-flex items-center gap-3 bg-white/5 border border-white/10 px-6 py-2 rounded-full mb-10">
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-aqua opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-aqua"></span>
-                        </span>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-gray-300">Operational Engineering Studio</span>
-                    </div>
-
-                    <h1 className="text-7xl md:text-9xl font-black uppercase tracking-tighter leading-[0.85] mb-12">
-                        Engineering <br /> <span className="text-gold">Operational</span> <br /> Supremacy.
-                    </h1>
-
-                    <p className="max-w-2xl mx-auto text-xl text-gray-400 leading-relaxed mb-16">
-                        We build custom financial logic and automated engines for businesses where a 1% error is unaffordable.
-                        From pond-level aquaculture to high-scale Meta API commerce.
-                    </p>
-
-                    <div className="flex flex-col md:flex-row gap-6 justify-center">
-                        <button className="bg-white text-navy px-12 py-5 rounded-full font-black uppercase text-xs tracking-[0.2em] hover:bg-aqua transition-all flex items-center justify-center gap-3 group">
-                            Start Engineering <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition" />
-                        </button>
-                        <a href="https://brand.inspiron.tech" target="_blank" className="border border-white/10 px-12 py-5 rounded-full font-black uppercase text-xs tracking-[0.2em] hover:bg-white/5 transition-all text-gray-300">
-                            View Brand Manual
-                        </a>
-                    </div>
-                </div>
-            </section>
+            {/* INSTITUTIONAL HERO */}
+            <InstitutionalHero />
 
             {/* REVENUE DASHBOARD: THE PRECISION LEDGER */}
             <RevenueDashboard />

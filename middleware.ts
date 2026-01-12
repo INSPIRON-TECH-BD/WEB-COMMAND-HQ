@@ -8,9 +8,9 @@ export function middleware(req: NextRequest) {
     // Also check for localhost with 'brand.' prefix for local development testing
     if (hostname.startsWith('brand.')) {
         // Rewrite the internal path to the (brand) folder
-        // Note: Since brand-manual is at /brand-manual, visiting brand.inspiron.tech/ 
-        // will rewrite to /brand-manual/ which matches app/(brand)/brand-manual/page.tsx
-        return NextResponse.rewrite(new URL(`/brand-manual${url.pathname}`, req.url));
+        // Note: visiting brand.inspiron.tech/ will rewrite to /manual/ 
+        // which matches app/(brand)/manual/page.tsx
+        return NextResponse.rewrite(new URL(`/manual${url.pathname}`, req.url));
     }
 
     // 2. Default behavior for inspiron.tech
