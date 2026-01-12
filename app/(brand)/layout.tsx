@@ -8,7 +8,7 @@ import React from 'react';
 import { InspironLogo } from '@/components/Branding/Logo';
 import { BookOpen, Shield, Palette, FileCode, Workflow } from 'lucide-react';
 import { Inter, Montserrat } from "next/font/google";
-import "../../globals.css";
+import "../globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["900"], variable: "--font-montserrat" });

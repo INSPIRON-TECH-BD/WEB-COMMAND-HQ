@@ -4,6 +4,8 @@
  * Target: brand.inspiron.tech
  */
 
+"use client";
+
 import React, { useState } from 'react';
 import { Terminal, Eye, Copy, Check } from 'lucide-react';
 

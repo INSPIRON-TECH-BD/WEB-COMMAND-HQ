@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * INSPIRON TECH - Institutional Brand Manual v1.0
  * Engineered for: MD ABU HASAN
