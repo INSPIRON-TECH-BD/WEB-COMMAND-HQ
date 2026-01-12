@@ -32,9 +32,8 @@ export default function MainLayout({
                     <div>
                         <h4 className="text-aqua font-bold uppercase tracking-widest mb-6">Command Node</h4>
                         <p className="text-gray-400 text-sm">
-                            64-68, Eastern Kamalapur Complex<br />
-                            2nd Floor, Suite 201<br />
-                            Dhaka, Bangladesh 1217
+                            64-68, Eastern Kamalapur Complex (2nd Floor)<br />
+                            Dhaka 1217, Bangladesh
                         </p>
                     </div>
 
