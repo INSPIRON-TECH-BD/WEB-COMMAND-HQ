@@ -11,6 +11,42 @@ export default function MainLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <>{children}</>
+        <div className="min-h-screen flex flex-col">
+            <main className="flex-grow">
+                {children}
+            </main>
+
+            <footer className="bg-[#020617] border-t border-aqua/10 py-16">
+                <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-12">
+                    {/* Column 1: Verification */}
+                    <div>
+                        <h4 className="text-gold font-bold uppercase tracking-widest mb-6">Verified Entity</h4>
+                        <p className="text-gray-500 text-sm leading-relaxed">
+                            INSPIRON TECH BD<br />
+                            Business ID: 1129614909344159<br />
+                            Verified: Dec 10, 2025
+                        </p>
+                    </div>
+
+                    {/* Column 2: Physical Command Node */}
+                    <div>
+                        <h4 className="text-aqua font-bold uppercase tracking-widest mb-6">Command Node</h4>
+                        <p className="text-gray-400 text-sm">
+                            64-68, Eastern Kamalapur Complex<br />
+                            2nd Floor, Suite 201<br />
+                            Dhaka, Bangladesh 1217
+                        </p>
+                    </div>
+
+                    {/* Column 3: Partner Status */}
+                    <div className="flex flex-col items-start">
+                        <h4 className="text-white font-bold uppercase tracking-widest mb-6">Partnership</h4>
+                        <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-mono text-gray-400">
+                            OFFICIAL MANAGER.IO RESELLER
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
     );
 }

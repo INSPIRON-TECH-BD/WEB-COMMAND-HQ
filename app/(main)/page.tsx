@@ -51,11 +51,7 @@ export default function LandingPage() {
                 </div>
             </section>
 
-            {/* FOOTER */}
-            <footer className="py-20 text-center border-t border-white/5">
-                <div className="w-32 mx-auto grayscale opacity-20 hover:opacity-100 transition mb-10"><InspironLogo /></div>
-                <p className="text-[10px] text-gray-600 font-black uppercase tracking-[1em]">MD ABU HASAN | DHAKA | 2026</p>
-            </footer>
+
         </div>
     );
 }
