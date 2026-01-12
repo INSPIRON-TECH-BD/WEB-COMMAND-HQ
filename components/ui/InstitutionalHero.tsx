@@ -15,8 +15,20 @@ export const InstitutionalHero = () => {
 
             <div className="relative z-10 text-center max-w-5xl">
                 {/* Meta Verification Badge */}
-                <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-aqua/10 border border-aqua/20 text-aqua text-[10px] font-black uppercase tracking-[0.3em] mb-10 animate-pulse">
-                    <ShieldCheck size={14} /> Meta Verified Developer ID: 1372121971105461
+                {/* Meta Verification Badge */}
+                <div className="relative z-20 flex justify-center mb-10">
+                    <div className="
+                        inline-flex items-center gap-3 
+                        px-5 py-2.5 rounded-full 
+                        bg-aqua/5 border border-aqua/30 
+                        backdrop-blur-xl
+                        text-aqua text-[10px] font-black 
+                        uppercase tracking-[0.4em] 
+                        animate-pulse shadow-[0_0_20px_rgba(0,255,255,0.1)]
+                    ">
+                        <ShieldCheck size={14} className="text-aqua" />
+                        Meta Verified Developer ID: 1372121971105461
+                    </div>
                 </div>
 
                 <h1 className="text-6xl md:text-9xl font-black text-white uppercase tracking-tighter leading-[0.85] mb-8">
