@@ -16,6 +16,24 @@ export default function PrivacyPage() {
                 <div className="space-y-6 text-sm leading-relaxed">
                     <p>We process contact information exclusively through the WhatsApp Business API to categorize business automation needs for Manager.io implementations.</p>
                     <p>Users may request permanent data deletion at any time by messaging <strong>"DELETE"</strong> to our verified business number: <span className="text-white">+880 1601-618030</span>.</p>
+
+                    {/* Data Deletion Node for Meta App Review */}
+                    <section id="data-deletion" className="mt-16 pt-8 border-t border-white/10">
+                        <h2 className="text-aqua font-bold uppercase tracking-widest mb-4">
+                            Data Deletion Instructions (Meta Compliance)
+                        </h2>
+                        <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                            At INSPIRON TECH, we adhere to a strict data sovereignty policy. If you wish to delete your user data
+                            associated with our WhatsApp automation or accounting integrations, please follow these steps:
+                        </p>
+                        <ul className="list-decimal list-inside text-gray-400 text-sm space-y-2 font-mono">
+                            <li>Send an email to <span className="text-white">hello@inspiron.tech</span> with the subject "DATA DELETION REQUEST".</li>
+                            <li>Include your WhatsApp Phone ID (used for the Technical Audit).</li>
+                            <li>Our system will purge your lead record and transaction logs within 24 hours.</li>
+                            <li>You will receive a "Handshake Termination" confirmation once the purge is complete.</li>
+                        </ul>
+                    </section>
+
                     <p className="pt-6 border-t border-white/5 text-[10px] text-gray-500 uppercase tracking-widest font-bold">
                         Controller: MD ABU HASAN | Verified Dec 10, 2025
                     </p>
