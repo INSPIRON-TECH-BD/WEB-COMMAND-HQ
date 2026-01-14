@@ -84,7 +84,8 @@ async function sendTemplateResponse(to: string, name: string) {
             to: to,
             type: "template",
             template: {
-                name: "welcome_message_english",
+                // ADD THE EXTRA UNDERSCORE HERE
+                name: "welcome_message__english",
                 language: { code: "en" },
                 components: [{
                     type: "body",
