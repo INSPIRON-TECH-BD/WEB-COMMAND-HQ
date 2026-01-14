@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
     const challenge = searchParams.get('hub.challenge');
 
     // WHATSAPP_VERIFY_TOKEN should be set in environment variables
-    const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || 'INSPIRON_TECH_STRIKE_2026';
+    const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || 'GoInspiron2025';
 
     if (mode === 'subscribe' && token === VERIFY_TOKEN) {
         console.log('WEBHOOK_VERIFIED');
