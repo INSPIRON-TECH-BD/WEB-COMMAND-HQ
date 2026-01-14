@@ -20,7 +20,8 @@ export default function LandingPage() {
                 <div className="hidden md:flex gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">
                     <Link href="/services" className="hover:text-aqua transition-colors">Services</Link>
                     <Link href="/precision-audit" className="hover:text-aqua transition-colors">Precision Audit</Link>
-                    <a href="https://wa.me/8801601618030" className="text-aqua">Initiate Audit</a>
+                    <a href="https://www.upwork.com/freelancers/~017693f06437586515" target="_blank" className="text-white hover:text-aqua transition-colors">Hire on Upwork</a>
+                    <a href="https://wa.me/8801601618030" className="text-aqua border border-aqua/30 px-4 py-2 rounded-full hover:bg-aqua/10 transition-all">Initiate Audit</a>
                 </div>
             </nav>
 

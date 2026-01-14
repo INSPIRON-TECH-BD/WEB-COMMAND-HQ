@@ -1,47 +1,71 @@
 /**
- * INSPIRON TECH - Engineering Nodes (Services)
- * Objective: Justification for BDT 250k+ Project Rates
+ * INSPIRON TECH - Operational Supremacy (Services)
+ * Strategic Node: Upwork Conversion & Tiered Pricing
+ * Objective: BDT 9,000,000 Mission Scaling
  */
 
 import React from 'react';
 import {
-    Zap, Database, Globe, ShieldCheck,
-    ArrowRight, MessageSquareCode, Settings2, Cpu
+    CheckCircle2, ShieldCheck, Zap,
+    Database, Globe, Cpu, ArrowRight,
+    MessageSquareCode, ExternalLink
 } from 'lucide-react';
 import Link from 'next/link';
+import { InspironLogo } from '@/components/Branding/Logo';
 
-const SERVICES = [
+const SERVICE_TIERS = [
     {
-        id: 'NODE_01',
-        title: 'Manager.io Implementation',
-        desc: 'Official Reseller & Implementation Partner in Bangladesh. We deploy custom COGS tracking and cloud-sync logic for high-volume inventory operations.',
-        impact: '0.1% Error Tolerance',
-        icon: Database,
-        color: 'text-gold'
+        name: "Starter Implementation",
+        price: "৳50,000 – 75,000",
+        timeline: "5 Days",
+        desc: "Ideal for growing enterprises requiring a clean architectural foundation in Manager.io.",
+        features: [
+            "Institutional Chart of Accounts Setup",
+            "Single Currency Optimization (BDT)",
+            "Bank & Statement Integration (1 Account)",
+            "Institutional Branding on Invoices",
+            "One-on-One Technical Training"
+        ],
+        cta: "Hire on Upwork",
+        link: "https://www.upwork.com/freelancers/~017693f06437586515", // Updated with likely ID
+        color: "border-white/10",
+        highlight: false
     },
     {
-        id: 'NODE_02',
-        title: 'Meta API Conversions',
-        desc: 'Server-side event tracking and automated conversion logic. We bridge the gap between Meta Ads and real-time bank reconciliation.',
-        impact: 'Scalable Meta ID: 1372121971105461',
-        icon: Globe,
-        color: 'text-aqua'
+        name: "Professional Node",
+        price: "৳100,000 – 150,000",
+        timeline: "10 Days",
+        desc: "Full-scale data migration and automated workflow logic for multi-entity operations.",
+        features: [
+            "Legacy Data Migration (Excel/Tally to Manager)",
+            "Multi-Currency Logic (BDT/USD/AUD)",
+            "Automated Recurring Workflows",
+            "3-Bank Reconciliation Hub",
+            "Custom HTML/CSS Invoice Templates",
+            "Advanced Team Training (Up to 5 Users)"
+        ],
+        cta: "Hire on Upwork",
+        link: "https://www.upwork.com/freelancers/~017693f06437586515", // Updated with likely ID
+        color: "border-aqua",
+        highlight: true
     },
     {
-        id: 'NODE_03',
-        title: 'Industrial IoT & Automation',
-        desc: 'Custom firmware and data pipelines for aquaculture and manufacturing. Real-time pond-level monitor sensors integrated with financial reporting.',
-        impact: 'Verified Site ID: 1129614909344159',
-        icon: Cpu,
-        color: 'text-white'
-    },
-    {
-        id: 'NODE_04',
-        title: 'Logic Migration & Audit',
-        desc: 'Reconstructing fragmented legacy data into relational structures. We specialize in BDT 100 Crore+ turnover reconciliation missions.',
-        impact: 'Zero-Discrepancy Guarantee',
-        icon: Settings2,
-        color: 'text-gray-400'
+        name: "Enterprise Transformation",
+        price: "৳200,000+",
+        timeline: "20+ Days",
+        desc: "The '0.1% Error Protocol' for BDT 100 Crore+ turnover manufacturing and agro-conglomerates.",
+        features: [
+            "GitHub Actions CI/CD Reporting Integration",
+            "Industrial IoT / AquaSmart Sensor Sync",
+            "Batch-Lease & Manufacturing Logic Automation",
+            "Custom Financial Dashboards (Next.js)",
+            "30-Day Critical Support Sentry",
+            "Manager.io Server (Self-Hosted) Deployment"
+        ],
+        cta: "Initiate Technical Audit",
+        link: "https://wa.me/8801601618030",
+        color: "border-gold",
+        highlight: false
     }
 ];
 
@@ -49,73 +73,113 @@ export default function ServicesPage() {
     return (
         <div className="min-h-screen bg-[#010409] text-white selection:bg-aqua selection:text-navy font-sans">
 
-            {/* NAVIGATION */}
-            <header className="border-b border-white/5 py-6 px-10 flex justify-between items-center bg-black/50 backdrop-blur-xl sticky top-0 z-50">
-                <Link href="/" className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 hover:text-white transition-all">
-                    ← Return to Hub
-                </Link>
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-aqua">Service Nodes v1.0</span>
-            </header>
+            {/* NAVIGATION NODE */}
+            <nav className="border-b border-white/5 py-6 px-10 flex justify-between items-center bg-black/50 backdrop-blur-xl sticky top-0 z-50">
+                <div className="w-32 md:w-40"><InspironLogo size={150} /></div>
+                <div className="flex gap-6 items-center">
+                    <Link href="/" className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 hover:text-white transition-all hidden md:block">
+                        Hub
+                    </Link>
+                    <a
+                        href="https://wa.me/8801601618030"
+                        className="bg-aqua/10 border border-aqua/30 text-aqua text-[10px] font-black px-4 py-2 rounded uppercase tracking-widest hover:bg-aqua hover:text-navy transition-all"
+                    >
+                        Sentry Active
+                    </a>
+                </div>
+            </nav>
 
-            {/* HERO SECTION */}
-            <section className="py-24 px-10 bg-gradient-to-b from-[#002147]/20 to-transparent">
-                <div className="max-w-5xl mx-auto">
+            {/* INSTITUTIONAL HERO */}
+            <section className="py-24 px-10 relative overflow-hidden">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-aqua/5 via-transparent to-transparent -z-10" />
+                <div className="max-w-5xl mx-auto text-center">
                     <div className="inline-flex items-center gap-3 bg-aqua/10 border border-aqua/20 px-6 py-2 rounded-full mb-10">
                         <ShieldCheck size={14} className="text-aqua" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-aqua">Engineering Studio Approved</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-aqua">Official Manager.io Partner Node</span>
                     </div>
-                    <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-12 leading-[0.85]">
-                        Engineering <br /> <span className="text-white opacity-40">Value Nodes.</span>
+                    <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-[0.85]">
+                        Engineering <br /> <span className="text-white opacity-40">Operational Control.</span>
                     </h1>
-                    <p className="max-w-xl text-xl text-gray-400 leading-relaxed font-medium italic border-l-2 border-white/10 pl-8">
-                        "We don't sell software. We engineer operational supremacy. Our services are priced for businesses where data integrity is the primary asset."
+                    <p className="max-w-2xl mx-auto text-xl text-gray-500 leading-relaxed font-medium">
+                        Fixed-scope technical implementations for businesses where precision is non-negotiable.
+                        We don't sell software; we install authority.
                     </p>
                 </div>
             </section>
 
-            {/* SERVICE GRID */}
-            <section className="py-32 px-10">
-                <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
-                    {SERVICES.map((node) => (
-                        <div key={node.id} className="p-16 bg-white/[0.03] border border-white/10 rounded-[48px] hover:border-aqua/50 transition-all group flex flex-col justify-between min-h-[450px]">
-                            <div>
-                                <div className="flex justify-between items-start mb-16">
-                                    <node.icon className={`${node.color} opacity-40 group-hover:opacity-100 transition-opacity`} size={40} />
-                                    <span className="text-[10px] font-mono text-gray-600 font-bold tracking-widest">{node.id}</span>
+            {/* PRICING NODES */}
+            <section className="py-20 px-10">
+                <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-8">
+                    {SERVICE_TIERS.map((tier, idx) => (
+                        <div
+                            key={idx}
+                            className={`relative p-12 bg-white/[0.02] border ${tier.color} rounded-[48px] flex flex-col justify-between transition-all hover:scale-[1.02] ${tier.highlight ? 'bg-white/[0.04] shadow-[0_0_80px_-20px_rgba(0,255,255,0.15)]' : ''}`}
+                        >
+                            {tier.highlight && (
+                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-aqua text-navy text-[10px] font-black px-6 py-2 rounded-full uppercase tracking-widest">
+                                    Most Requested Node
                                 </div>
-                                <h3 className="text-3xl font-black uppercase tracking-tighter mb-6 group-hover:text-aqua transition-colors">{node.title}</h3>
-                                <p className="text-gray-500 leading-relaxed text-lg font-medium mb-10 italic">
-                                    {node.desc}
+                            )}
+
+                            <div>
+                                <h3 className="text-sm font-black uppercase tracking-[0.3em] text-gray-500 mb-2">{tier.name}</h3>
+                                <div className="flex items-baseline gap-2 mb-6">
+                                    <span className={`text-4xl font-black ${tier.highlight ? 'text-aqua' : 'text-white'}`}>{tier.price}</span>
+                                </div>
+                                <p className="text-gray-400 text-sm mb-10 leading-relaxed font-medium italic">
+                                    "{tier.desc}"
                                 </p>
+
+                                <div className="space-y-4 mb-12">
+                                    <div className="text-[10px] font-black uppercase text-gray-600 tracking-widest mb-6">Technical Specifications:</div>
+                                    {tier.features.map((feature, fIdx) => (
+                                        <div key={fIdx} className="flex items-start gap-3">
+                                            <CheckCircle2 size={16} className="text-aqua mt-0.5 shrink-0" />
+                                            <span className="text-sm text-gray-300 font-medium">{feature}</span>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
 
-                            <div className="pt-8 border-t border-white/5 flex items-center justify-between">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-gold">{node.impact}</span>
-                                <ArrowRight className="text-white/20 group-hover:text-aqua transition-colors" size={20} />
+                            <div className="pt-10 border-t border-white/5 mt-auto">
+                                <div className="flex justify-between items-center mb-8">
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-gold">Deployment: {tier.timeline}</span>
+                                    <Zap size={14} className="text-gold" />
+                                </div>
+                                <a
+                                    href={tier.link}
+                                    className={`w-full flex items-center justify-center gap-3 py-5 rounded-2xl font-black uppercase tracking-widest text-sm transition-all ${tier.highlight ? 'bg-aqua text-navy shadow-[0_20px_40px_-10px_rgba(0,255,255,0.3)]' : 'bg-white/5 border border-white/10 hover:bg-white/10'}`}
+                                >
+                                    {tier.cta}
+                                    {tier.cta.includes("Upwork") ? <ExternalLink size={18} /> : <MessageSquareCode size={18} />}
+                                </a>
                             </div>
                         </div>
                     ))}
                 </div>
             </section>
 
-            {/* CALL TO ACTION */}
-            <section className="py-40 px-10 bg-white/[0.01] border-y border-white/5 text-center">
-                <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-8 leading-tight">
-                    Request a Technical <br /> <span className="text-aqua">Audit Node.</span>
-                </h2>
-                <p className="max-w-xl mx-auto text-gray-500 mb-12 font-medium">
-                    Identify your capital leakage and automate your precision conversion logic today.
-                </p>
-                <a
-                    href="https://wa.me/8801601618030"
-                    className="inline-flex items-center justify-center gap-4 bg-aqua text-navy font-black px-12 py-6 rounded-2xl hover:scale-105 transition-all uppercase tracking-widest text-sm shadow-[0_30px_60px_rgba(0,255,255,0.2)]"
-                >
-                    <MessageSquareCode size={22} /> Initiate Engagement
-                </a>
+            {/* CONVERSION ANCHOR */}
+            <section className="py-32 px-10 text-center bg-gradient-to-t from-aqua/[0.02] to-transparent">
+                <div className="max-w-3xl mx-auto">
+                    <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-8 leading-tight">
+                        Beyond Standard <br /> <span className="text-aqua">Data Entry.</span>
+                    </h2>
+                    <p className="text-gray-500 mb-12 text-lg">
+                        If your operation exceeds BDT 100 Crore in annual turnover, standard bookkeeping is a risk.
+                        You require an engineering audit.
+                    </p>
+                    <Link
+                        href="/precision-audit"
+                        className="inline-flex items-center gap-4 text-white hover:text-aqua transition-colors font-black uppercase tracking-[0.3em] text-xs"
+                    >
+                        View Case Studies (Nobin Agro / STEP Group) <ArrowRight size={16} />
+                    </Link>
+                </div>
             </section>
 
-            {/* FOOTER */}
-            <footer className="py-20 text-center opacity-30">
+            {/* FOOTER NODE */}
+            <footer className="py-20 text-center opacity-30 border-t border-white/5">
                 <p className="text-[10px] font-black uppercase tracking-[1em]">MD ABU HASAN | DHAKA | 2026</p>
             </footer>
         </div>

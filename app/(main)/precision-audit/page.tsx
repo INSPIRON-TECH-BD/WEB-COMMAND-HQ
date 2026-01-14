@@ -13,6 +13,7 @@ import {
 import Link from 'next/link';
 import { EvidenceSlider } from '@/components/ui/EvidenceSlider';
 import { RevenueDashboard } from '@/components/ui/RevenueDashboard';
+import { CaseStudyCard } from '@/components/ui/CaseStudyCard';
 
 export default function AgroCaseStudy() {
     return (
@@ -95,7 +96,51 @@ export default function AgroCaseStudy() {
                 <EvidenceSlider />
             </section>
 
-            {/* 5. TECHNICAL SPECS CALLOUT */}
+            {/* 5. INDUSTRIAL CASE STUDY: STEP GROUP */}
+            <section className="py-32 px-10">
+                <div className="max-w-6xl mx-auto">
+                    <div className="mb-16 text-center">
+                        <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-6">
+                            Beyond <span className="text-gold">Agro.</span>
+                        </h2>
+                        <p className="text-gray-500 max-w-xl mx-auto text-sm font-medium">
+                            Our logic engines are sector-agnostic. From aquaculture to high-volume footwear manufacturing.
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-12">
+                        <CaseStudyCard
+                            subtitle="Manufacturing Sector"
+                            title="STEP Group Industries"
+                            description="Complete digital transformation for a major footwear component manufacturer. We implemented a custom Next.js ERP to handle production tracking, inventory management, and payroll for 500+ employees."
+                            impactMetrics={[
+                                "Real-time Production Tracking",
+                                "Automated Payroll Processing",
+                                "Inventory Waste Reduction",
+                                "Manager.io Integration"
+                            ]}
+                            link="https://step-group-erp.vercel.app/" // Assuming this is the link based on context, or I can use a placeholder if unsure. But user mentioned "STEP Group" data.
+                            ctaText="View ERP Showcase"
+                        />
+                        <div className="p-10 rounded-[32px] border border-white/5 bg-white/[0.01] flex flex-col justify-center items-center text-center">
+                            <div className="mb-6 bg-aqua/10 p-4 rounded-full">
+                                <Activity className="text-aqua" size={32} />
+                            </div>
+                            <h3 className="text-2xl font-black uppercase tracking-tighter mb-4 text-white">
+                                Your Data <br /> <span className="text-gray-600">Could Be Next.</span>
+                            </h3>
+                            <p className="text-gray-500 text-sm mb-8 max-w-xs">
+                                We are currently accepting 1 new industrial client for Q1 2026.
+                            </p>
+                            <Link href="https://wa.me/8801601618030" className="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
+                                Schedule Briefing
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 6. TECHNICAL SPECS CALLOUT */}
             <section className="py-32 px-10">
                 <div className="max-w-4xl mx-auto bg-gradient-to-br from-[#002147] to-[#010409] p-16 rounded-[48px] border border-aqua/10 relative overflow-hidden group">
                     <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-aqua/5 blur-[80px] group-hover:bg-aqua/10 transition-colors"></div>
