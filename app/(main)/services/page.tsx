@@ -63,7 +63,7 @@ const SERVICE_TIERS = [
             "Manager.io Server (Self-Hosted) Deployment"
         ],
         cta: "Initiate Technical Audit",
-        link: "https://wa.me/8801601618030",
+        link: "https://wa.me/8801601618030?text=I%20want%20to%20initiate%20a%20Technical%20Audit%20for%20my%20enterprise.",
         color: "border-gold",
         highlight: false
     }

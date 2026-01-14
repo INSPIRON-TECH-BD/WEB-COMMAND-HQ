@@ -112,15 +112,16 @@ export default function AgroCaseStudy() {
                         <CaseStudyCard
                             subtitle="Manufacturing Sector"
                             title="STEP Group Industries"
-                            description="Complete digital transformation for a major footwear component manufacturer. We implemented a custom Next.js ERP to handle production tracking, inventory management, and payroll for 500+ employees."
+                            description="Target Architecture: A complete digital transformation for a major footwear component manufacturer. Planned implementation of a custom Next.js ERP to handle production tracking, inventory management, and payroll for 500+ employees."
                             impactMetrics={[
-                                "Real-time Production Tracking",
-                                "Automated Payroll Processing",
-                                "Inventory Waste Reduction",
-                                "Manager.io Integration"
+                                "Target: Real-time Production Tracking",
+                                "Target: Automated Payroll Processing",
+                                "Target: Inventory Waste Reduction",
+                                "Target: Manager.io Integration"
                             ]}
-                            link="https://step-group-erp.vercel.app/" // Assuming this is the link based on context, or I can use a placeholder if unsure. But user mentioned "STEP Group" data.
-                            ctaText="View ERP Showcase"
+                            link="#"
+                            ctaText="View ERP Roadmap"
+                            status="Planned"
                         />
                         <div className="p-10 rounded-[32px] border border-white/5 bg-white/[0.01] flex flex-col justify-center items-center text-center">
                             <div className="mb-6 bg-aqua/10 p-4 rounded-full">
