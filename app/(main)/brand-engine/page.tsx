@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * INSPIRON TECH - Brand-Engine Command Node
  * Objective: Centralized Asset Management & AI Prompt Generation
