@@ -17,20 +17,14 @@ export default function NLawStandards() {
         <div className="min-h-screen bg-[#010409] text-white font-sans selection:bg-aqua selection:text-navy">
 
             {/* 1. INSTITUTIONAL HEADER (Matched to Precision Audit) */}
-            <header className="border-b border-white/10 py-6 px-10 sticky top-0 bg-black/80 backdrop-blur-xl z-50 flex justify-between items-center">
-                <div className="flex items-center gap-6">
-                    <Link href="/" className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-white transition-all hover:translate-x-[-4px]">
-                        ← Return to Base
+            {/* 1. INSTITUTIONAL HEADER - Corrected for Visibility */}
+            <header className="border-b border-white/10 py-10 px-10 sticky top-0 bg-[#010409]/90 backdrop-blur-xl z-50 flex justify-between items-center">
+                <div className="flex items-center gap-10">
+                    <Link href="/" className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 hover:text-white transition-all">
+                        ← RETURN TO BASE
                     </Link>
-                    <span className="h-4 w-px bg-white/10"></span>
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-aqua animate-pulse">
-                        Sentry Protocol v2.5
-                    </span>
-                </div>
-                <div className="hidden md:flex items-center gap-4 text-[10px] font-mono text-gray-600">
-                    <span className="uppercase tracking-widest">Doc_ID: IT-LAW-2026</span>
-                    <span className="h-1 w-1 rounded-full bg-aqua"></span>
-                    <span className="uppercase tracking-widest">Dhaka Command Node</span>
+                    <span className="h-8 w-px bg-white/10"></span>
+                    <InspironLogo />
                 </div>
             </header>
 
