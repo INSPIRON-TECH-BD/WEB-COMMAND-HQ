@@ -1,8 +1,9 @@
 import React from 'react';
 
 // Sentry Icon Component (Internal) - Clean Fill, No Stroke
-const SentryIcon = ({ size = 48 }: { size?: number | string }) => (
+const SentryIcon = ({ size = 48, className = "" }: { size?: number | string, className?: string }) => (
   <svg
+    className={className}
     width={size}
     height={size}
     viewBox="0 0 500 500"
