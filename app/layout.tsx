@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["900"], variable: "--font-montserrat" });
 
 export const metadata: Metadata = {
-    title: "OP MISSION CONTROL | INSPIRON TECH",
+    title: "INSPIRON TECH | Official Manager.io Partner Bangladesh",
     description: "Institutional Cloud Accounting & Business Automation for 100+ Crore Agro-Enterprises.",
     icons: {
         icon: [

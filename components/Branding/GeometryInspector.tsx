@@ -41,7 +41,7 @@ export default function GeometryInspector() {
             <div className="relative flex items-center justify-center py-20 bg-[#002147]/30 rounded-[30px] border border-white/5">
 
                 {/* LOGO ASSEMBLY */}
-                <div className="flex items-end gap-[20%] relative"> {/* 20% Spacing Constant */}
+                <div className="flex items-end gap-[8px] relative"> {/* 8px Monolithic Gap */}
 
                     {/* THE ICON */}
                     <div className="relative w-32 h-32 flex items-center justify-center">
@@ -64,11 +64,10 @@ export default function GeometryInspector() {
                         )}
                     </div>
 
-                    {/* THE WORDMARK */}
-                    <div className="relative">
-                        <h2 className="text-7xl font-black uppercase tracking-tighter leading-none mb-[-4px] text-white">
-                            INSPIRON<span className="font-light italic text-[#FFD700]">tech</span>
-                        </h2>
+                    {/* THE WORDMARK (V2026: Hybrid Weight) */}
+                    <div className="flex items-baseline leading-none tracking-tight gap-1">
+                        <span className="font-medium text-[26px] lowercase text-white">inspiron</span>
+                        <span className="font-light text-[24px] uppercase text-[#FFD700]">TECH</span>
 
                         {/* Height Mandate Audit */}
                         {isAuditing && (
@@ -78,7 +77,7 @@ export default function GeometryInspector() {
                             >
                                 <div className="absolute -top-6 left-0 flex items-center gap-2">
                                     <Ruler size={10} className="text-[#00D2FF]" />
-                                    <span className="text-[8px] font-black text-[#00D2FF] uppercase">1:1 x-Height Verified</span>
+                                    <span className="text-[8px] font-black text-[#00D2FF] uppercase">1:1 Hybrid Lock</span>
                                 </div>
                             </motion.div>
                         )}

@@ -26,8 +26,8 @@
         </mask>
     </defs>
     
-    <!-- 1. BACKGROUND -->
-    <rect class="st0" width="500" height="500"/>
+    <!-- 1. BACKGROUND REMOVED FOR TRANSPARENCY -->
+    <!-- <rect class="st0" width="500" height="500"/> -->
 
     <!-- 2. LEFT LOOP (Option 1 - Masked) -->
     <!-- fill-rule="nonzero" ensures self-overlapping segments merge into solid fill -->
