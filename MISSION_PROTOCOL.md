@@ -22,6 +22,32 @@
 
 ---
 
+## FEDERATION TOPOGRAPHY (WORKSPACE MAP)
+
+The `CyberHasan` workspace is a Federation of Nodes. The Primary Nodes for Operation 2026 are assigned as follows:
+
+### 1. COMMAND NODE (PRIMARY)
+*   **Path:** `01_CODEBASE/OP-MISSION-CONTROL`
+*   **Function:** The Next.js Application Core (`inspiron.tech`).
+*   **Status:** **ACTIVE**. Validated V2026 Neo Sans Protocol.
+
+### 2. CONSTITUTIONAL NODE
+*   **Path:** `01_CODEBASE/INSPIRON_TECH_BRAND_SYSTEM`
+*   **Function:** The Source of Truth. Contains `THE_n_LAW.md` and Master Assets.
+*   **Directive:** All geometric legislation is written here first.
+
+### 3. R&D NODE
+*   **Path:** `01_CODEBASE/n_LAW_GEOMETRY_LAB`
+*   **Function:** Experimental Vector Testing Ground.
+*   **Directive:** Pure HTML/SVG prototypes for geometric validation before React implementation.
+
+### 4. AUXILIARY NODES (OBSERVED)
+*   `Smart-Dashboard_MSINTL` (MS International Legacy)
+*   `STEP-GROUP-ERP` (Manufacturing Logic)
+*   `INSPIRON-TECH` (Legacy/Backup)
+
+---
+
 ## OPERATIONAL DIRECTIVE (CROSS-DEVICE SYNC)
 
 To reactivate this specific Formation on any terminal (Home PC, Remote Node):
