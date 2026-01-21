@@ -2,7 +2,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import html2canvas from 'html2canvas';
-import { InspironLogo, InspironIcon } from './Logo';
+// IMPORT FROM SUBMODULE
+import { RefinedLogo, RefinedIcon } from "@brand/components/Branding/RefinedLogo";
 import { Download, Layout, Smartphone, CheckCircle2, AlertCircle } from 'lucide-react';
 
 const SIZES = {
@@ -53,8 +54,8 @@ export const V121Factory = () => {
                                 key={id}
                                 onClick={() => setActiveTab(id)}
                                 className={`w-full text-left p-3 rounded-lg text-xs font-bold transition-all uppercase tracking-tighter border ${activeTab === id
-                                        ? 'bg-navy border-aqua text-aqua shadow-[0_0_15px_rgba(0,255,255,0.1)]'
-                                        : 'bg-white/5 border-transparent text-gray-500 hover:text-white hover:bg-white/10'
+                                    ? 'bg-navy border-aqua text-aqua shadow-[0_0_15px_rgba(0,255,255,0.1)]'
+                                    : 'bg-white/5 border-transparent text-gray-500 hover:text-white hover:bg-white/10'
                                     }`}
                             >
                                 {size.label}
@@ -103,7 +104,7 @@ export const V121Factory = () => {
             <div className="flex-1 flex items-center justify-center bg-black/60 rounded-3xl border border-white/5 overflow-hidden p-12 min-h-[600px]">
                 <div
                     ref={canvasRef}
-                    className="bg-navy relative overflow-hidden shadow-2xl transition-all duration-500"
+                    className="bg-[#010409] relative overflow-hidden shadow-2xl transition-all duration-500"
                     style={{
                         width: getActiveSize()?.width,
                         height: getActiveSize()?.height,
@@ -113,7 +114,7 @@ export const V121Factory = () => {
                 >
                     {/* Background Grid */}
                     <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(rgba(0, 255, 255, 0.07) 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
-                    <div className="absolute inset-0 opacity-50 bg-gradient-to-br from-navy via-navy to-[#003c64]"></div>
+                    <div className="absolute inset-0 opacity-50 bg-gradient-to-br from-[#010409] via-[#010409] to-[#003c64]"></div>
 
                     {/* Circle Safety Crop */}
                     {showCrop && (
@@ -123,13 +124,13 @@ export const V121Factory = () => {
                     {/* Dynamic Content Mapping */}
                     {activeTab === 'pfp-icon' && (
                         <div className="absolute inset-0 flex items-center justify-center p-32">
-                            <InspironIcon className="w-full drop-shadow-[0_20px_50px_rgba(0,255,255,0.3)]" />
+                            <RefinedIcon size={800} className="w-full drop-shadow-[0_20px_50px_rgba(0,255,255,0.3)]" />
                         </div>
                     )}
 
                     {activeTab === 'pfp-brand' && (
                         <div className="absolute inset-0 flex items-center justify-center p-24">
-                            <InspironLogo className="w-full" />
+                            <RefinedLogo size={800} className="w-full" />
                         </div>
                     )}
 
@@ -143,7 +144,7 @@ export const V121Factory = () => {
                                 <p className="text-white/40 text-xl font-bold uppercase tracking-[0.5em]">{subtitle || 'Dhaka Command Node'}</p>
                             </div>
                             <div className="absolute left-10 top-1/2 -translate-y-1/2 w-80 opacity-10">
-                                <InspironLogo />
+                                <RefinedLogo size={320} />
                             </div>
                         </>
                     )}
@@ -151,7 +152,7 @@ export const V121Factory = () => {
                     {activeTab === 'cover-wa' && (
                         <>
                             <div className="absolute top-20 left-20 w-[600px]">
-                                <InspironLogo />
+                                <RefinedLogo size={400} />
                             </div>
                             <div className="absolute bottom-20 right-20 text-right">
                                 <h2 className="text-[130px] font-black uppercase text-gold leading-[0.8]">
@@ -165,8 +166,8 @@ export const V121Factory = () => {
                     {activeTab === 'post-portrait' && (
                         <div className="p-20 h-full flex flex-col">
                             <div className="flex justify-between items-start mb-24">
-                                <div className="w-64"><InspironLogo /></div>
-                                <div className="w-24"><InspironIcon /></div>
+                                <div className="w-64"><RefinedLogo size={250} /></div>
+                                <div className="w-24"><RefinedIcon size={100} /></div>
                             </div>
                             <h2 className="text-[115px] font-black uppercase leading-[0.9]">
                                 {headline || '0.1% ERROR TOLERANCE'}
@@ -182,7 +183,7 @@ export const V121Factory = () => {
                     {activeTab === 'post-story' && (
                         <div className="p-16 flex flex-col justify-center text-center h-full">
                             <div className="absolute top-20 left-1/2 -translate-x-1/2 w-80 text-white">
-                                <InspironLogo />
+                                <RefinedLogo size={320} />
                             </div>
                             <h2 className="text-[110px] font-black uppercase leading-none mb-12 tracking-tighter text-white">
                                 {headline ? headline.replace(' ', '\n') : 'DATA\nSTRIKE'}
@@ -198,7 +199,7 @@ export const V121Factory = () => {
                     {/* FB Cover */}
                     {activeTab === 'cover-fb' && (
                         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-20">
-                            <div className="w-[500px] mb-20 opacity-20 absolute top-10 grayscale brightness-200"><InspironLogo /></div>
+                            <div className="w-[500px] mb-20 opacity-20 absolute top-10 grayscale brightness-200"><RefinedLogo size={500} /></div>
                             <h2 className="text-[100px] font-black uppercase text-white leading-tight z-10">
                                 {headline || 'INSTITUTIONAL\nINTELLIGENCE'}
                             </h2>
