@@ -8,7 +8,7 @@
 
 import React from 'react';
 import { ShieldCheck, Zap, BarChart3, Copy, Download, ExternalLink, MousePointer2 } from 'lucide-react';
-import { InspironLogo } from '@/components/Branding/Logo';
+import { RefinedLogo } from "@brand/components/Branding/RefinedLogo";
 import GeometryInspector from '@/components/Branding/GeometryInspector';
 import Link from 'next/link';
 
@@ -141,7 +141,7 @@ export default function BrandManualPage() {
                         </div>
                     </div>
                     <div className="bg-[#0b0e14] p-16 rounded-[32px] border border-[#30363d] shadow-2xl group flex items-center justify-center">
-                        <InspironLogo className="w-full h-auto drop-shadow-[0_0_40px_rgba(0,255,255,0.15)] group-hover:drop-shadow-[0_0_60px_rgba(0,255,255,0.25)] transition-all duration-500" />
+                        <RefinedLogo size={400} className="w-full h-auto drop-shadow-[0_0_40px_rgba(0,255,255,0.15)] group-hover:drop-shadow-[0_0_60px_rgba(0,255,255,0.25)] transition-all duration-500" />
                     </div>
                 </div>
             </section>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { InspironLogo } from '@/components/Branding/Logo';
+import { RefinedLogo } from "@brand/components/Branding/RefinedLogo";
 import { RevenueDashboard } from '@/components/ui/RevenueDashboard';
 import { InstitutionalHero } from '@/components/ui/InstitutionalHero';
 import { Shield, Zap, Database } from 'lucide-react';
@@ -16,7 +16,7 @@ export default function LandingPage() {
 
             {/* NAVIGATION */}
             <nav className="border-b border-white/5 py-6 px-8 flex justify-between items-center bg-[#002147]/90 backdrop-blur-xl sticky top-0 z-50">
-                <div className="w-40"><InspironLogo /></div>
+                <div className="w-40"><RefinedLogo size={160} /></div>
                 <div className="hidden md:flex gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">
                     <Link href="/services" className="hover:text-aqua transition-colors">Services</Link>
                     <Link href="/precision-audit" className="hover:text-aqua transition-colors">Precision Audit</Link>
