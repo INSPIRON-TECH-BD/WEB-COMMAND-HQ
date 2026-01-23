@@ -1,0 +1,14 @@
+{
+    "version": "1.0.0",
+    "fonts": {
+        "primary": "Neo Sans Pro",
+        "weights": [
+            "Light",
+            "Medium",
+            "Bold"
+        ],
+        "fallback": [
+            "sans-serif"
+        ]
+    }
+}
