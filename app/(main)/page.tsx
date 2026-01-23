@@ -14,17 +14,6 @@ export default function LandingPage() {
     return (
         <div className="min-h-screen bg-[#010409] text-white selection:bg-aqua selection:text-navy">
 
-            {/* NAVIGATION */}
-            <nav className="border-b border-white/5 py-6 px-8 flex justify-between items-center bg-[#002147]/90 backdrop-blur-xl sticky top-0 z-50">
-                <div className="w-40"><RefinedLogo size={160} /></div>
-                <div className="hidden md:flex gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">
-                    <Link href="/services" className="hover:text-aqua transition-colors">Services</Link>
-                    <Link href="/precision-audit" className="hover:text-aqua transition-colors">Precision Audit</Link>
-                    <a href="https://www.upwork.com/freelancers/~017693f06437586515" target="_blank" className="text-white hover:text-aqua transition-colors">Hire on Upwork</a>
-                    <a href="https://wa.me/8801601618030" className="text-aqua border border-aqua/30 px-4 py-2 rounded-full hover:bg-aqua/10 transition-all">Initiate Audit</a>
-                </div>
-            </nav>
-
             {/* INSTITUTIONAL HERO */}
             <InstitutionalHero />
 

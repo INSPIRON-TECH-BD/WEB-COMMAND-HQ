@@ -7,21 +7,6 @@ export default function NobinAgroCaseStudy() {
     return (
         <div className="min-h-screen bg-[#010409] text-white selection:bg-aqua selection:text-navy font-sans">
 
-            {/* NAVIGATION */}
-            <nav className="border-b border-white/5 py-6 px-10 flex justify-between items-center bg-black/50 backdrop-blur-xl sticky top-0 z-50">
-                <Link href="/" className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 hover:text-white transition-all flex items-center gap-2">
-                    <ArrowLeft size={14} /> Back to Hub
-                </Link>
-                <div className="flex gap-6 items-center">
-                    <Link href="/services" className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 hover:text-white transition-all hidden md:block">
-                        Services
-                    </Link>
-                    <a href="https://www.upwork.com/fl/abuhasan" target="_blank" className="bg-[#14a800] text-white px-4 py-2 rounded font-bold hover:bg-[#0d7a00] transition-all normal-case tracking-normal text-[10px] flex items-center gap-2">
-                        💼 Hire on Upwork
-                    </a>
-                </div>
-            </nav>
-
             {/* HERO SECTION */}
             <section className="py-24 px-10 relative overflow-hidden border-b border-white/5">
                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#00ffff_1px,transparent_1px)] [background-size:40px_40px]"></div>

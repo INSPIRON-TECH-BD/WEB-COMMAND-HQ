@@ -19,24 +19,6 @@ export default function AgroCaseStudy() {
     return (
         <div className="min-h-screen bg-[#010409] text-white font-sans selection:bg-aqua selection:text-navy">
 
-            {/* 1. INSTITUTIONAL HEADER */}
-            <header className="border-b border-white/10 py-6 px-10 sticky top-0 bg-black/80 backdrop-blur-xl z-50 flex justify-between items-center">
-                <div className="flex items-center gap-6">
-                    <Link href="/" className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-white transition-all hover:translate-x-[-4px]">
-                        ← Return to Base
-                    </Link>
-                    <span className="h-4 w-px bg-white/10"></span>
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-aqua animate-pulse">
-                        Agro Audit Report v1.02
-                    </span>
-                </div>
-                <div className="hidden md:flex items-center gap-4 text-[10px] font-mono text-gray-600">
-                    <span className="uppercase tracking-widest">Doc_ID: IT-BN-2024-AGRO</span>
-                    <span className="h-1 w-1 rounded-full bg-aqua"></span>
-                    <span className="uppercase tracking-widest">Dhaka Command Node</span>
-                </div>
-            </header>
-
             {/* 2. EXECUTIVE HERO */}
             <section className="relative pt-32 pb-48 px-10 overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_20%,_rgba(0,255,255,0.05)_0%,_transparent_50%)]"></div>

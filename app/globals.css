@@ -8,14 +8,132 @@
   --navy-black: #010409;
 }
 
+/* NEO SANS PRO - FULL FONT FAMILY */
 @font-face {
   font-family: 'Neo Sans Pro';
   src: url('/fonts/NeoSansPro-Light.woff') format('woff');
   font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Neo Sans Pro';
+  src: url('/fonts/NeoSansPro-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Neo Sans Pro';
+  src: url('/fonts/NeoSansPro-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Neo Sans Pro';
+  src: url('/fonts/NeoSansPro-Italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Neo Sans Pro';
+  src: url('/fonts/NeoSansPro-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Neo Sans Pro';
+  src: url('/fonts/NeoSansPro-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Neo Sans Pro';
+  src: url('/fonts/NeoSansPro-BoldItalic.woff') format('woff');
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Neo Sans Pro';
+  src: url('/fonts/NeoSansPro-Ultra.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
 }
 
 body {
   background: var(--navy-black);
   color: white;
   font-family: 'Neo Sans Pro', sans-serif;
+}
+
+/* BRAND GEOMETRY LAB UTILITIES */
+.blueprint-grid {
+  background-image:
+    linear-gradient(rgba(0, 210, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 210, 255, 0.05) 1px, transparent 1px);
+  background-size: 25px 25px;
+}
+
+.nav-glass {
+  background: rgba(1, 4, 9, 0.85);
+  /* Darkened for Mission Control theme */
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glow-cyan {
+  filter: drop-shadow(0 0 15px rgba(0, 210, 255, 0.4));
+}
+
+.blueprint-border {
+  border: 1px solid rgba(0, 210, 255, 0.2);
+}
+
+/* iPhone/Frame styling */
+.app-frame {
+  border: 12px solid #1e293b;
+  border-radius: 4rem;
+  background: #000;
+  overflow: hidden;
+  box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.35);
+}
+
+.custom-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 10px;
+}
+
+#toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #002147;
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 1.5rem;
+  border: 1px solid #00D2FF;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  z-index: 1000;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+#toast.active {
+  transform: translateX(-50%) translateY(0);
 }

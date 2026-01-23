@@ -10,6 +10,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'sans': ['"Neo Sans Pro"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        'institutional': ['"Neo Sans Pro"', 'sans-serif'],
+      },
       colors: {
         navy: "#002147",
         gold: "#FFD700",

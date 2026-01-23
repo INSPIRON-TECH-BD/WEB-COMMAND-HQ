@@ -75,22 +75,6 @@ export default function ServicesPage() {
     return (
         <div className="min-h-screen bg-[#010409] text-white selection:bg-aqua selection:text-navy font-sans">
 
-            {/* 1. INSTITUTIONAL HEADER */}
-            <header className="border-b border-white/10 py-10 px-10 sticky top-0 bg-[#010409]/90 backdrop-blur-xl z-50 flex justify-between items-center">
-                <div className="flex items-center gap-10">
-                    <Link href="/" className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 hover:text-white transition-all">
-                        ← RETURN TO BASE
-                    </Link>
-                    <span className="h-8 w-px bg-white/10"></span>
-                    {/* Standardized to V2026.02 Baseline */}
-                    <RefinedLogo size={40} />
-                </div>
-                <div className="hidden md:flex gap-12 text-[10px] font-bold uppercase tracking-[0.3em] opacity-60">
-                    <a href="#operations" className="hover:text-aqua transition-all text-white">Operations</a>
-                    <a href="#protocols" className="hover:text-aqua transition-all text-white">Protocols</a>
-                </div>
-            </header>
-
             {/* INSTITUTIONAL HERO */}
             <section className="py-24 px-10 relative overflow-hidden">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-aqua/5 via-transparent to-transparent -z-10" />
