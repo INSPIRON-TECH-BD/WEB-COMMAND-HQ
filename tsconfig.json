@@ -29,7 +29,8 @@
       "@brand/*": [
         "./src/brand-system/*"
       ]
-    }
+    },
+    "target": "ES2017"
   },
   "include": [
     "next-env.d.ts",

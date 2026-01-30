@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-// IMPORT FROM SUBMODULE
-import { RefinedLogo } from "@brand/components/Branding/RefinedLogo";
+import { GlobalHeader } from "@/components/Navigation/GlobalHeader";
 
 export const metadata: Metadata = {
     title: "INSPIRON TECH | Official Manager.io Partner Bangladesh",
@@ -11,9 +10,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">
-            <body className="bg-[#010409] font-institutional text-white">
+            <body className="bg-deep-navy-black font-institutional text-institutional-white" suppressHydrationWarning>
+                <GlobalHeader />
                 {children}
             </body>
         </html>
     );
 }
+

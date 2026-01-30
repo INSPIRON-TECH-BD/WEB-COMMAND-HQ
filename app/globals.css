@@ -137,3 +137,34 @@ body {
 #toast.active {
   transform: translateX(-50%) translateY(0);
 }
+
+/* GOLD-RACER SHIMMER ANIMATION - Sovereign Brand Manual v1.2.0 */
+@keyframes gold-racer {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.gold-racer {
+  background: linear-gradient(90deg,
+      #FFD700 0%,
+      #FFF4CC 50%,
+      #FFD700 100%);
+  background-size: 200% auto;
+  animation: gold-racer 3s linear infinite;
+  color: #010409;
+  font-weight: 700;
+}
+
+/* HAPTIC FEEDBACK DOCTRINE */
+.haptic-button {
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.haptic-button:active {
+  transform: scale(0.95);
+}
