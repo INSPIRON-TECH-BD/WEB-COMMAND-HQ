@@ -1,4 +1,4 @@
-import { GlobalNavigation } from '@brand/components/Navigation/GlobalHeader';
+import { GlobalHeader } from '@/components/Navigation/GlobalHeader';
 import React from 'react';
 
 export default function MainLayout({
@@ -8,7 +8,7 @@ export default function MainLayout({
 }) {
     return (
         <>
-            <GlobalNavigation />
+            <GlobalHeader />
             <main className="pt-24">
                 {children}
             </main>
