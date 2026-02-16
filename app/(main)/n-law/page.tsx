@@ -121,6 +121,28 @@ const VelocityChart = () => {
 export default function NLawStandards() {
     const [isAuditing, setIsAuditing] = useState(false);
     const [showToast, setShowToast] = useState(false);
+    const [mouseCoords, setMouseCoords] = useState({ x: 0, y: 0 });
+    const [isHoveringLogo, setIsHoveringLogo] = useState(false);
+    const [showAnimation, setShowAnimation] = useState(false);
+
+    // Trigger animation on mount
+    useEffect(() => {
+        const timer = setTimeout(() => setShowAnimation(true), 300);
+        return () => clearTimeout(timer);
+    }, []);
+
+    // Handle mouse coordinate tracking
+    const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+        const svg = e.currentTarget;
+        const rect = svg.getBoundingClientRect();
+        const viewBox = svg.viewBox.baseVal;
+
+        // Convert screen coordinates to SVG coordinates
+        const x = ((e.clientX - rect.left) / rect.width) * viewBox.width;
+        const y = ((e.clientY - rect.top) / rect.height) * viewBox.height;
+
+        setMouseCoords({ x: Math.round(x * 1000) / 1000, y: Math.round(y * 1000) / 1000 });
+    };
 
     const scrollToId = (id: string) => {
         const el = document.getElementById(id);
@@ -139,13 +161,13 @@ export default function NLawStandards() {
             '  <defs>',
             '    <mask id="inspiron-gap" x="-1075.154" y="-1075" width="3000" height="3000" maskUnits="userSpaceOnUse">',
             '      <path fill="#fff" d="M-1075.154-1075h3000v3000h-3000z"/>',
-            '      <path d="M321.346 350c-10.6-1-19.3-6.1-26-15.3-.3-.6-4.3-7.3-10-16.5..." style="fill:none; stroke:#000; stroke-width:24px"/>',
+            '      <path d="M321.346 350c-10.6-1-19.3-6.1-26-15.3-.3-.6-4.3-7.3-10-16.5-49.2-81.1-52.8-87.8-52.6-88.4 5.5-8.8 19.4-31.2 27.4-43.8 3.3-5.4 5.7-9 6-9.4 1.6 2.7 27.4 45.3 49.4 81.8 17 28.2 31.9 52.8 32.2 53.5 4.2 7 4.2 15.2 0 22.5-5.2 9-15.4 14.9-25.6 14.9h-.8z" style="fill:none; stroke:#000; stroke-width:24px"/>',
             '    </mask>',
             '  </defs>',
             '  <g mask="url(#inspiron-gap)">',
-            '    <path d="M87.046 349.3c-30.8 0-57.9-14.8-74.3-40.9..." fill="#00D2FF"/>',
+            '    <path d="M87.046 349.3c-30.8 0-57.9-14.8-74.3-40.9-15.4-24.2-16.9-55-4.2-80.5 7.8-14.2 32.9-53.9 57.4-92.4 15.1-23.7 29.3-46.1 39.3-62.6 2.7-4.3 4.8-7.8 8.4-11.5 11.4-13.1 28.1-20.6 45.6-20.6s33.8 8.1 43.8 22.1c5.5 7.8,9.1,16.9,10.3 26.4.3 2.5-.4 4.8-2.1 7.5-1.9 3.3-21.8 34.6-21.8 34.6-.6.9-1.2 1.9-1.8 2.8-1.3 2.2-2.4 4.2-3.9 4.2s-1.2-.3-1.8-.9c-4.2-4.9-8.2-11.5-12-18-2.4-4-4.5-7.9-6.9-11.2-1.8-2.8-4.8-4.5-7.8-4.5s-4.2 1-5.8 3c-5.2 8.1-27.5 43.8-45.6 72.7-11.8 18.9-22.1 35.3-25.4 40.4-2.2 3.6-5.2 8.1-7.9 12.5-1.6 2.7-3.3 5.4-4.8 7.8-.6 1-1.3 2.1-1.9 3.1-2.5 4-4.6 7.5-6.1 11.1-5.2 12.4-.4 27.3 10.9 34.6,5.5 3.6 11.4 5.4 17.5 5.4 12.3 0,25-7.6,32.9-20,5.5-8.1,23.6-37,45-70.6,31.7-50.4 67.9-107.5 76.1-118.7 6.3-6.7 14.5-10.8 22.7-10.8 9.3 0,18.2 5.1,23.2 13.1,4.8 7.9 5.4 16.8 1 24.7-3.6 7-6.6 11.3-10.9 18-3.1 4.9-7.3 11.2-13 20.6-14.4 22.5-31 48.7-47 74.2-24.4 38.9-47.7 75.7-55.3 86.8-17.5 24.1-45.5 38.6-75.1 38.6z" fill="#00D2FF"/>',
             '  </g>',
-            '  <path d="M321.346 350..." fill="#00D2FF"/>',
+            '  <path d="M321.346 350c-10.6-1-19.3-6.1-26-15.3-.3-.6-4.3-7.3-10-16.5-49.2-81.1-52.8-87.8-52.6-88.4 5.5-8.8 19.4-31.2 27.4-43.8 3.3-5.4 5.7-9 6-9.4 1.6 2.7 27.4 45.3 49.4 81.8 17 28.2 31.9 52.8 32.2 53.5 4.2 7 4.2 15.2 0 22.5-5.2 9-15.4 14.9-25.6 14.9h-.8z" fill="#00D2FF"/>',
             '  <circle cx="321.346" cy="37.5" r="37.5" fill="#FFD700"/>',
             '</svg>'
         ].join('\n');
@@ -176,9 +198,7 @@ export default function NLawStandards() {
                 {/* 00. INTRO SECTION: BRAND VISION */}
                 <section id="vision" className="pt-48 pb-32 px-10 text-center max-w-6xl mx-auto space-y-8 bg-[#010409] blueprint-grid border-b border-white/5 rounded-b-[4rem] shadow-sm relative overflow-hidden">
                     <div className="space-y-6 max-w-3xl mx-auto relative z-10">
-                        <div className="flex justify-center">
-                            <span className="px-5 py-2 bg-[#00D2FF]/10 text-[#00D2FF] text-[11px] font-bold rounded-full tracking-[0.4em] uppercase border border-[#00D2FF]/20 shadow-sm">Submission Final v2026.1</span>
-                        </div>
+
                         <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter uppercase leading-[0.85]">Institutional Equilibrium</h1>
                         <p className="text-slate-400 text-xl md:text-2xl font-light leading-relaxed mt-10">
                             The final synthesis of Inspiron Tech's core logic. A mathematical architecture where geometry and typography exist in a state of absolute, axis-locked stability.
@@ -203,21 +223,147 @@ export default function NLawStandards() {
                         <div className="bg-[#002147]/50 rounded-[5rem] p-20 md:p-32 relative overflow-hidden group shadow-[0_40px_80px_-20px_rgba(0,33,71,0.3)] border border-white/5">
                             <div className="absolute inset-0 blueprint-grid opacity-10"></div>
 
-                            {/* Axis Guide */}
-                            {isAuditing && (
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="absolute top-0 bottom-0 w-[1px] bg-red-500/50 border-l border-dashed border-red-500 z-50 left-[89.5%]"
-                                />
-                            )}
+                            {/* SVG-NATIVE PRECISION AUDIT WITH ANIMATION (EXACT 321.346 COORDINATE) */}
+                            <div className="relative z-20 w-full aspect-square">
+                                <svg
+                                    viewBox="0 0 358.846 350.3"
+                                    className="w-full h-full text-[#00D2FF] glow-cyan transition-transform duration-1000 group-hover:scale-[1.03]"
+                                    onMouseMove={handleMouseMove}
+                                    onMouseEnter={() => setIsHoveringLogo(true)}
+                                    onMouseLeave={() => setIsHoveringLogo(false)}
+                                >
+                                    {/* MAIN LOGO GEOMETRY WITH ANIMATION */}
+                                    <defs>
+                                        <mask id="VaultMask_Final" x="-1075.154" y="-1075" width="3000" height="3000" maskUnits="userSpaceOnUse">
+                                            <path fill="#fff" d="M-1075.154-1075h3000v3000h-3000z" />
+                                            <path d="M321.346 350c-10.6-1-19.3-6.1-26-15.3-.3-.6-4.3-7.3-10-16.5-49.2-81.1-52.8-87.8-52.6-88.4 5.5-8.8 19.4-31.2 27.4-43.8 3.3-5.4 5.7-9 6-9.4 1.6 2.7 27.4 45.3 49.4 81.8 17 28.2 31.9 52.8 32.2 53.5 4.2 7 4.2 15.2 0 22.5-5.2 9-15.4 14.9-25.6 14.9h-.8z"
+                                                fill="none" stroke="#000" strokeWidth="24px" strokeLinecap="round" strokeLinejoin="round" />
+                                        </mask>
 
-                            <div className="relative z-20 w-full aspect-square text-[#00D2FF] glow-cyan transition-transform duration-1000 group-hover:scale-[1.03]">
-                                <MasterLockup />
+                                        {/* Animation definition */}
+                                        <style>{`
+                                            @keyframes drawPath {
+                                                from { stroke-dashoffset: 2500; }
+                                                to { stroke-dashoffset: 0; }
+                                            }
+                                            .animated-path {
+                                                stroke-dasharray: 2500;
+                                                animation: ${showAnimation ? 'drawPath 2.5s ease-in-out forwards' : 'none'};
+                                            }
+                                        `}</style>
+                                    </defs>
+                                    <g mask="url(#VaultMask_Final)">
+                                        <path
+                                            className="animated-path"
+                                            d="M87.046 349.3c-30.8 0-57.9-14.8-74.3-40.9-15.4-24.2-16.9-55-4.2-80.5 7.8-14.2 32.9-53.9 57.4-92.4 15.1-23.7 29.3-46.1 39.3-62.6 2.7-4.3 4.8-7.8 8.4-11.5 11.4-13.1 28.1-20.6 45.6-20.6s33.8 8.1 43.8 22.1c5.5 7.8,9.1,16.9,10.3 26.4.3 2.5-.4 4.8-2.1 7.5-1.9 3.3-21.8 34.6-21.8 34.6-.6.9-1.2 1.9-1.8 2.8-1.3 2.2-2.4 4.2-3.9 4.2s-1.2-.3-1.8-.9c-4.2-4.9-8.2-11.5-12-18-2.4-4-4.5-7.9-6.9-11.2-1.8-2.8-4.8-4.5-7.8-4.5s-4.2 1-5.8 3c-5.2 8.1-27.5 43.8-45.6 72.7-11.8 18.9-22.1 35.3-25.4 40.4-2.2 3.6-5.2 8.1-7.9 12.5-1.6 2.7-3.3 5.4-4.8 7.8-.6 1-1.3 2.1-1.9 3.1-2.5 4-4.6 7.5-6.1 11.1-5.2 12.4-.4 27.3 10.9 34.6 5.5 3.6 11.4 5.4 17.5 5.4 12.3 0 25-7.6 32.9-20 5.5-8.1 23.6-37 45-70.6 31.7-50.4 67.9-107.5 76.1-118.7 6.3-6.7 14.5-10.8 22.7-10.8 9.3 0 18.2 5.1 23.2 13.1 4.8 7.9 5.4 16.8 1 24.7-3.6 7-6.6 11.3-10.9 18-3.1 4.9-7.3 11.2-13 20.6-14.4 22.5-31 48.7-47 74.2-24.4 38.9-47.7 75.7-55.3 86.8-17.5 24.1-45.5 38.6-75.1 38.6z"
+                                            fill="currentColor"
+                                            stroke="currentColor"
+                                            strokeWidth="0.5"
+                                        />
+                                    </g>
+                                    <path
+                                        className="animated-path"
+                                        d="M321.346 350c-10.6-1-19.3-6.1-26-15.3-.3-.6-4.3-7.3-10-16.5-49.2-81.1-52.8-87.8-52.6-88.4 5.5-8.8 19.4-31.2 27.4-43.8 3.3-5.4 5.7-9 6-9.4 1.6 2.7 27.4 45.3 49.4 81.8 17 28.2 31.9 52.8 32.2 53.5 4.2 7 4.2 15.2 0 22.5-5.2 9-15.4 14.9-25.6 14.9h-.8z"
+                                        fill="currentColor"
+                                        stroke="currentColor"
+                                        strokeWidth="0.5"
+                                    />
+                                    <circle
+                                        cx="321.346"
+                                        cy="37.5"
+                                        r="37.5"
+                                        fill="#FFD700"
+                                        style={{
+                                            opacity: showAnimation ? 1 : 0,
+                                            transition: 'opacity 0.5s ease 2s'
+                                        }}
+                                    />
+
+                                    {/* PRECISION AUDIT MODE: STRUCTURAL SPINE */}
+                                    {isAuditing && (
+                                        <g className="animate-in fade-in duration-300">
+                                            {/* Vertical axis lock at EXACT X=321.346 */}
+                                            <line
+                                                x1="321.346" y1="0"
+                                                x2="321.346" y2="350.3"
+                                                stroke="#ef4444"
+                                                strokeWidth="1.5"
+                                                strokeDasharray="8 4"
+                                                opacity="0.7"
+                                            />
+
+                                            {/* Golden dot anchor circle */}
+                                            <circle
+                                                cx="321.346"
+                                                cy="37.5"
+                                                r="42"
+                                                stroke="#FFD700"
+                                                strokeWidth="1.5"
+                                                fill="none"
+                                                opacity="0.4"
+                                                strokeDasharray="4 2"
+                                            />
+
+                                            {/* Dimension labels */}
+                                            <text
+                                                x="321.346"
+                                                y="15"
+                                                fill="#ef4444"
+                                                fontSize="11"
+                                                fontWeight="700"
+                                                textAnchor="middle"
+                                                fontFamily="monospace"
+                                            >
+                                                X: 321.346°
+                                            </text>
+
+                                            <text
+                                                x="345"
+                                                y="42"
+                                                fill="#FFD700"
+                                                fontSize="10"
+                                                fontWeight="600"
+                                                fontFamily="monospace"
+                                            >
+                                                r=37.5
+                                            </text>
+
+                                            {/* Coordinate system indicator */}
+                                            <text
+                                                x="10"
+                                                y="340"
+                                                fill="rgba(255,255,255,0.3)"
+                                                fontSize="9"
+                                                fontWeight="500"
+                                                fontFamily="monospace"
+                                            >
+                                                ViewBox: 358.846 × 350.3
+                                            </text>
+                                        </g>
+                                    )}
+                                </svg>
+
+                                {/* HOVER COORDINATE TRACKER */}
+                                {isHoveringLogo && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="absolute top-4 left-4 bg-black/80 backdrop-blur-xl px-4 py-2 rounded-lg border border-[#00D2FF]/30 font-mono text-xs"
+                                    >
+                                        <div className="flex gap-4">
+                                            <span className="text-[#00D2FF]">X: {mouseCoords.x.toFixed(3)}</span>
+                                            <span className="text-[#FFD700]">Y: {mouseCoords.y.toFixed(3)}</span>
+                                        </div>
+                                    </motion.div>
+                                )}
                             </div>
-                            <div className="absolute bottom-12 left-0 right-0 flex justify-center z-30">
-                                <button onClick={() => setIsAuditing(!isAuditing)} className={`px-8 py-3 backdrop-blur-xl text-white text-[10px] font-bold rounded-full border border-white/20 uppercase tracking-[0.25em] transition-all ${isAuditing ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-white/10 hover:bg-white/20'}`}>
-                                    {isAuditing ? 'Detach Structural Spine' : 'Toggle Structural Spine'}
+
+                            <div className="absolute bottom-12 left-0 right-0 flex justify-center z-30 gap-4">
+                                <button
+                                    onClick={() => setIsAuditing(!isAuditing)}
+                                    className={`px-8 py-3 backdrop-blur-xl text-white text-[10px] font-bold rounded-full border border-white/20 uppercase tracking-[0.25em] transition-all ${isAuditing ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-white/10 hover:bg-white/20'}`}
+                                >
+                                    {isAuditing ? '✓ Spine Active (321.346°)' : 'Toggle Structural Spine'}
                                 </button>
                             </div>
                         </div>
@@ -235,6 +381,40 @@ export default function NLawStandards() {
                                     Distribution Analysis: The color mass distribution across Navy (Structural), Cyan (Operational), and Gold (Indicator) nodes.
                                 </p>
                             </div>
+
+                            {/* PRECISION METRICS PANEL */}
+                            {isAuditing && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="bg-red-500/5 rounded-[3rem] p-8 border border-red-500/20 space-y-4"
+                                >
+                                    <h4 className="text-xs font-bold uppercase tracking-[0.4em] text-red-400">Precision Metrics</h4>
+                                    <div className="space-y-3 font-mono text-xs">
+                                        <div className="flex justify-between">
+                                            <span className="text-slate-500">Axis Lock:</span>
+                                            <span className="text-white font-bold">X = 321.346</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-slate-500">Percentage:</span>
+                                            <span className="text-white font-bold">89.54%</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-slate-500">Golden Anchor:</span>
+                                            <span className="text-white font-bold">(321.346, 37.5)</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-slate-500">Tolerance:</span>
+                                            <span className="text-green-500 font-bold">± 0.001px</span>
+                                        </div>
+                                    </div>
+                                    <div className="pt-4 border-t border-red-500/10">
+                                        <p className="text-[10px] text-slate-600 leading-relaxed">
+                                            ✓ SVG-native coordinate system eliminates CSS approximation errors. Alignment verified to 0.001px precision.
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            )}
                         </div>
                     </div>
                 </section>
@@ -274,104 +454,78 @@ export default function NLawStandards() {
                                     <p className="text-sm text-slate-500 leading-relaxed font-light">Technical precision node. Rendered at weight 300 to provide visual depth and hierarchical contrast against the primary lockup.</p>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </section>
 
-                {/* 03. OPERATIONAL SIMULATION */}
-                <section id="simulation" className="py-40 px-8 max-w-7xl mx-auto space-y-32 transition-all">
-                    <div className="flex flex-col md:flex-row justify-between items-end gap-10">
-                        <div className="space-y-4 max-w-2xl">
-                            <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-none">03. Operational Simulation</h2>
-                            <p className="text-slate-500 text-lg md:text-xl font-light leading-relaxed">
-                                Validating brand integrity in the crucible of operational use. High-density OLED vs. administrative LCD environments.
-                            </p>
-                        </div>
-                        <div className="px-6 py-2.5 bg-green-500/10 rounded-2xl flex items-center gap-2 border border-green-500/20">
-                            <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></div>
-                            <span className="text-[11px] font-bold uppercase text-green-500 tracking-widest">Protocol: Syncing</span>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
-                        {/* MISSION CONTROL: OLED */}
-                        <div className="space-y-10">
-                            <p className="text-[12px] font-bold text-slate-500 uppercase tracking-[0.6em] text-center">Mission Control // Flagship OLED</p>
-                            <div className="app-frame h-[800px] flex flex-col bg-[#010409] border-[#1e293b] shadow-[0_0_150px_rgba(0,210,255,0.15)]">
-                                <div className="h-28 bg-black/95 backdrop-blur-3xl flex items-center px-12 justify-between border-b border-white/5">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 text-[#00D2FF] glow-cyan"><MasterLockup /></div>
-                                        <div className="flex items-baseline pt-1">
-                                            <span className="font-medium text-2xl lowercase text-white tracking-tighter leading-none">inspiron</span>
-                                            <span className="font-light text-xl uppercase text-[#FFD700] ml-1.5 tracking-widest leading-none">TECH</span>
+                            {/* INTERACTIVE TYPOGRAPHY WEIGHT SLIDER */}
+                            <div className="mt-20 w-full max-w-4xl p-12 rounded-[4rem] bg-[#00D2FF]/5 border border-[#00D2FF]/20">
+                                <h4 className="text-xs font-bold uppercase tracking-[0.5em] text-[#00D2FF] mb-8">Interactive Weight Verification</h4>
+                                <div className="space-y-8">
+                                    <div className="flex items-center justify-between gap-8">
+                                        <span className="text-sm font-mono text-slate-400 w-32">Weight: {Math.round((500))}</span>
+                                        <input
+                                            type="range"
+                                            min="300"
+                                            max="700"
+                                            step="100"
+                                            defaultValue="500"
+                                            className="flex-1 h-2 bg-white/10 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#00D2FF] [&::-webkit-slider-thumb]:cursor-pointer"
+                                            onChange={(e) => {
+                                                const preview = e.target.parentElement?.nextElementSibling;
+                                                if (preview) (preview as HTMLElement).style.fontWeight = e.target.value;
+                                                const label = e.target.previousElementSibling;
+                                                if (label) label.textContent = `Weight: ${e.target.value}`;
+                                            }}
+                                        />
+                                        <span className="text-sm font-mono text-slate-400 w-24 text-right">Standard</span>
+                                    </div>
+                                    <div className="text-6xl lowercase text-white text-center py-8 transition-all duration-300" style={{ fontWeight: 500 }}>
+                                        inspiron
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-4 text-center text-xs font-mono">
+                                        <div className="p-3 bg-white/5 rounded-xl">
+                                            <div className="text-slate-500 mb-1">Light</div>
+                                            <div className="text-white font-bold">300</div>
                                         </div>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                        <div className="w-2 h-2 bg-slate-800 rounded-full"></div>
-                                    </div>
-                                </div>
-                                <div className="flex-1 p-12 space-y-12 overflow-y-auto custom-scroll">
-                                    <div className="space-y-3">
-                                        <h4 className="text-white text-5xl font-black tracking-tight uppercase leading-[0.9]">Vault Dashboard</h4>
-                                        <p className="text-slate-600 text-sm italic">Encrypted node synchronization active...</p>
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-6">
-                                        <div className="bg-white/5 rounded-[3rem] p-10 border border-white/5">
-                                            <div className="text-[10px] font-mono text-slate-500 uppercase tracking-[0.3em] mb-4">Total Packets</div>
-                                            <div className="text-5xl font-black text-white leading-none">42.8<span className="text-xl font-light text-slate-600 ml-1">PB</span></div>
+                                        <div className="p-3 bg-[#00D2FF]/10 rounded-xl border border-[#00D2FF]/30">
+                                            <div className="text-[#00D2FF] mb-1">Medium ✓</div>
+                                            <div className="text-white font-bold">500</div>
                                         </div>
-                                        <div className="bg-white/5 rounded-[3rem] p-10 border border-white/5">
-                                            <div className="text-[10px] font-mono text-slate-500 uppercase tracking-[0.3em] mb-4">Sync Health</div>
-                                            <div className="text-5xl font-black text-[#FFD700] leading-none">100<span className="text-xl font-light text-slate-600 ml-1">%</span></div>
-                                        </div>
-                                    </div>
-                                    <div className="p-12 rounded-[4.5rem] bg-gradient-to-br from-[#00152e] to-black border border-[#00D2FF]/20 relative overflow-hidden group">
-                                        <div className="absolute inset-0 blueprint-grid opacity-10"></div>
-                                        <div className="text-[11px] font-mono text-white/30 uppercase tracking-[0.5em] mb-10 relative z-20">Network Throughput (Gbps)</div>
-                                        <div className="h-32 relative z-20">
-                                            <VelocityChart />
+                                        <div className="p-3 bg-white/5 rounded-xl">
+                                            <div className="text-slate-500 mb-1">Bold</div>
+                                            <div className="text-white font-bold">700</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* ADMIN PANEL: LCD */}
-                        <div className="space-y-10">
-                            <p className="text-[12px] font-bold text-slate-500 uppercase tracking-[0.6em] text-center">Admin Panel // Budget LCD</p>
-                            <div className="app-frame h-[800px] flex flex-col border-slate-300 bg-slate-200">
-                                <div className="h-28 bg-white flex items-center px-14 justify-between border-b-2 border-slate-200 shadow-sm">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 text-[#002147]"><MasterLockup /></div>
-                                        <div className="flex items-baseline pt-1">
-                                            <span className="font-medium text-2xl lowercase text-slate-900 tracking-tighter leading-none">inspiron</span>
-                                            <span className="font-light text-xl uppercase text-[#002147] ml-1.5 tracking-widest leading-none">TECH</span>
+                            {/* BRAND COLOR SYSTEM */}
+                            <div className="mt-12 w-full max-w-4xl p-12 rounded-[4rem] bg-[#FFD700]/5 border border-[#FFD700]/20">
+                                <h4 className="text-xs font-bold uppercase tracking-[0.5em] text-[#FFD700] mb-8">Brand Color System</h4>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="p-6 bg-white/5 rounded-2xl border border-[#FFD700]/30 space-y-3">
+                                        <div className="w-full h-16 rounded-xl" style={{ backgroundColor: '#FFD700' }}></div>
+                                        <div className="text-center">
+                                            <div className="text-[10px] font-bold text-[#FFD700] uppercase tracking-wider mb-1">Primary Accent</div>
+                                            <div className="text-sm font-mono text-white">#FFD700</div>
+                                            <div className="text-[10px] text-slate-500">Action Gold</div>
                                         </div>
                                     </div>
-                                    <div className="w-14 h-1.5 bg-slate-200 rounded-full"></div>
+                                    <div className="p-6 bg-white/5 rounded-2xl border border-[#00D2FF]/30 space-y-3">
+                                        <div className="w-full h-16 rounded-xl" style={{ backgroundColor: '#00D2FF' }}></div>
+                                        <div className="text-center">
+                                            <div className="text-[10px] font-bold text-[#00D2FF] uppercase tracking-wider mb-1">Core Brand</div>
+                                            <div className="text-sm font-mono text-white">#00D2FF</div>
+                                            <div className="text-[10px] text-slate-500">Electric Cyan</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="flex-1 p-14 space-y-14 bg-white m-12 rounded-[5rem] shadow-xl border border-slate-200 overflow-hidden">
-                                    <div className="space-y-4 border-b border-slate-100 pb-10">
-                                        <h4 className="text-slate-900 font-black text-5xl tracking-tight uppercase leading-[0.85]">Protocol Config</h4>
-                                        <p className="text-slate-400 text-md font-light">Node Authority: <strong className="text-[#002147] font-bold">Inspiron Tech BD</strong></p>
-                                    </div>
-                                    <div className="space-y-10">
-                                        <div className="space-y-4">
-                                            <label className="text-[12px] font-bold uppercase tracking-[0.4em] text-slate-400 ml-2">Vault Endpoint</label>
-                                            <div className="w-full h-20 bg-slate-50 border-2 border-slate-100 rounded-[2rem] flex items-center px-10 text-slate-700 font-bold text-xl font-mono">vault.inspiron.tech/v2026.1</div>
-                                        </div>
-                                        <div className="space-y-4">
-                                            <label className="text-[12px] font-bold uppercase tracking-[0.4em] text-slate-400 ml-2">Sync Status</label>
-                                            <div className="w-full h-20 bg-slate-50 border-2 border-slate-100 rounded-[2rem] flex items-center px-10 text-green-600 font-black text-xl uppercase tracking-[0.2em]">TLS 1.3 / SECURE</div>
-                                        </div>
-                                    </div>
-                                    <button className="w-full py-8 bg-[#002147] text-white rounded-[2.5rem] font-black text-xl tracking-[0.25em] uppercase shadow-2xl shadow-navy-950/20 active:scale-[0.97] transition-all hover:bg-[#00D2FF]">Update Synchronization</button>
-                                </div>
+                                <p className="text-[10px] text-slate-600 text-center mt-6 leading-relaxed">
+                                    Mathematically precise color values ensure consistent reproduction across all media.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </section>
+
 
                 {/* 04. PRODUCTION ASSET EXPORT */}
                 <section className="py-40 bg-[#010409] relative overflow-hidden border-t border-white/5">
@@ -442,17 +596,17 @@ export default function NLawStandards() {
 
             {/* INSTITUTIONAL FOOTER */}
             <footer className="py-32 bg-white px-12 border-t border-slate-100 flex flex-col items-center space-y-16">
-                <div className="flex items-center gap-6 text-slate-300">
-                    <div className="w-16 h-16 text-slate-200"><MasterLockup /></div>
-                    <div className="w-48 h-px bg-slate-100"></div>
-                    <span className="text-[12px] font-bold uppercase tracking-[0.8em]">Production Signature Verified</span>
+                <div className="flex items-center gap-6">
+                    <div className="w-16 h-16 text-[#00D2FF]"><MasterLockup /></div>
+                    <div className="w-48 h-px bg-[#FFD700]/30"></div>
+                    <span className="text-[12px] font-bold uppercase tracking-[0.8em] text-slate-700">Production Signature Verified</span>
                 </div>
                 <div className="text-center space-y-4">
                     <p className="text-[#002147] font-black text-5xl tracking-tighter uppercase leading-none">Architected by MD ABU HASAN</p>
                     <p className="text-slate-400 text-sm font-bold uppercase tracking-[0.5em]">&copy; 2026 Inspiron Tech BD // Mission Control Protocol v2.1</p>
                 </div>
             </footer>
-        </div>
+        </div >
     );
 }
 
