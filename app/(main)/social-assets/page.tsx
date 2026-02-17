@@ -55,7 +55,7 @@ export default function SocialAssetsPage() {
                 </div>
             )}
 
-            <div className={`grid gap-20 ${cleanMode ? 'gap-0 place-content-center h-screen' : 'max-w-7xl mx-auto'}`}>
+            <div className={`grid ${cleanMode ? 'gap-40 justify-items-center py-20' : 'gap-20 max-w-7xl mx-auto'}`}>
 
                 {/* --- ASSET 01: FACEBOOK PROFILE PICTURE (500x500) --- */}
                 <section className="space-y-6">
