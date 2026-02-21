@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import {
     Scale, Layout, Monitor, Users, Activity, Settings, RefreshCcw,
     Maximize2, Smartphone, BadgeCheck, Download, Sun, Moon, Grid, ShieldCheck
@@ -138,6 +139,9 @@ export default function SocialAssetsPage() {
             <nav className="sticky top-0 z-50 bg-[#010409]/80 backdrop-blur-md border-b border-white/10 h-16 shrink-0">
                 <div className="max-w-[1920px] mx-auto px-6 h-full flex items-center justify-between">
                     <div className="flex items-center gap-4">
+                        <Link href="/" className="hidden md:flex items-center gap-2 text-gray-500 hover:text-white text-[10px] font-mono tracking-widest transition-colors mr-4">
+                            ← HOME
+                        </Link>
                         <div className="w-8 h-8 bg-action-gold/10 rounded flex items-center justify-center border border-action-gold/20">
                             <Scale className="text-action-gold" size={16} />
                         </div>
@@ -146,7 +150,7 @@ export default function SocialAssetsPage() {
                             <div className="text-[10px] text-gray-500 font-mono tracking-widest">MD ABU HASAN // STATUS: ACTIVE</div>
                         </div>
                     </div>
-                    <div className="flex gap-1 bg-white/5 p-1 rounded-lg border border-white/5">
+                    <div className="flex gap-1 bg-white/5 p-1 rounded-lg border border-white/5 overflow-x-auto scrollbar-none">
                         {([
                             { id: 'linkedin', icon: Layout, label: 'LinkedIn' },
                             { id: 'facebook', icon: Monitor, label: 'Facebook' },
@@ -158,8 +162,8 @@ export default function SocialAssetsPage() {
                                 key={mode.id}
                                 onClick={() => setActiveMode(mode.id)}
                                 className={`flex items-center gap-2 px-4 py-2 rounded text-[10px] font-bold uppercase tracking-widest transition-all ${activeMode === mode.id
-                                        ? 'bg-electric-cyan text-deep-navy-black shadow-[0_0_20px_rgba(0,210,255,0.2)]'
-                                        : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                    ? 'bg-electric-cyan text-deep-navy-black shadow-[0_0_20px_rgba(0,210,255,0.2)]'
+                                    : 'text-gray-400 hover:text-white hover:bg-white/5'
                                     }`}
                             >
                                 <mode.icon size={14} />
@@ -172,10 +176,10 @@ export default function SocialAssetsPage() {
 
             {/* ─── MAIN THEATER ──────────────────────────────────────────── */}
             {/* FIX 5: min-w-0 on main prevents flex children from overflowing */}
-            <main className="flex-1 flex flex-col lg:flex-row h-[calc(100vh-64px)] overflow-hidden min-w-0">
+            <main className="flex-1 flex flex-col lg:flex-row lg:h-[calc(100vh-64px)] lg:overflow-hidden min-w-0">
 
                 {/* ─── CONTROLS ──────────────────────────────────────────── */}
-                <aside className="w-full lg:w-[420px] bg-[#050a10] border-r border-white/10 overflow-y-auto custom-scrollbar flex flex-col shrink-0 z-10">
+                <aside className="w-full max-h-[50vh] lg:max-h-none lg:w-[420px] bg-[#050a10] border-r border-white/10 overflow-y-auto custom-scrollbar flex flex-col shrink-0 z-10">
                     <div className="p-6 space-y-8">
                         <div className="flex items-center gap-2 pb-4 border-b border-white/10">
                             <Settings className="text-electric-cyan" size={16} />
@@ -317,7 +321,7 @@ export default function SocialAssetsPage() {
                     </div>
 
                     {/* ─── RENDER STAGE ──────────────────────────────────── */}
-                    <div className="w-full h-full flex items-center justify-center p-20 overflow-auto custom-scrollbar">
+                    <div className="w-full h-full flex items-center justify-center p-4 md:p-10 lg:p-20 overflow-auto custom-scrollbar">
 
                         {/* 1. LINKEDIN (1584 × 396) */}
                         {activeMode === 'linkedin' && (
@@ -493,12 +497,16 @@ export default function SocialAssetsPage() {
 
                         {/* Export Hint */}
                         <div className="absolute bottom-6 flex items-center gap-4">
-                            <button className="bg-[#00D2FF]/10 hover:bg-[#00D2FF]/20 border border-[#00D2FF]/30 text-[#00D2FF] px-6 py-3 rounded-full flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(0,210,255,0.1)] group">
+                            <button
+                                onClick={() => alert("Please use OS screenshot tools to capture the asset. A native export module is under development.")}
+                                className="bg-[#00D2FF]/10 hover:bg-[#00D2FF]/20 border border-[#00D2FF]/30 text-[#00D2FF] px-6 py-3 rounded-full flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(0,210,255,0.1)] group">
                                 <ShieldCheck size={14} className="group-hover:scale-110 transition-transform" />
                                 EXPORT SYSTEM ASSET
                             </button>
                             <span className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">
-                                Win+Shift+S for pixel-perfect capture
+                                {typeof window !== 'undefined' && navigator.platform.includes('Mac')
+                                    ? 'Cmd+Shift+4 for pixel-perfect capture'
+                                    : 'Win+Shift+S for pixel-perfect capture'}
                             </span>
                         </div>
                     </div>

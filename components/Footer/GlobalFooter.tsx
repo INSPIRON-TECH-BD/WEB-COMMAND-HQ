@@ -13,6 +13,7 @@ const DIRECTORY = [
 const COMMAND = [
     { href: '/about', label: 'ABOUT.SYS' },
     { href: '/contact', label: 'CONTACT.INIT' },
+    { href: '/social-assets', label: 'BRAND.ASSETS' },
 ];
 
 const COMPLIANCE = [
