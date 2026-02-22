@@ -92,9 +92,7 @@ export default function ContactPage() {
                                     <div>
                                         <div className="text-lg font-bold text-white mb-1">Sector Command</div>
                                         <div className="text-gray-400 text-sm leading-relaxed">
-                                            Suite 201, Eastern Kamalapur Complex<br />
-                                            Dhaka 1217<br />
-                                            Bangladesh
+                                            64-68, Eastern Kamalapur Complex, North Kamalapur, Dhaka 1217, Bangladesh
                                         </div>
                                     </div>
                                 </div>

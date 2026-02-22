@@ -21,16 +21,67 @@ const LINKEDIN_PRESETS = [
     { id: "execution", label: "The Execution", headline: "Theory is Free.", highlight: "Logic is Expensive.", sub: "Deploy Your Logic. 0.1% Error Tolerance." },
 ];
 
-type ActiveMode = 'linkedin' | 'facebook' | 'whatsapp' | 'profile' | 'audit';
+type ActiveMode =
+    | 'linkedin' | 'linkedin-profile' | 'linkedin-page' | 'linkedin-page-logo' | 'linkedin-post'
+    | 'facebook' | 'facebook-personal' | 'facebook-page' | 'facebook-group' | 'facebook-post'
+    | 'instagram' | 'instagram-profile' | 'whatsapp' | 'whatsapp-business' | 'whatsapp-business-cover'
+    | 'profile' | 'audit';
+
+
+const PLATFORMS = [
+    // Core
+    { id: 'linkedin', icon: Layout, label: 'LI Banner', canvas: '1584×396' },
+    { id: 'facebook-personal', icon: Monitor, label: 'FB Cover', canvas: '820×360' },
+    { id: 'whatsapp', icon: Smartphone, label: 'WA Status', canvas: '1080×1920' },
+    { id: 'profile', icon: Users, label: 'Universal Profile', canvas: '400×400' },
+
+    // Facebook
+    { id: 'facebook-page', icon: Monitor, label: 'FB Page', canvas: '820×360' },
+    { id: 'facebook-group', icon: Monitor, label: 'FB Group', canvas: '820×360' },
+    { id: 'facebook-post', icon: Monitor, label: 'FB Post', canvas: '1200×630' },
+
+    // LinkedIn
+    { id: 'linkedin-profile', icon: Users, label: 'LI Profile', canvas: '400×400' },
+    { id: 'linkedin-page', icon: Layout, label: 'LI Page', canvas: '1128×191' },
+    { id: 'linkedin-page-logo', icon: Users, label: 'LI Logo', canvas: '400×400' },
+    { id: 'linkedin-post', icon: Monitor, label: 'LI Post', canvas: '1200×627' },
+
+    // Instagram
+    { id: 'instagram', icon: Grid, label: 'IG Post', canvas: '1080×1080' },
+    { id: 'instagram-profile', icon: Users, label: 'IG Profile', canvas: '1080×1080' },
+
+    // WhatsApp
+    { id: 'whatsapp-business', icon: Smartphone, label: 'WA Biz Pic', canvas: '500×500' },
+    { id: 'whatsapp-business-cover', icon: Monitor, label: 'WA Biz Cover', canvas: '1211×681' },
+
+    // Audit
+    { id: 'audit', icon: Activity, label: 'Audit', canvas: 'Variable' },
+] as const;
+
 type RenderMode = 'dark' | 'light' | 'blueprint';
+
 
 const MODE_SCALES: Record<ActiveMode, number> = {
     linkedin: 0.4,
+    'linkedin-profile': 0.8,
+    'linkedin-page': 0.7,
+    'linkedin-page-logo': 0.8,
+    'linkedin-post': 0.5,
     facebook: 0.65,
+    'facebook-personal': 0.65,
+    'facebook-page': 0.65,
+    'facebook-group': 0.65,
+    'facebook-post': 0.5,
+    instagram: 0.4,
+    'instagram-profile': 0.4,
     whatsapp: 0.28,
+    'whatsapp-business': 0.8,
+    'whatsapp-business-cover': 0.45,
     profile: 0.8,
     audit: 0.7,
 };
+
+
 
 export default function SocialAssetsPage() {
 
@@ -58,6 +109,7 @@ export default function SocialAssetsPage() {
     });
 
     const [facebookData, setFacebookData] = useState({
+        variant: 'personal' as 'personal' | 'page' | 'group',
         badge: "Official Manager.io Advisor",
         headline: "Institutional-Grade\nFinancial Architecture",
         subtext: "We don't have account managers. We have architects.",
@@ -65,14 +117,26 @@ export default function SocialAssetsPage() {
     });
 
     const [whatsappData, setWhatsappData] = useState({
-        tag: "Official Partner",
-        headline: "Deploy Your",
-        highlight: "Architecture",
-        subtext: "We architect the accounting logic other consultants walk away from.",
-        name: "MD ABU HASAN",
-        role: "Founder & Chief Architect",
-        cta: "inspiron.tech/architect",
+        badge: "INSPIRON TECH",
+        headline: "Manager.io\nBangladesh",
+        highlight: "Architecture", // Added back
+        subtext: "Cloud Accounting | Custom Dashboards | NBR Compliance",
+        cta: "inspiron.tech/architect", // shared for old status
+        cta1: "Start Demo →",
+        cta2: "01719-300849",
+        tag: "Official Partner", // shared for old status
+        name: "MD ABU HASAN", // shared for old status
+        role: "Founder & Chief Architect", // shared for old status
     });
+
+    const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
+    const [isMac, setIsMac] = useState(false);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setIsMac(navigator.platform.includes('Mac'));
+        }
+    }, []);
 
     const [profileData, setProfileData] = useState({
         initials: "IT",
@@ -151,13 +215,7 @@ export default function SocialAssetsPage() {
                         </div>
                     </div>
                     <div className="flex gap-1 bg-white/5 p-1 rounded-lg border border-white/5 overflow-x-auto scrollbar-none">
-                        {([
-                            { id: 'linkedin', icon: Layout, label: 'LinkedIn' },
-                            { id: 'facebook', icon: Monitor, label: 'Facebook' },
-                            { id: 'whatsapp', icon: Smartphone, label: 'WhatsApp' },
-                            { id: 'profile', icon: Users, label: 'Profile' },
-                            { id: 'audit', icon: Activity, label: 'Audit' },
-                        ] as { id: ActiveMode; icon: React.ElementType; label: string }[]).map((mode) => (
+                        {(PLATFORMS as unknown as any[]).map((mode) => (
                             <button
                                 key={mode.id}
                                 onClick={() => setActiveMode(mode.id)}
@@ -187,7 +245,7 @@ export default function SocialAssetsPage() {
                         </div>
 
                         {/* LINKEDIN CONTROLS */}
-                        {activeMode === 'linkedin' && (
+                        {activeMode.startsWith('linkedin') && (
                             <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
                                 <div className="space-y-2">
                                     <label className="text-[10px] uppercase tracking-widest text-action-gold font-bold flex items-center gap-2">
@@ -219,9 +277,17 @@ export default function SocialAssetsPage() {
                             </div>
                         )}
 
-                        {/* FACEBOOK CONTROLS — FIX 1: now has subtext field */}
-                        {activeMode === 'facebook' && (
+                        {/* FACEBOOK CONTROLS */}
+                        {activeMode.startsWith('facebook') && (
                             <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
+                                <div className="grid grid-cols-3 gap-2 mb-4">
+                                    {(['personal', 'page', 'group'] as const).map(v => (
+                                        <button key={v} onClick={() => setActiveMode(`facebook-${v}` as ActiveMode)}
+                                            className={`p-3 rounded text-[10px] font-bold uppercase tracking-widest transition-all ${activeMode.includes(v) ? 'bg-electric-cyan text-black' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}>
+                                            {v}
+                                        </button>
+                                    ))}
+                                </div>
                                 <TechInput label="Top Badge" value={facebookData.badge} onChange={v => setFacebookData({ ...facebookData, badge: v })} />
                                 <TechTextArea label="Headline (\\n = new line)" value={facebookData.headline} onChange={v => setFacebookData({ ...facebookData, headline: v })} rows={3} />
                                 <TechTextArea label="Sub-Narrative" value={facebookData.subtext} onChange={v => setFacebookData({ ...facebookData, subtext: v })} rows={2} />
@@ -229,22 +295,38 @@ export default function SocialAssetsPage() {
                             </div>
                         )}
 
-                        {/* WHATSAPP CONTROLS — FIX 2: isolated whatsappData state */}
-                        {activeMode === 'whatsapp' && (
+                        {/* WHATSAPP CONTROLS */}
+                        {activeMode.startsWith('whatsapp') && (
                             <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
-                                <div className="p-3 bg-white/5 border border-white/10 rounded text-[10px] text-gray-400 font-mono">MODE: WHATSAPP STATUS (1080×1920 // 9:16)</div>
-                                <TechInput label="Badge Tag" value={whatsappData.tag} onChange={v => setWhatsappData({ ...whatsappData, tag: v })} />
+                                <div className="p-3 bg-white/5 border border-white/10 rounded text-[10px] text-gray-400 font-mono uppercase tracking-widest">
+                                    MODE: {activeMode.replace(/-/g, ' ')}
+                                </div>
+                                <TechInput label="Badge / Tag" value={activeMode === 'whatsapp' ? whatsappData.tag : whatsappData.badge}
+                                    onChange={v => activeMode === 'whatsapp' ? setWhatsappData({ ...whatsappData, tag: v }) : setWhatsappData({ ...whatsappData, badge: v })} />
                                 <TechInput label="Headline" value={whatsappData.headline} onChange={v => setWhatsappData({ ...whatsappData, headline: v })} />
                                 <TechInput label="Gold Highlight" value={whatsappData.highlight} onChange={v => setWhatsappData({ ...whatsappData, highlight: v })} />
                                 <TechTextArea label="Sub-Narrative" value={whatsappData.subtext} onChange={v => setWhatsappData({ ...whatsappData, subtext: v })} rows={4} />
-                                <div className="h-px bg-white/10" />
-                                <TechInput label="Name" value={whatsappData.name} onChange={v => setWhatsappData({ ...whatsappData, name: v })} />
-                                <TechInput label="Role" value={whatsappData.role} onChange={v => setWhatsappData({ ...whatsappData, role: v })} />
-                                <TechInput label="Bottom CTA" value={whatsappData.cta} onChange={v => setWhatsappData({ ...whatsappData, cta: v })} />
+
+                                {activeMode === 'whatsapp' && (
+                                    <>
+                                        <div className="h-px bg-white/10" />
+                                        <TechInput label="Name" value={whatsappData.name} onChange={v => setWhatsappData({ ...whatsappData, name: v })} />
+                                        <TechInput label="Role" value={whatsappData.role} onChange={v => setWhatsappData({ ...whatsappData, role: v })} />
+                                        <TechInput label="Bottom CTA" value={whatsappData.cta} onChange={v => setWhatsappData({ ...whatsappData, cta: v })} />
+                                    </>
+                                )}
+
+                                {activeMode === 'whatsapp-business-cover' && (
+                                    <>
+                                        <div className="h-px bg-white/10" />
+                                        <TechInput label="CTA 1 (Primary)" value={whatsappData.cta1} onChange={v => setWhatsappData({ ...whatsappData, cta1: v })} />
+                                        <TechInput label="CTA 2 (Secondary)" value={whatsappData.cta2} onChange={v => setWhatsappData({ ...whatsappData, cta2: v })} />
+                                    </>
+                                )}
                             </div>
                         )}
 
-                        {/* PROFILE CONTROLS */}
+                        {/* PROFILE CONTROLS (Universal) */}
                         {activeMode === 'profile' && (
                             <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
                                 <TechInput label="Initials" value={profileData.initials} onChange={v => setProfileData({ ...profileData, initials: v })} />
@@ -303,6 +385,14 @@ export default function SocialAssetsPage() {
 
                     {/* Toolbar */}
                     <div className="absolute top-6 right-6 z-20 flex gap-4">
+                        <div className="flex gap-1 bg-black/60 backdrop-blur border border-white/10 p-1 rounded-full">
+                            {(['desktop', 'mobile'] as const).map(p => (
+                                <button key={p} onClick={() => setPreviewMode(p)}
+                                    className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${previewMode === p ? 'bg-electric-cyan text-deep-navy-black' : 'text-gray-500 hover:text-white'}`}>
+                                    {p === 'desktop' ? '🖥️ Desktop' : '📱 Mobile'}
+                                </button>
+                            ))}
+                        </div>
                         <div className="flex gap-1 bg-black/60 backdrop-blur border border-white/10 p-1 rounded-full">
                             {([{ id: 'dark', icon: Moon }, { id: 'light', icon: Sun }, { id: 'blueprint', icon: Grid }] as { id: RenderMode; icon: React.ElementType }[]).map(m => (
                                 <button key={m.id} onClick={() => setRenderMode(m.id)}
@@ -368,29 +458,60 @@ export default function SocialAssetsPage() {
                             </div>
                         )}
 
-                        {/* 2. FACEBOOK (820 × 312) — FIX 1: subtext now rendered */}
-                        {activeMode === 'facebook' && (
-                            <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
-                                <div className={`w-[820px] h-[312px] ${theme.bg} relative overflow-hidden flex items-center justify-center text-center ${theme.border} border transition-colors duration-500`}>
+                        {/* 2. FACEBOOK COVER (820 × 360) */}
+                        {activeMode.startsWith('facebook') && activeMode !== 'facebook-post' && (
+                            <div style={{ transform: `scale(${scale * (previewMode === 'mobile' ? 0.78 : 1)})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
+                                <div className={`w-[820px] h-[360px] ${theme.bg} relative overflow-hidden flex items-center justify-center text-center ${theme.border} border transition-colors duration-500`}>
                                     <div className={`absolute inset-0 ${theme.grid} [background-size:20px_20px]`} />
-                                    <div className="relative z-10 px-12">
-                                        <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] mb-3" style={{ color: '#FFD700' }}>
-                                            <BadgeCheck size={14} /> {facebookData.badge}
+
+                                    {/* SAFE AREA OVERLAY — Critical for mobile */}
+                                    <div className="absolute inset-0 pointer-events-none z-20">
+                                        <div className="absolute left-1/2 top-1/2 w-[640px] h-[360px] -translate-x-1/2 -translate-y-1/2 border-4 border-red-500/50 rounded-lg" />
+                                        <div className="absolute left-0 top-0 w-[90px] h-full bg-red-500/10" /> {/* Left crop simulation */}
+                                        <div className="absolute right-0 top-0 w-[90px] h-full bg-red-500/10" /> {/* Right crop simulation */}
+                                    </div>
+
+                                    <div className="relative z-10 px-16 py-12 max-w-[640px]">
+                                        <div className="inline-flex items-center gap-2 text-lg font-bold uppercase tracking-[0.2em] mb-6" style={{ color: '#FFD700' }}>
+                                            <BadgeCheck size={20} /> {facebookData.badge}
                                         </div>
-                                        <h2 className={`text-4xl font-black ${theme.text} uppercase tracking-tight mb-3 whitespace-pre-line leading-tight font-institutional`}>
+                                        <h2 className={`text-5xl font-black ${theme.text} uppercase tracking-tight mb-6 whitespace-pre-line leading-tight font-institutional`}>
                                             {facebookData.headline}
                                         </h2>
-                                        {/* FIX 1: subtext field rendered */}
-                                        <p className={`${theme.sub} text-sm font-light mb-5 max-w-lg mx-auto font-institutional leading-relaxed`}>
+                                        <p className={`${theme.sub} text-base font-light mb-8 max-w-lg mx-auto font-institutional leading-relaxed`}>
                                             {facebookData.subtext}
                                         </p>
-                                        <div className="inline-block px-8 py-3 font-bold uppercase tracking-widest text-sm rounded-full shadow-[0_0_20px_rgba(0,210,255,0.4)]"
+                                        <div className="inline-block px-10 py-4 font-bold uppercase tracking-widest text-sm rounded-full shadow-[0_0_20px_rgba(0,210,255,0.4)]"
                                             style={{ backgroundColor: '#00D2FF', color: '#010409' }}>
                                             {facebookData.cta}
                                         </div>
                                     </div>
                                 </div>
-                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">820 × 312 PX // FACEBOOK_COVER</div>
+                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">
+                                    820 × 360 PX // FB {activeMode.split('-')[1]?.toUpperCase() || 'COVER'} (Safe Area: 640×360 Center) ✨
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 2b. FACEBOOK POST (1200 × 630) */}
+                        {activeMode === 'facebook-post' && (
+                            <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
+                                <div className={`w-[1200px] h-[630px] ${theme.bg} relative overflow-hidden flex items-center justify-center text-center ${theme.border} border transition-colors duration-500`}>
+                                    <div className={`absolute inset-0 ${theme.grid} [background-size:30px_30px]`} />
+                                    <div className="relative z-10 px-24">
+                                        <div className="w-24 h-24 mx-auto mb-8"><MasterLogo idSuffix="fb-post" /></div>
+                                        <h2 className={`text-6xl font-black ${theme.text} uppercase tracking-tight mb-8 font-institutional`}>
+                                            {facebookData.headline.replace(/\\n/g, ' ')}
+                                        </h2>
+                                        <p className={`${theme.sub} text-2xl font-light mb-12 max-w-2xl mx-auto font-institutional`}>
+                                            {facebookData.subtext}
+                                        </p>
+                                        <div className="px-12 py-5 bg-electric-cyan text-black font-black uppercase tracking-widest text-xl rounded-xl inline-block">
+                                            {facebookData.cta}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">1200 × 630 PX // FB_POST</div>
                             </div>
                         )}
 
@@ -435,26 +556,118 @@ export default function SocialAssetsPage() {
                             </div>
                         )}
 
-                        {/* 4. PROFILE (400 × 400) */}
-                        {activeMode === 'profile' && (
+                        {/* 4. PROFILE VARIANTS (400, 500, 1080) */}
+                        {(activeMode === 'profile' || activeMode === 'linkedin-profile' || activeMode === 'whatsapp-business' || activeMode === 'instagram-profile' || activeMode === 'linkedin-page-logo') && (
                             <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
-                                <div className={`relative w-[400px] h-[400px] rounded-full overflow-hidden ${theme.bg} border-4 shadow-2xl flex items-center justify-center transition-colors duration-500`}
+                                <div className={`relative ${activeMode === 'whatsapp-business' ? 'w-[500px] h-[500px]' :
+                                    activeMode === 'instagram-profile' ? 'w-[1080px] h-[1080px]' :
+                                        'w-[400px] h-[400px]'
+                                    } ${activeMode === 'linkedin-page-logo' ? 'rounded-none' : 'rounded-full'} overflow-hidden ${theme.bg} border-4 shadow-2xl flex items-center justify-center transition-colors duration-500`}
                                     style={{ borderColor: '#FFD700' }}>
                                     <div className="absolute inset-0 bg-[radial-gradient(#00C2FF_1px,transparent_1px)] [background-size:20px_20px] opacity-10" />
                                     <div className="z-10 text-center flex flex-col items-center">
-                                        <div className={`text-9xl font-black absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none font-institutional ${renderMode === 'light' ? 'text-black/5' : 'text-white/5'}`}>
+                                        <div className={`${activeMode === 'instagram-profile' ? 'text-[300px]' : 'text-9xl'} font-black absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none font-institutional ${renderMode === 'light' ? 'text-black/5' : 'text-white/5'}`}>
                                             {profileData.initials}
                                         </div>
-                                        <div className={`w-48 h-48 rounded-full flex items-center justify-center mb-6 border-2 border-white/10 mx-auto overflow-hidden p-8 ${renderMode === 'light' ? 'bg-slate-200' : 'bg-gray-800'}`}>
-                                            <MasterLogo idSuffix="profile" />
+                                        <div className={`${activeMode === 'instagram-profile' ? 'w-96 h-96' : 'w-48 h-48'} rounded-full flex items-center justify-center mb-6 border-2 border-white/10 mx-auto overflow-hidden p-8 bg-gray-800/50 backdrop-blur-sm`}>
+                                            <MasterLogo idSuffix="profile-v" />
                                         </div>
                                         <div className="px-6 py-1.5 rounded-full text-sm font-bold uppercase tracking-widest inline-block shadow-[0_0_20px_rgba(255,215,0,0.3)]"
                                             style={{ backgroundColor: '#FFD700', color: '#010409' }}>
-                                            {profileData.role}
+                                            {activeMode === 'whatsapp-business' ? whatsappData.badge : profileData.role}
                                         </div>
                                     </div>
                                 </div>
-                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">400 × 400 PX // PROFILE_NODE</div>
+                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50 uppercase tracking-widest">
+                                    {activeMode === 'whatsapp-business' ? '500 × 500' :
+                                        activeMode === 'instagram-profile' ? '1080 × 1080' : '400 × 400'} PX // {activeMode.replace(/-/g, '_').toUpperCase()}
+                                </div>
+                            </div>
+                        )}
+
+
+                        {/* 5. LINKEDIN PAGE (1128 × 191) */}
+                        {activeMode === 'linkedin-page' && (
+                            <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
+                                <div className={`w-[1128px] h-[191px] ${theme.bg} relative overflow-hidden flex items-center px-12 ${theme.border} border transition-colors duration-500`}>
+                                    <div className={`absolute inset-0 ${theme.grid} [background-size:20px_20px]`} />
+                                    <div className="relative z-10 flex items-center gap-12 w-full">
+                                        <div className="w-24 h-24 shrink-0"><MasterLogo idSuffix="li-page" /></div>
+                                        <div>
+                                            <h2 className={`text-4xl font-black ${theme.text} uppercase tracking-tight font-institutional`}>
+                                                {linkedinData.headline} <span style={{ color: '#FFD700' }}>{linkedinData.highlight}</span>
+                                            </h2>
+                                            <p className={`${theme.sub} text-sm font-light uppercase tracking-[0.2em] mt-2`}>
+                                                {linkedinData.subtext.substring(0, 60)}...
+                                            </p>
+                                        </div>
+                                        <div className="ml-auto font-mono text-xl text-electric-cyan">{linkedinData.website}</div>
+                                    </div>
+                                </div>
+                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">1128 × 191 PX // LI_PAGE_BANNER</div>
+                            </div>
+                        )}
+
+                        {/* 6. LINKEDIN POST / INSTAGRAM (Standard Squares/Landscape) */}
+                        {(activeMode === 'linkedin-post' || activeMode === 'instagram') && (
+                            <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
+                                <div className={`${activeMode === 'instagram' ? 'w-[1080px] h-[1080px]' : 'w-[1200px] h-[627px]'} ${theme.bg} relative overflow-hidden flex items-center justify-center text-center p-24 ${theme.border} border transition-colors duration-500`}>
+                                    <div className={`absolute inset-0 ${theme.grid} [background-size:40px_40px]`} />
+                                    <div className="relative z-10">
+                                        <div className="w-32 h-32 mx-auto mb-10"><MasterLogo idSuffix="social-post" /></div>
+                                        <h2 className={`text-7xl font-black ${theme.text} uppercase tracking-tight mb-8 leading-tight font-institutional`}>
+                                            {linkedinData.headline}<br />
+                                            <span style={{ color: '#FFD700' }}>{linkedinData.highlight}</span>
+                                        </h2>
+                                        <p className={`${theme.sub} text-2xl font-light mb-12 max-w-2xl mx-auto font-institutional leading-relaxed`}>
+                                            {linkedinData.subtext}
+                                        </p>
+                                        <div className="px-12 py-5 bg-electric-cyan text-black font-black uppercase tracking-widest text-xl rounded-2xl inline-block shadow-lg">
+                                            {linkedinData.website}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">
+                                    {activeMode === 'instagram' ? '1080 × 1080' : '1200 × 627'} PX // {activeMode.toUpperCase()}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 7. WHATSAPP BUSINESS COVER (1211 × 681) */}
+                        {activeMode === 'whatsapp-business-cover' && (
+                            <div style={{ transform: `scale(${scale})` }} className="w-fit transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0">
+                                <div className={`w-[1211px] h-[681px] ${theme.bg} relative overflow-hidden flex items-center justify-center text-center ${theme.border} border rounded-xl`}>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-electric-cyan/20 via-transparent to-emerald-400/20" />
+                                    <div className={`absolute inset-0 ${theme.grid} [background-size:30px_30px]`} />
+
+                                    <div className="relative z-10 px-20 py-16 max-w-4xl mx-auto">
+                                        <div className="inline-flex items-center gap-3 text-xl font-bold uppercase tracking-wide mb-8" style={{ color: '#25D366' }}>
+                                            <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                                                <span className="text-white font-bold text-lg">B</span>
+                                            </div>
+                                            {whatsappData.badge}
+                                        </div>
+                                        <h2 className={`text-7xl font-black uppercase tracking-tight mb-8 leading-tight ${theme.text} font-institutional whitespace-pre-line`}>
+                                            {whatsappData.headline}
+                                        </h2>
+
+                                        <p className={`${theme.sub} text-2xl font-light mb-12 max-w-2xl mx-auto leading-relaxed font-institutional`}>
+                                            {whatsappData.subtext}
+                                        </p>
+                                        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                                            <div className="inline-block px-12 py-5 font-bold uppercase tracking-widest text-lg rounded-2xl bg-gradient-to-r from-electric-cyan to-emerald-400 text-black shadow-[0_0_30px_rgba(0,210,255,0.3)]">
+                                                {whatsappData.cta1}
+                                            </div>
+                                            <div className={`px-10 py-5 font-bold uppercase tracking-wide text-lg rounded-2xl border ${theme.border} backdrop-blur-sm`}>
+                                                {whatsappData.cta2}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/40 to-transparent" />
+                                </div>
+                                <div className="mt-4 text-center text-sm text-gray-500 font-mono opacity-70">
+                                    1211 × 681 PX (Recommended) or 1920 × 1080 PX (16:9) // WhatsApp Business Cover Photo ✨
+                                </div>
                             </div>
                         )}
 
@@ -504,7 +717,7 @@ export default function SocialAssetsPage() {
                                 EXPORT SYSTEM ASSET
                             </button>
                             <span className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">
-                                {typeof window !== 'undefined' && navigator.platform.includes('Mac')
+                                {isMac
                                     ? 'Cmd+Shift+4 for pixel-perfect capture'
                                     : 'Win+Shift+S for pixel-perfect capture'}
                             </span>
