@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import {
     Scale, Layout, Monitor, Users, Activity, Settings, RefreshCcw,
@@ -25,19 +25,21 @@ type ActiveMode =
     | 'linkedin' | 'linkedin-profile' | 'linkedin-page' | 'linkedin-page-logo' | 'linkedin-post'
     | 'facebook' | 'facebook-personal' | 'facebook-page' | 'facebook-group' | 'facebook-post'
     | 'instagram' | 'instagram-profile' | 'whatsapp' | 'whatsapp-business' | 'whatsapp-business-cover'
-    | 'profile' | 'audit';
+    | 'profile' | 'audit'
+    | 'upwork-hero' | 'upwork-before-after' | 'upwork-process' | 'upwork-pricing'
+    | 'forum-header' | 'forum-card';
 
 
 const PLATFORMS = [
     // Core
     { id: 'linkedin', icon: Layout, label: 'LI Banner', canvas: '1584×396' },
-    { id: 'facebook-personal', icon: Monitor, label: 'FB Cover', canvas: '820×360' },
+    { id: 'facebook-personal', icon: Monitor, label: 'FB Cover', canvas: '820×312' },
     { id: 'whatsapp', icon: Smartphone, label: 'WA Status', canvas: '1080×1920' },
     { id: 'profile', icon: Users, label: 'Universal Profile', canvas: '400×400' },
 
     // Facebook
     { id: 'facebook-page', icon: Monitor, label: 'FB Page', canvas: '820×360' },
-    { id: 'facebook-group', icon: Monitor, label: 'FB Group', canvas: '820×360' },
+    { id: 'facebook-group', icon: Monitor, label: 'FB Group', canvas: '1640×856' },
     { id: 'facebook-post', icon: Monitor, label: 'FB Post', canvas: '1200×630' },
 
     // LinkedIn
@@ -56,6 +58,46 @@ const PLATFORMS = [
 
     // Audit
     { id: 'audit', icon: Activity, label: 'Audit', canvas: 'Variable' },
+    // Upwork Portfolio
+    { id: 'upwork-hero', icon: Monitor, label: 'UW Hero', canvas: '1600×1200' },
+    { id: 'upwork-before-after', icon: Monitor, label: 'UW Before/After', canvas: '1600×1200' },
+    { id: 'upwork-process', icon: Monitor, label: 'UW Process', canvas: '1600×1200' },
+    { id: 'upwork-pricing', icon: Monitor, label: 'UW Pricing', canvas: '1600×1200' },
+    // Manager.io Forum
+    { id: 'forum-header', icon: Layout, label: 'Forum Header', canvas: '1110×300' },
+    { id: 'forum-card', icon: Users, label: 'Forum Card', canvas: '590×300' },
+] as const;
+
+
+const NAV_GROUPS = [
+    {
+        id: 'linkedin', label: 'LinkedIn', dot: '#0077B5',
+        modes: ['linkedin', 'linkedin-profile', 'linkedin-page', 'linkedin-page-logo', 'linkedin-post'],
+    },
+    {
+        id: 'facebook', label: 'Facebook', dot: '#1877F2',
+        modes: ['facebook-personal', 'facebook-page', 'facebook-group', 'facebook-post'],
+    },
+    {
+        id: 'instagram', label: 'Instagram', dot: '#E1306C',
+        modes: ['instagram', 'instagram-profile'],
+    },
+    {
+        id: 'whatsapp', label: 'WhatsApp', dot: '#25D366',
+        modes: ['whatsapp', 'whatsapp-business', 'whatsapp-business-cover'],
+    },
+    {
+        id: 'utility', label: 'Utility', dot: '#FFD700',
+        modes: ['profile', 'audit'],
+    },
+    {
+        id: 'upwork', label: 'Upwork', dot: '#14a800',
+        modes: ['upwork-hero', 'upwork-before-after', 'upwork-process', 'upwork-pricing'],
+    },
+    {
+        id: 'forum', label: 'Forum', dot: '#00D2FF',
+        modes: ['forum-header', 'forum-card'],
+    },
 ] as const;
 
 type RenderMode = 'dark' | 'light' | 'blueprint';
@@ -70,7 +112,7 @@ const MODE_SCALES: Record<ActiveMode, number> = {
     facebook: 0.65,
     'facebook-personal': 0.65,
     'facebook-page': 0.65,
-    'facebook-group': 0.65,
+    'facebook-group': 0.28,
     'facebook-post': 0.5,
     instagram: 0.4,
     'instagram-profile': 0.4,
@@ -79,7 +121,31 @@ const MODE_SCALES: Record<ActiveMode, number> = {
     'whatsapp-business-cover': 0.45,
     profile: 0.8,
     audit: 0.7,
+    'upwork-hero': 0.38,
+    'upwork-before-after': 0.38,
+    'upwork-process': 0.38,
+    'upwork-pricing': 0.38,
+    'forum-header': 0.6,
+    'forum-card': 0.9,
 };
+
+// ─── TECHNICAL COMPONENT PRIMITIVES ─────────────────────────────────────────
+
+const InstitutionalInput = ({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) => (
+    <div className="space-y-1 group">
+        <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold font-mono group-hover:text-electric-cyan transition-colors">{label}</label>
+        <input type="text" value={value} onChange={e => onChange(e.target.value)} spellCheck={false}
+            className="w-full bg-black/40 border border-white/10 rounded px-3 py-3 text-xs text-white focus:outline-none focus:border-electric-cyan focus:bg-electric-cyan/5 font-mono transition-all" />
+    </div>
+);
+
+const InstitutionalTextArea = ({ label, value, onChange, rows }: { label: string; value: string; onChange: (v: string) => void; rows: number }) => (
+    <div className="space-y-1 group">
+        <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold font-mono group-hover:text-electric-cyan transition-colors">{label}</label>
+        <textarea value={value} onChange={e => onChange(e.target.value)} rows={rows} spellCheck={false}
+            className="w-full bg-black/40 border border-white/10 rounded px-3 py-3 text-xs text-white focus:outline-none focus:border-electric-cyan focus:bg-electric-cyan/5 font-mono transition-all resize-none" />
+    </div>
+);
 
 
 
@@ -109,7 +175,6 @@ export default function SocialAssetsPage() {
     });
 
     const [facebookData, setFacebookData] = useState({
-        variant: 'personal' as 'personal' | 'page' | 'group',
         badge: "Official Manager.io Advisor",
         headline: "Institutional-Grade\nFinancial Architecture",
         subtext: "We don't have account managers. We have architects.",
@@ -130,11 +195,12 @@ export default function SocialAssetsPage() {
     });
 
     const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
+    const [isExporting, setIsExporting] = useState(false);
     const [isMac, setIsMac] = useState(false);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            setIsMac(navigator.platform.includes('Mac'));
+            setIsMac(navigator.userAgent.includes('Mac') || navigator.userAgent.includes('Macintosh'));
         }
     }, []);
 
@@ -143,10 +209,27 @@ export default function SocialAssetsPage() {
         role: "Chief Architect",
     });
 
+    const [instagramData, setInstagramData] = useState({
+        headline: "Deploy Your",
+        highlight: "Architecture",
+        subtext: "We architect the accounting logic other consultants walk away from.",
+        cta: "inspiron.tech/architect",
+    });
+
     const [auditState, setAuditState] = useState({
         grid: true,
         spine: true,
         weight: 500 as 300 | 500 | 700,
+    });
+
+    const [upworkData, setUpworkData] = useState({
+        tag: 'Official Manager.io Partner',
+        headline: 'Manager.io ERP',
+        highlight: 'Setup & Data Migration',
+        subtext: 'Clean COA · Zero-Loss Migration · Audit-Ready Reports',
+        name: 'MD ABU HASAN',
+        role: 'Founder & ERP Architect',
+        website: 'inspiron.tech',
     });
 
     // ─── LOGIC HANDLERS ─────────────────────────────────────────────────────
@@ -179,6 +262,63 @@ export default function SocialAssetsPage() {
         }
     };
     const theme = getTheme();
+    // ─── EXPORT HANDLER ─────────────────────────────────────────────────────
+    const handleExport = useCallback(async () => {
+        const target = document.querySelector('[data-export-canvas]') as HTMLElement;
+        if (!target) return;
+        setIsExporting(true);
+        const isUpwork = activeMode.startsWith('upwork-');
+        try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const html2canvas = (await import('html2canvas' as any)).default;
+            const scaleWrapper = target.parentElement as HTMLElement;
+            const prevTransform = scaleWrapper?.style.transform ?? '';
+            if (scaleWrapper) scaleWrapper.style.transform = 'scale(1) translate(0,0)';
+
+            // FIX 1: Tailwind arbitrary bg classes (e.g. bg-[#002147]) aren't resolved by
+            // getComputedStyle in the html2canvas context. Use an explicit renderMode lookup.
+            const bgLookup: Record<string, string> = {
+                dark: '#010409',
+                blueprint: '#002147',
+                light: '#f1f5f9',
+            };
+            const canvasBg = bgLookup[renderMode] ?? '#010409';
+
+            // FIX 2: html2canvas cannot render CSS blur() filters — glow orb divs become
+            // solid blobs. Find elements whose class list includes a token starting with "blur-["
+            // (e.g. blur-[120px]) and hide them before capture, then restore.
+            // We specifically exclude backdrop-blur-* tokens which are metric boxes, not orbs.
+            const blurOrbs = Array.from(target.querySelectorAll<HTMLElement>('[class]')).filter(el => {
+                const cls = typeof el.className === 'string' ? el.className : '';
+                return cls.split(' ').some(token => token.startsWith('blur-['));
+            });
+            blurOrbs.forEach(el => el.style.setProperty('visibility', 'hidden', 'important'));
+
+            const cvs = await html2canvas(target, {
+                scale: 1,
+                useCORS: true,
+                backgroundColor: canvasBg,
+                logging: false,
+                width: target.offsetWidth,
+                height: target.offsetHeight,
+            });
+
+            // Restore blur orb visibility
+            blurOrbs.forEach(el => el.style.removeProperty('visibility'));
+            if (scaleWrapper) scaleWrapper.style.transform = prevTransform;
+
+            const link = document.createElement('a');
+            link.download = `inspiron_${activeMode}_${Date.now()}.${isUpwork ? 'jpg' : 'png'}`;
+            link.href = cvs.toDataURL(isUpwork ? 'image/jpeg' : 'image/png', isUpwork ? 0.95 : 1.0);
+            link.click();
+        } catch {
+            alert('Export failed — ensure html2canvas is installed: npm i html2canvas');
+        } finally {
+            setIsExporting(false);
+        }
+    }, [activeMode, renderMode]);
+
+
 
     const MasterLogo = ({ idSuffix }: { idSuffix: string }) => (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 358.846 350.3" className="w-full h-full">
@@ -200,41 +340,70 @@ export default function SocialAssetsPage() {
         <div className="min-h-screen bg-[#010409] text-white font-institutional selection:bg-electric-cyan selection:text-black flex flex-col overflow-hidden">
 
             {/* ─── HUD ───────────────────────────────────────────────────── */}
-            <nav className="sticky top-0 z-50 bg-[#010409]/80 backdrop-blur-md border-b border-white/10 h-16 shrink-0">
-                <div className="max-w-[1920px] mx-auto px-6 h-full flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <Link href="/" className="hidden md:flex items-center gap-2 text-gray-500 hover:text-white text-[10px] font-mono tracking-widest transition-colors mr-4">
-                            ← HOME
-                        </Link>
-                        <div className="w-8 h-8 bg-action-gold/10 rounded flex items-center justify-center border border-action-gold/20">
-                            <Scale className="text-action-gold" size={16} />
+            <nav className="sticky top-0 z-50 bg-[#010409]/90 backdrop-blur-md border-b border-white/10 shrink-0">
+                <div className="max-w-[1920px] mx-auto px-6">
+                    {/* Row 1: brand + category tabs */}
+                    <div className="h-14 flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-4 shrink-0">
+                            <Link href="/" className="hidden md:flex items-center gap-2 text-gray-500 hover:text-white text-[10px] font-mono tracking-widest transition-colors mr-2">
+                                ← HOME
+                            </Link>
+                            <div className="w-7 h-7 bg-action-gold/10 rounded flex items-center justify-center border border-action-gold/20">
+                                <Scale className="text-action-gold" size={14} />
+                            </div>
+                            <div className="hidden sm:block">
+                                <div className="text-[11px] font-bold tracking-[0.2em] uppercase text-white leading-none">Brand Asset Command</div>
+                                <div className="text-[9px] text-gray-500 font-mono tracking-widest mt-0.5">V2.14 // ACTIVE</div>
+                            </div>
                         </div>
-                        <div>
-                            <div className="text-xs font-bold tracking-[0.2em] uppercase text-white">Brand Asset Command</div>
-                            <div className="text-[10px] text-gray-500 font-mono tracking-widest">MD ABU HASAN // STATUS: ACTIVE</div>
+                        {/* Category tabs */}
+                        <div className="flex gap-1 overflow-x-auto scrollbar-none">
+                            {NAV_GROUPS.map((group) => {
+                                const isActive = group.modes.includes(activeMode as never);
+                                return (
+                                    <button
+                                        key={group.id}
+                                        onClick={() => setActiveMode(group.modes[0] as ActiveMode)}
+                                        className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${isActive
+                                            ? 'text-white border-b-2'
+                                            : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'
+                                            }`}
+                                        style={isActive ? { borderBottomColor: group.dot, backgroundColor: `${group.dot}15` } : {}}
+                                    >
+                                        <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: group.dot }} />
+                                        {group.label}
+                                    </button>
+                                );
+                            })}
                         </div>
                     </div>
-                    <div className="flex gap-1 bg-white/5 p-1 rounded-lg border border-white/5 overflow-x-auto scrollbar-none">
-                        {(PLATFORMS as unknown as any[]).map((mode) => (
-                            <button
-                                key={mode.id}
-                                onClick={() => setActiveMode(mode.id)}
-                                className={`flex items-center gap-2 px-4 py-2 rounded text-[10px] font-bold uppercase tracking-widest transition-all ${activeMode === mode.id
-                                    ? 'bg-electric-cyan text-deep-navy-black shadow-[0_0_20px_rgba(0,210,255,0.2)]'
-                                    : 'text-gray-400 hover:text-white hover:bg-white/5'
-                                    }`}
-                            >
-                                <mode.icon size={14} />
-                                <span className="hidden md:inline">{mode.label}</span>
-                            </button>
-                        ))}
+                    {/* Row 2: sub-mode pills */}
+                    <div className="h-9 flex items-center gap-1 pb-2 overflow-x-auto scrollbar-none border-t border-white/5">
+                        {NAV_GROUPS.find(g => g.modes.includes(activeMode as never))?.modes.map((modeId) => {
+                            const platform = (PLATFORMS as readonly typeof PLATFORMS[number][]).find(p => p.id === modeId);
+                            if (!platform) return null;
+                            return (
+                                <button
+                                    key={modeId}
+                                    onClick={() => setActiveMode(modeId as ActiveMode)}
+                                    className={`flex items-center gap-1.5 px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${activeMode === modeId
+                                        ? 'bg-electric-cyan text-deep-navy-black shadow-[0_0_12px_rgba(0,210,255,0.3)]'
+                                        : 'text-gray-500 hover:text-white hover:bg-white/5'
+                                        }`}
+                                >
+                                    <platform.icon size={11} />
+                                    {platform.label}
+                                    <span className="text-[8px] opacity-60 font-mono">{platform.canvas}</span>
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
             </nav>
 
             {/* ─── MAIN THEATER ──────────────────────────────────────────── */}
             {/* FIX 5: min-w-0 on main prevents flex children from overflowing */}
-            <main className="flex-1 flex flex-col lg:flex-row lg:h-[calc(100vh-64px)] lg:overflow-hidden min-w-0">
+            <main className="flex-1 flex flex-col lg:flex-row lg:h-[calc(100vh-96px)] lg:overflow-hidden min-w-0">
 
                 {/* ─── CONTROLS ──────────────────────────────────────────── */}
                 <aside className="w-full max-h-[50vh] lg:max-h-none lg:w-[420px] bg-[#050a10] border-r border-white/10 overflow-y-auto custom-scrollbar flex flex-col shrink-0 z-10">
@@ -261,19 +430,21 @@ export default function SocialAssetsPage() {
                                     </div>
                                 </div>
                                 <div className="h-px bg-white/10" />
-                                <TechInput label="Badge Tag" value={linkedinData.tag} onChange={v => setLinkedinData({ ...linkedinData, tag: v })} />
-                                <TechInput label="Headline" value={linkedinData.headline} onChange={v => setLinkedinData({ ...linkedinData, headline: v })} />
-                                <TechInput label="Gold Highlight" value={linkedinData.highlight} onChange={v => setLinkedinData({ ...linkedinData, highlight: v })} />
-                                <TechTextArea label="Sub-Narrative" value={linkedinData.subtext} onChange={v => setLinkedinData({ ...linkedinData, subtext: v })} rows={3} />
+                                <InstitutionalInput label="Badge Tag" value={linkedinData.tag} onChange={v => setLinkedinData({ ...linkedinData, tag: v })} />
+                                <InstitutionalInput label="Headline" value={linkedinData.headline} onChange={v => setLinkedinData({ ...linkedinData, headline: v })} />
+                                <InstitutionalInput label="Gold Highlight" value={linkedinData.highlight} onChange={v => setLinkedinData({ ...linkedinData, highlight: v })} />
+                                <InstitutionalTextArea label="Sub-Narrative" value={linkedinData.subtext} onChange={v => setLinkedinData({ ...linkedinData, subtext: v })} rows={3} />
                                 <div className="h-px bg-white/10" />
                                 <div className="grid grid-cols-2 gap-3">
-                                    <TechInput label="Name" value={linkedinData.name} onChange={v => setLinkedinData({ ...linkedinData, name: v })} />
-                                    <TechInput label="Role" value={linkedinData.role} onChange={v => setLinkedinData({ ...linkedinData, role: v })} />
-                                    <TechInput label="Metric 1 Val" value={linkedinData.metric1Val} onChange={v => setLinkedinData({ ...linkedinData, metric1Val: v })} />
-                                    <TechInput label="Metric 1 Lbl" value={linkedinData.metric1Lbl} onChange={v => setLinkedinData({ ...linkedinData, metric1Lbl: v })} />
-                                    <TechInput label="Metric 2 Val" value={linkedinData.metric2Val} onChange={v => setLinkedinData({ ...linkedinData, metric2Val: v })} />
-                                    <TechInput label="Metric 2 Lbl" value={linkedinData.metric2Lbl} onChange={v => setLinkedinData({ ...linkedinData, metric2Lbl: v })} />
+                                    <InstitutionalInput label="Name" value={linkedinData.name} onChange={v => setLinkedinData({ ...linkedinData, name: v })} />
+                                    <InstitutionalInput label="Role" value={linkedinData.role} onChange={v => setLinkedinData({ ...linkedinData, role: v })} />
+                                    <InstitutionalInput label="Metric 1 Val" value={linkedinData.metric1Val} onChange={v => setLinkedinData({ ...linkedinData, metric1Val: v })} />
+                                    <InstitutionalInput label="Metric 1 Lbl" value={linkedinData.metric1Lbl} onChange={v => setLinkedinData({ ...linkedinData, metric1Lbl: v })} />
+                                    <InstitutionalInput label="Metric 2 Val" value={linkedinData.metric2Val} onChange={v => setLinkedinData({ ...linkedinData, metric2Val: v })} />
+                                    <InstitutionalInput label="Metric 2 Lbl" value={linkedinData.metric2Lbl} onChange={v => setLinkedinData({ ...linkedinData, metric2Lbl: v })} />
                                 </div>
+                                <div className="h-px bg-white/10" />
+                                <InstitutionalInput label="Website / CTA" value={linkedinData.website} onChange={v => setLinkedinData({ ...linkedinData, website: v })} />
                             </div>
                         )}
 
@@ -283,15 +454,15 @@ export default function SocialAssetsPage() {
                                 <div className="grid grid-cols-3 gap-2 mb-4">
                                     {(['personal', 'page', 'group'] as const).map(v => (
                                         <button key={v} onClick={() => setActiveMode(`facebook-${v}` as ActiveMode)}
-                                            className={`p-3 rounded text-[10px] font-bold uppercase tracking-widest transition-all ${activeMode.includes(v) ? 'bg-electric-cyan text-black' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}>
+                                            className={`p-3 rounded text-[10px] font-bold uppercase tracking-widest transition-all ${activeMode === `facebook-${v}` ? 'bg-electric-cyan text-black' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}>
                                             {v}
                                         </button>
                                     ))}
                                 </div>
-                                <TechInput label="Top Badge" value={facebookData.badge} onChange={v => setFacebookData({ ...facebookData, badge: v })} />
-                                <TechTextArea label="Headline (\\n = new line)" value={facebookData.headline} onChange={v => setFacebookData({ ...facebookData, headline: v })} rows={3} />
-                                <TechTextArea label="Sub-Narrative" value={facebookData.subtext} onChange={v => setFacebookData({ ...facebookData, subtext: v })} rows={2} />
-                                <TechInput label="CTA Button" value={facebookData.cta} onChange={v => setFacebookData({ ...facebookData, cta: v })} />
+                                <InstitutionalInput label="Top Badge" value={facebookData.badge} onChange={v => setFacebookData({ ...facebookData, badge: v })} />
+                                <InstitutionalTextArea label="Headline (\\n = new line)" value={facebookData.headline} onChange={v => setFacebookData({ ...facebookData, headline: v })} rows={3} />
+                                <InstitutionalTextArea label="Sub-Narrative" value={facebookData.subtext} onChange={v => setFacebookData({ ...facebookData, subtext: v })} rows={2} />
+                                <InstitutionalInput label="CTA Button" value={facebookData.cta} onChange={v => setFacebookData({ ...facebookData, cta: v })} />
                             </div>
                         )}
 
@@ -301,43 +472,58 @@ export default function SocialAssetsPage() {
                                 <div className="p-3 bg-white/5 border border-white/10 rounded text-[10px] text-gray-400 font-mono uppercase tracking-widest">
                                     MODE: {activeMode.replace(/-/g, ' ')}
                                 </div>
-                                <TechInput label="Badge / Tag" value={activeMode === 'whatsapp' ? whatsappData.tag : whatsappData.badge}
+                                <InstitutionalInput label="Badge / Tag" value={activeMode === 'whatsapp' ? whatsappData.tag : whatsappData.badge}
                                     onChange={v => activeMode === 'whatsapp' ? setWhatsappData({ ...whatsappData, tag: v }) : setWhatsappData({ ...whatsappData, badge: v })} />
-                                <TechInput label="Headline" value={whatsappData.headline} onChange={v => setWhatsappData({ ...whatsappData, headline: v })} />
-                                <TechInput label="Gold Highlight" value={whatsappData.highlight} onChange={v => setWhatsappData({ ...whatsappData, highlight: v })} />
-                                <TechTextArea label="Sub-Narrative" value={whatsappData.subtext} onChange={v => setWhatsappData({ ...whatsappData, subtext: v })} rows={4} />
+                                <InstitutionalInput label="Headline" value={whatsappData.headline} onChange={v => setWhatsappData({ ...whatsappData, headline: v })} />
+                                <InstitutionalInput label="Gold Highlight" value={whatsappData.highlight} onChange={v => setWhatsappData({ ...whatsappData, highlight: v })} />
+                                <InstitutionalTextArea label="Sub-Narrative" value={whatsappData.subtext} onChange={v => setWhatsappData({ ...whatsappData, subtext: v })} rows={4} />
 
                                 {activeMode === 'whatsapp' && (
                                     <>
                                         <div className="h-px bg-white/10" />
-                                        <TechInput label="Name" value={whatsappData.name} onChange={v => setWhatsappData({ ...whatsappData, name: v })} />
-                                        <TechInput label="Role" value={whatsappData.role} onChange={v => setWhatsappData({ ...whatsappData, role: v })} />
-                                        <TechInput label="Bottom CTA" value={whatsappData.cta} onChange={v => setWhatsappData({ ...whatsappData, cta: v })} />
+                                        <InstitutionalInput label="Name" value={whatsappData.name} onChange={v => setWhatsappData({ ...whatsappData, name: v })} />
+                                        <InstitutionalInput label="Role" value={whatsappData.role} onChange={v => setWhatsappData({ ...whatsappData, role: v })} />
+                                        <InstitutionalInput label="Bottom CTA" value={whatsappData.cta} onChange={v => setWhatsappData({ ...whatsappData, cta: v })} />
                                     </>
                                 )}
 
                                 {activeMode === 'whatsapp-business-cover' && (
                                     <>
                                         <div className="h-px bg-white/10" />
-                                        <TechInput label="CTA 1 (Primary)" value={whatsappData.cta1} onChange={v => setWhatsappData({ ...whatsappData, cta1: v })} />
-                                        <TechInput label="CTA 2 (Secondary)" value={whatsappData.cta2} onChange={v => setWhatsappData({ ...whatsappData, cta2: v })} />
+                                        <InstitutionalInput label="CTA 1 (Primary)" value={whatsappData.cta1} onChange={v => setWhatsappData({ ...whatsappData, cta1: v })} />
+                                        <InstitutionalInput label="CTA 2 (Secondary)" value={whatsappData.cta2} onChange={v => setWhatsappData({ ...whatsappData, cta2: v })} />
                                     </>
                                 )}
+                            </div>
+                        )}
+
+
+                        {/* INSTAGRAM CONTROLS */}
+                        {activeMode.startsWith('instagram') && (
+                            <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
+                                <InstitutionalInput label="Headline" value={instagramData.headline}
+                                    onChange={v => setInstagramData({ ...instagramData, headline: v })} />
+                                <InstitutionalInput label="Gold Highlight" value={instagramData.highlight}
+                                    onChange={v => setInstagramData({ ...instagramData, highlight: v })} />
+                                <InstitutionalTextArea label="Sub-Narrative" value={instagramData.subtext}
+                                    onChange={v => setInstagramData({ ...instagramData, subtext: v })} rows={3} />
+                                <InstitutionalInput label="CTA" value={instagramData.cta}
+                                    onChange={v => setInstagramData({ ...instagramData, cta: v })} />
                             </div>
                         )}
 
                         {/* PROFILE CONTROLS (Universal) */}
                         {activeMode === 'profile' && (
                             <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
-                                <TechInput label="Initials" value={profileData.initials} onChange={v => setProfileData({ ...profileData, initials: v })} />
-                                <TechInput label="Role Badge" value={profileData.role} onChange={v => setProfileData({ ...profileData, role: v })} />
+                                <InstitutionalInput label="Initials" value={profileData.initials} onChange={v => setProfileData({ ...profileData, initials: v })} />
+                                <InstitutionalInput label="Role Badge" value={profileData.role} onChange={v => setProfileData({ ...profileData, role: v })} />
                                 <div className="p-4 bg-action-gold/5 border border-action-gold/20 rounded text-[10px] text-action-gold/80 font-mono leading-relaxed">
                                     &gt;&gt; SYSTEM NOTE: Generates BRAND CONTAINER (400×400). Overlay transparent PNG headshot in post-production.
                                 </div>
                             </div>
                         )}
 
-                        {/* AUDIT CONTROLS — FIX 3: weight test re-added */}
+                        {/* AUDIT CONTROLS */}
                         {activeMode === 'audit' && (
                             <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
                                 <div className="p-3 bg-electric-cyan/5 border border-electric-cyan/20 rounded text-[10px] text-electric-cyan font-mono">STATUS: GEOMETRIC INTEGRITY CHECK</div>
@@ -371,9 +557,36 @@ export default function SocialAssetsPage() {
                                 </div>
                             </div>
                         )}
+
+                        {/* UPWORK CONTROLS */}
+                        {activeMode.startsWith('upwork') && (
+                            <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
+                                <div className="p-3 bg-[#14a800]/10 border border-[#14a800]/30 rounded text-[10px] text-[#14a800] font-mono uppercase tracking-widest">Upwork Portfolio Assets // JPG Export</div>
+                                <div className="grid grid-cols-2 gap-2">
+                                    {(['upwork-hero', 'upwork-before-after', 'upwork-process', 'upwork-pricing'] as const).map(m => (
+                                        <button key={m} onClick={() => setActiveMode(m)}
+                                            className={`px-3 py-2 rounded text-[10px] font-bold uppercase tracking-widest transition-all ${activeMode === m ? 'bg-[#14a800] text-white' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}>
+                                            {m.replace('upwork-', '')}
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="h-px bg-white/10" />
+                                <InstitutionalInput label="Top Tag" value={upworkData.tag} onChange={v => setUpworkData({ ...upworkData, tag: v })} />
+                                <InstitutionalInput label="Headline" value={upworkData.headline} onChange={v => setUpworkData({ ...upworkData, headline: v })} />
+                                <InstitutionalInput label="Gold Highlight" value={upworkData.highlight} onChange={v => setUpworkData({ ...upworkData, highlight: v })} />
+                                <InstitutionalTextArea label="Sub-Narrative" value={upworkData.subtext} onChange={v => setUpworkData({ ...upworkData, subtext: v })} rows={3} />
+                                <div className="h-px bg-white/10" />
+                                <InstitutionalInput label="Name" value={upworkData.name} onChange={v => setUpworkData({ ...upworkData, name: v })} />
+                                <InstitutionalInput label="Role" value={upworkData.role} onChange={v => setUpworkData({ ...upworkData, role: v })} />
+                                <InstitutionalInput label="Website" value={upworkData.website} onChange={v => setUpworkData({ ...upworkData, website: v })} />
+                                <div className="p-4 bg-[#14a800]/5 border border-[#14a800]/20 rounded text-[10px] text-[#14a800]/80 font-mono leading-relaxed">
+                                    &gt;&gt; EXPORT: JPG 0.95q — enforced &lt;10MB Upwork compliance
+                                </div>
+                            </div>
+                        )}
                     </div>
                     <div className="mt-auto p-6 border-t border-white/10 text-[10px] text-gray-600 font-mono text-center">
-                        INSPIRON_SOCIAL_GENERATOR_V2.12
+                        INSPIRON_SOCIAL_GENERATOR_V2.14
                     </div>
                 </aside>
 
@@ -416,7 +629,7 @@ export default function SocialAssetsPage() {
                         {/* 1. LINKEDIN (1584 × 396) */}
                         {activeMode === 'linkedin' && (
                             <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
-                                <div className={`w-[1584px] h-[396px] ${theme.bg} relative overflow-hidden flex items-center justify-between px-24 ring-1 ring-white/5 transition-colors duration-500`}>
+                                <div data-export-canvas className={`w-[1584px] h-[396px] ${theme.bg} relative overflow-hidden flex items-center justify-between px-24 ring-1 ring-white/5 transition-colors duration-500`}>
                                     <div className={`absolute inset-0 ${theme.grid} [background-size:24px_24px]`} />
                                     <div className="absolute right-0 top-0 w-[600px] h-[600px] blur-[120px] rounded-full opacity-20" style={{ backgroundColor: '#00D2FF' }} />
                                     <div className="relative z-10 w-2/3">
@@ -458,50 +671,108 @@ export default function SocialAssetsPage() {
                             </div>
                         )}
 
-                        {/* 2. FACEBOOK COVER (820 × 360) */}
-                        {activeMode.startsWith('facebook') && activeMode !== 'facebook-post' && (
-                            <div style={{ transform: `scale(${scale * (previewMode === 'mobile' ? 0.78 : 1)})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
-                                <div className={`w-[820px] h-[360px] ${theme.bg} relative overflow-hidden flex items-center justify-center text-center ${theme.border} border transition-colors duration-500`}>
-                                    <div className={`absolute inset-0 ${theme.grid} [background-size:20px_20px]`} />
-
-                                    {/* SAFE AREA OVERLAY — Critical for mobile */}
-                                    <div className="absolute inset-0 pointer-events-none z-20">
-                                        <div className="absolute left-1/2 top-1/2 w-[640px] h-[360px] -translate-x-1/2 -translate-y-1/2 border-4 border-red-500/50 rounded-lg" />
-                                        <div className="absolute left-0 top-0 w-[90px] h-full bg-red-500/10" /> {/* Left crop simulation */}
-                                        <div className="absolute right-0 top-0 w-[90px] h-full bg-red-500/10" /> {/* Right crop simulation */}
+                        {/* 2a. FACEBOOK PERSONAL COVER (820 x 312) */}
+                        {activeMode === 'facebook-personal' && (
+                            <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
+                                {/* SAFE ZONE overlay — outside canvas, never exported */}
+                                <div className="absolute inset-0 pointer-events-none z-30">
+                                    <div className="absolute left-1/2 top-1/2 w-[640px] h-[230px] -translate-x-1/2 -translate-y-1/2 border border-dashed border-white/20 rounded" />
+                                    <div className="absolute bottom-0 left-8 w-[168px] h-[168px] rounded-full border-2 border-dashed border-yellow-400/40 flex items-end justify-center pb-1">
+                                        <span className="text-[8px] text-yellow-400/60 font-mono">PIC OVERLAP</span>
                                     </div>
-
-                                    <div className="relative z-10 px-16 py-12 max-w-[640px]">
-                                        <div className="inline-flex items-center gap-2 text-lg font-bold uppercase tracking-[0.2em] mb-6" style={{ color: '#FFD700' }}>
-                                            <BadgeCheck size={20} /> {facebookData.badge}
+                                </div>
+                                <div data-export-canvas className={`w-[820px] h-[312px] ${theme.bg} relative overflow-hidden flex items-center justify-center text-center ${theme.border} border transition-colors duration-500`}>
+                                    <div className={`absolute inset-0 ${theme.grid} [background-size:20px_20px]`} />
+                                    <div className="relative z-10 px-12 py-6 max-w-[580px]">
+                                        <div className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em] mb-4" style={{ color: '#FFD700' }}>
+                                            <BadgeCheck size={16} /> {facebookData.badge}
                                         </div>
-                                        <h2 className={`text-5xl font-black ${theme.text} uppercase tracking-tight mb-6 whitespace-pre-line leading-tight font-institutional`}>
+                                        <h2 className={`text-4xl font-black ${theme.text} uppercase tracking-tight mb-4 whitespace-pre-line leading-tight font-institutional`}>
                                             {facebookData.headline}
                                         </h2>
-                                        <p className={`${theme.sub} text-base font-light mb-8 max-w-lg mx-auto font-institutional leading-relaxed`}>
+                                        <p className={`${theme.sub} text-sm font-light mb-5 max-w-md mx-auto font-institutional leading-relaxed`}>
                                             {facebookData.subtext}
                                         </p>
-                                        <div className="inline-block px-10 py-4 font-bold uppercase tracking-widest text-sm rounded-full shadow-[0_0_20px_rgba(0,210,255,0.4)]"
+                                        <div className="inline-block px-8 py-3 font-bold uppercase tracking-widest text-xs rounded-full shadow-[0_0_20px_rgba(255,215,0,0.4)]"
                                             style={{ backgroundColor: '#00D2FF', color: '#010409' }}>
                                             {facebookData.cta}
                                         </div>
                                     </div>
                                 </div>
-                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">
-                                    820 × 360 PX // FB {activeMode.split('-')[1]?.toUpperCase() || 'COVER'} (Safe Area: 640×360 Center) ✨
-                                </div>
+                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">820 × 312 PX // FB_PERSONAL_COVER</div>
                             </div>
                         )}
 
-                        {/* 2b. FACEBOOK POST (1200 × 630) */}
+                        {/* 2b. FACEBOOK PAGE COVER (820 x 360) */}
+                        {activeMode === 'facebook-page' && (
+                            <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
+                                {/* SAFE ZONE overlay — outside canvas, never exported */}
+                                <div className="absolute inset-0 pointer-events-none z-30">
+                                    <div className="absolute left-1/2 top-1/2 w-[640px] h-[240px] -translate-x-1/2 -translate-y-1/2 border border-dashed border-white/20 rounded" />
+                                    <div className="absolute bottom-4 left-6 text-[8px] text-yellow-400/60 font-mono uppercase">Logo Zone</div>
+                                </div>
+                                <div data-export-canvas className={`w-[820px] h-[360px] ${theme.bg} relative overflow-hidden flex items-center justify-center text-center ${theme.border} border transition-colors duration-500`}>
+                                    <div className={`absolute inset-0 ${theme.grid} [background-size:20px_20px]`} />
+                                    <div className="relative z-10 px-16 py-10 max-w-[640px]">
+                                        <div className="inline-flex items-center gap-2 text-base font-bold uppercase tracking-[0.2em] mb-5" style={{ color: '#FFD700' }}>
+                                            <BadgeCheck size={18} /> {facebookData.badge}
+                                        </div>
+                                        <h2 className={`text-5xl font-black ${theme.text} uppercase tracking-tight mb-5 whitespace-pre-line leading-tight font-institutional`}>
+                                            {facebookData.headline}
+                                        </h2>
+                                        <p className={`${theme.sub} text-base font-light mb-7 max-w-lg mx-auto font-institutional leading-relaxed`}>
+                                            {facebookData.subtext}
+                                        </p>
+                                        <div className="inline-block px-10 py-3 font-bold uppercase tracking-widest text-sm rounded-full shadow-[0_0_20px_rgba(255,215,0,0.4)]"
+                                            style={{ backgroundColor: '#00D2FF', color: '#010409' }}>
+                                            {facebookData.cta}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">820 × 360 PX // FB_PAGE_COVER</div>
+                            </div>
+                        )}
+
+                        {/* 2c. FACEBOOK GROUP COVER (1640 x 856) */}
+                        {activeMode === 'facebook-group' && (
+                            <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
+                                {/* SAFE ZONE overlay — outside canvas, never exported */}
+                                <div className="absolute inset-0 pointer-events-none z-30">
+                                    <div className="absolute left-1/2 top-1/2 w-[1200px] h-[600px] -translate-x-1/2 -translate-y-1/2 border border-dashed border-white/15 rounded" />
+                                </div>
+                                <div data-export-canvas className={`w-[1640px] h-[856px] ${theme.bg} relative overflow-hidden flex items-center justify-center text-center ${theme.border} border transition-colors duration-500`}>
+                                    <div className={`absolute inset-0 ${theme.grid} [background-size:40px_40px]`} />
+                                    <div className="absolute right-0 top-0 w-[800px] h-[800px] blur-[200px] rounded-full opacity-20" style={{ backgroundColor: '#00D2FF' }} />
+                                    <div className="absolute left-0 bottom-0 w-[600px] h-[600px] blur-[200px] rounded-full opacity-10" style={{ backgroundColor: '#FFD700' }} />
+                                    <div className="relative z-10 px-32 py-24 max-w-[1200px]">
+                                        <div className="inline-flex items-center gap-3 text-2xl font-bold uppercase tracking-[0.2em] mb-10" style={{ color: '#FFD700' }}>
+                                            <BadgeCheck size={28} /> {facebookData.badge}
+                                        </div>
+                                        <h2 className={`text-8xl font-black ${theme.text} uppercase tracking-tight mb-10 whitespace-pre-line leading-tight font-institutional`}>
+                                            {facebookData.headline}
+                                        </h2>
+                                        <p className={`${theme.sub} text-2xl font-light mb-14 max-w-3xl mx-auto font-institutional leading-relaxed`}>
+                                            {facebookData.subtext}
+                                        </p>
+                                        <div className="inline-block px-16 py-6 font-bold uppercase tracking-widest text-xl rounded-full shadow-[0_0_40px_rgba(255,215,0,0.4)]"
+                                            style={{ backgroundColor: '#00D2FF', color: '#010409' }}>
+                                            {facebookData.cta}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">1640 × 856 PX // FB_GROUP_COVER</div>
+                            </div>
+                        )}
+
+                        {/* 2d. FACEBOOK POST (1200 × 630) */}
                         {activeMode === 'facebook-post' && (
                             <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
-                                <div className={`w-[1200px] h-[630px] ${theme.bg} relative overflow-hidden flex items-center justify-center text-center ${theme.border} border transition-colors duration-500`}>
+                                <div data-export-canvas className={`w-[1200px] h-[630px] ${theme.bg} relative overflow-hidden flex items-center justify-center text-center ${theme.border} border transition-colors duration-500`}>
                                     <div className={`absolute inset-0 ${theme.grid} [background-size:30px_30px]`} />
                                     <div className="relative z-10 px-24">
                                         <div className="w-24 h-24 mx-auto mb-8"><MasterLogo idSuffix="fb-post" /></div>
-                                        <h2 className={`text-6xl font-black ${theme.text} uppercase tracking-tight mb-8 font-institutional`}>
-                                            {facebookData.headline.replace(/\\n/g, ' ')}
+                                        <h2 className={`text-6xl font-black ${theme.text} uppercase tracking-tight mb-8 whitespace-pre-line font-institutional`}>
+                                            {facebookData.headline}
                                         </h2>
                                         <p className={`${theme.sub} text-2xl font-light mb-12 max-w-2xl mx-auto font-institutional`}>
                                             {facebookData.subtext}
@@ -518,7 +789,7 @@ export default function SocialAssetsPage() {
                         {/* 3. WHATSAPP (1080 × 1920) — FIX 2: isolated whatsappData */}
                         {activeMode === 'whatsapp' && (
                             <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
-                                <div className={`w-[1080px] h-[1920px] ${theme.bg} relative overflow-hidden flex flex-col justify-between p-32 ring-1 ring-white/5 transition-colors duration-500`}>
+                                <div data-export-canvas className={`w-[1080px] h-[1920px] ${theme.bg} relative overflow-hidden flex flex-col justify-between p-32 ring-1 ring-white/5 transition-colors duration-500`}>
                                     <div className={`absolute inset-0 ${theme.grid} [background-size:40px_40px]`} />
                                     <div className="absolute top-0 right-0 w-[800px] h-[800px] blur-[150px] rounded-full opacity-10" style={{ backgroundColor: '#00D2FF' }} />
                                     <div className="absolute bottom-0 left-0 w-[600px] h-[600px] blur-[150px] rounded-full opacity-10" style={{ backgroundColor: '#FFD700' }} />
@@ -559,7 +830,7 @@ export default function SocialAssetsPage() {
                         {/* 4. PROFILE VARIANTS (400, 500, 1080) */}
                         {(activeMode === 'profile' || activeMode === 'linkedin-profile' || activeMode === 'whatsapp-business' || activeMode === 'instagram-profile' || activeMode === 'linkedin-page-logo') && (
                             <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
-                                <div className={`relative ${activeMode === 'whatsapp-business' ? 'w-[500px] h-[500px]' :
+                                <div data-export-canvas className={`relative ${activeMode === 'whatsapp-business' ? 'w-[500px] h-[500px]' :
                                     activeMode === 'instagram-profile' ? 'w-[1080px] h-[1080px]' :
                                         'w-[400px] h-[400px]'
                                     } ${activeMode === 'linkedin-page-logo' ? 'rounded-none' : 'rounded-full'} overflow-hidden ${theme.bg} border-4 shadow-2xl flex items-center justify-center transition-colors duration-500`}
@@ -589,7 +860,7 @@ export default function SocialAssetsPage() {
                         {/* 5. LINKEDIN PAGE (1128 × 191) */}
                         {activeMode === 'linkedin-page' && (
                             <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
-                                <div className={`w-[1128px] h-[191px] ${theme.bg} relative overflow-hidden flex items-center px-12 ${theme.border} border transition-colors duration-500`}>
+                                <div data-export-canvas className={`w-[1128px] h-[191px] ${theme.bg} relative overflow-hidden flex items-center px-12 ${theme.border} border transition-colors duration-500`}>
                                     <div className={`absolute inset-0 ${theme.grid} [background-size:20px_20px]`} />
                                     <div className="relative z-10 flex items-center gap-12 w-full">
                                         <div className="w-24 h-24 shrink-0"><MasterLogo idSuffix="li-page" /></div>
@@ -597,8 +868,8 @@ export default function SocialAssetsPage() {
                                             <h2 className={`text-4xl font-black ${theme.text} uppercase tracking-tight font-institutional`}>
                                                 {linkedinData.headline} <span style={{ color: '#FFD700' }}>{linkedinData.highlight}</span>
                                             </h2>
-                                            <p className={`${theme.sub} text-sm font-light uppercase tracking-[0.2em] mt-2`}>
-                                                {linkedinData.subtext.substring(0, 60)}...
+                                            <p className={`${theme.sub} text-sm font-light uppercase tracking-[0.2em] mt-2 leading-relaxed`}>
+                                                {linkedinData.subtext}
                                             </p>
                                         </div>
                                         <div className="ml-auto font-mono text-xl text-electric-cyan">{linkedinData.website}</div>
@@ -611,19 +882,19 @@ export default function SocialAssetsPage() {
                         {/* 6. LINKEDIN POST / INSTAGRAM (Standard Squares/Landscape) */}
                         {(activeMode === 'linkedin-post' || activeMode === 'instagram') && (
                             <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
-                                <div className={`${activeMode === 'instagram' ? 'w-[1080px] h-[1080px]' : 'w-[1200px] h-[627px]'} ${theme.bg} relative overflow-hidden flex items-center justify-center text-center p-24 ${theme.border} border transition-colors duration-500`}>
+                                <div data-export-canvas className={`${activeMode === 'instagram' ? 'w-[1080px] h-[1080px]' : 'w-[1200px] h-[627px]'} ${theme.bg} relative overflow-hidden flex items-center justify-center text-center p-24 ${theme.border} border transition-colors duration-500`}>
                                     <div className={`absolute inset-0 ${theme.grid} [background-size:40px_40px]`} />
                                     <div className="relative z-10">
                                         <div className="w-32 h-32 mx-auto mb-10"><MasterLogo idSuffix="social-post" /></div>
                                         <h2 className={`text-7xl font-black ${theme.text} uppercase tracking-tight mb-8 leading-tight font-institutional`}>
-                                            {linkedinData.headline}<br />
-                                            <span style={{ color: '#FFD700' }}>{linkedinData.highlight}</span>
+                                            {activeMode === 'instagram' ? instagramData.headline : linkedinData.headline}<br />
+                                            <span style={{ color: '#FFD700' }}>{activeMode === 'instagram' ? instagramData.highlight : linkedinData.highlight}</span>
                                         </h2>
                                         <p className={`${theme.sub} text-2xl font-light mb-12 max-w-2xl mx-auto font-institutional leading-relaxed`}>
-                                            {linkedinData.subtext}
+                                            {activeMode === 'instagram' ? instagramData.subtext : linkedinData.subtext}
                                         </p>
                                         <div className="px-12 py-5 bg-electric-cyan text-black font-black uppercase tracking-widest text-xl rounded-2xl inline-block shadow-lg">
-                                            {linkedinData.website}
+                                            {activeMode === 'instagram' ? instagramData.cta : linkedinData.website}
                                         </div>
                                     </div>
                                 </div>
@@ -636,7 +907,7 @@ export default function SocialAssetsPage() {
                         {/* 7. WHATSAPP BUSINESS COVER (1211 × 681) */}
                         {activeMode === 'whatsapp-business-cover' && (
                             <div style={{ transform: `scale(${scale})` }} className="w-fit transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0">
-                                <div className={`w-[1211px] h-[681px] ${theme.bg} relative overflow-hidden flex items-center justify-center text-center ${theme.border} border rounded-xl`}>
+                                <div data-export-canvas className={`w-[1211px] h-[681px] ${theme.bg} relative overflow-hidden flex items-center justify-center text-center ${theme.border} border transition-colors duration-500`}>
                                     <div className="absolute inset-0 bg-gradient-to-r from-electric-cyan/20 via-transparent to-emerald-400/20" />
                                     <div className={`absolute inset-0 ${theme.grid} [background-size:30px_30px]`} />
 
@@ -668,6 +939,230 @@ export default function SocialAssetsPage() {
                                 <div className="mt-4 text-center text-sm text-gray-500 font-mono opacity-70">
                                     1211 × 681 PX (Recommended) or 1920 × 1080 PX (16:9) // WhatsApp Business Cover Photo ✨
                                 </div>
+                            </div>
+                        )}
+
+                        {/* 9. UPWORK HERO (1600 × 1200) */}
+                        {activeMode === 'upwork-hero' && (
+                            <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
+                                <div data-export-canvas className="w-[1600px] h-[1200px] bg-[#010409] text-white relative overflow-hidden flex items-center justify-center">
+                                    <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] [background-size:40px_40px]" />
+                                    <div className="absolute right-0 top-0 w-[1000px] h-[1000px] blur-[200px] rounded-full opacity-20" style={{ backgroundColor: '#00D2FF' }} />
+                                    <div className="absolute left-[-200px] bottom-[-200px] w-[800px] h-[800px] blur-[200px] rounded-full opacity-10" style={{ backgroundColor: '#FFD700' }} />
+
+                                    <div className="relative z-10 flex flex-col items-center text-center w-full max-w-[1400px] mx-auto px-10 gap-20">
+                                        <div className="flex flex-col items-center justify-center gap-8">
+                                            <div className="flex items-center gap-6 mb-4">
+                                                {/* FIX: explicit size so MasterLogo doesn't overflow */}
+                                                <div className="w-20 h-20 flex-shrink-0"><MasterLogo idSuffix="uw-hero" /></div>
+                                                <div className="flex items-baseline leading-none pt-2">
+                                                    <span className="text-5xl font-medium lowercase text-white tracking-tighter">inspiron</span>
+                                                    <span className="text-4xl font-light uppercase text-[#FFD700] ml-2 tracking-[0.2em]">TECH</span>
+                                                </div>
+                                            </div>
+                                            <div className="inline-flex items-center gap-4 px-8 py-3 border text-2xl font-bold uppercase tracking-[0.2em] rounded" style={{ borderColor: '#00D2FF', color: '#00D2FF', backgroundColor: 'rgba(0,210,255,0.05)' }}>
+                                                {upworkData.tag}
+                                            </div>
+                                            <h1 className="text-7xl font-black uppercase tracking-tight leading-[1.1]">
+                                                {upworkData.headline}<br />
+                                                <span style={{ color: '#FFD700' }}>{upworkData.highlight}</span>
+                                            </h1>
+                                            <p className="text-gray-300 text-3xl font-light leading-relaxed tracking-wide mt-2 max-w-4xl">{upworkData.subtext}</p>
+                                        </div>
+
+                                        <div className="flex justify-center gap-8 w-full mt-8">
+                                            {[{ icon: '📊', label: 'P&L Statement', color: '#22c55e' }, { icon: '🏦', label: 'Balance Sheet', color: '#00D2FF' }, { icon: '💸', label: 'Cash Flow', color: '#FFD700' }].map((c, i) => (
+                                                <div key={i} className="bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-12 flex flex-col items-center text-center gap-6 flex-1">
+                                                    <div className="text-6xl">{c.icon}</div>
+                                                    <div className="text-3xl font-bold text-white tracking-wide">{c.label}</div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="absolute bottom-8 right-12 text-gray-400 font-mono text-xl">{upworkData.website}</div>
+                                </div>
+                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">1600 × 1200 PX // UPWORK_HERO (JPG)</div>
+                            </div>
+                        )}
+
+                        {/* 10. UPWORK BEFORE/AFTER (1600 × 1200) */}
+                        {activeMode === 'upwork-before-after' && (
+                            <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
+                                <div data-export-canvas className="w-[1600px] h-[1200px] bg-[#010409] text-white relative overflow-hidden flex items-center justify-center">
+                                    <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] [background-size:40px_40px]" />
+                                    <div className="absolute right-0 top-0 w-1/2 h-full blur-[200px] opacity-10 bg-[#00D2FF]" />
+                                    <div className="absolute left-0 top-0 w-1/2 h-full blur-[200px] opacity-10 bg-rose-500" />
+
+                                    <div className="absolute top-12 left-1/2 -translate-x-1/2 flex items-center gap-4 z-30 opacity-60">
+                                        <div className="w-10 h-10 text-white"><MasterLogo idSuffix="uw-ba" /></div>
+                                        <div className="flex items-baseline"><span className="text-2xl font-medium lowercase text-white tracking-tighter">inspiron</span><span className="text-xl font-light uppercase text-[#FFD700] ml-2 tracking-[0.2em]">TECH</span></div>
+                                    </div>
+
+                                    <div className="relative z-10 w-full max-w-[1500px] mx-auto grid grid-cols-2 gap-12 px-10">
+                                        <div className="bg-[#0a0505]/80 border border-rose-500/20 p-16 flex flex-col h-[960px] relative overflow-hidden rounded-2xl">
+                                            <div className="absolute top-0 right-0 bg-rose-500 text-black font-black uppercase tracking-[0.3em] px-10 py-3 rounded-bl-3xl text-2xl">Before</div>
+                                            <h3 className="text-rose-400 text-5xl font-light tracking-wide mt-12 mb-20 leading-tight">Spreadsheets<br />&amp; broken ERP</h3>
+                                            <div className="flex-1 border border-white/5 rounded-xl bg-white/[0.02] flex flex-col overflow-hidden opacity-60">
+                                                {[...Array(9)].map((_, i) => (<div key={i} className="flex-1 border-b border-white/5 flex items-center px-8 gap-6"><div className="w-16 text-gray-500 font-mono text-2xl">{i + 1}</div><div className="flex-1 h-6 bg-white/5 rounded" /><div className="w-32 h-6 bg-white/10 rounded" /></div>))}
+                                            </div>
+                                        </div>
+                                        <div className="bg-white/[0.02] border border-[#00D2FF]/30 p-16 flex flex-col h-[960px] relative overflow-hidden rounded-2xl shadow-[0_0_80px_rgba(0,210,255,0.05)]">
+                                            <div className="absolute top-0 right-0 bg-[#00D2FF] text-black font-black uppercase tracking-[0.3em] px-10 py-3 rounded-bl-3xl text-2xl">After</div>
+                                            <h3 className="text-[#00D2FF] text-5xl font-light tracking-wide mt-12 mb-16 leading-tight">Stable Manager.io<br />accounting core</h3>
+                                            <div className="flex flex-col gap-8 flex-1 justify-center">
+                                                {[{ icon: '📈', label: 'P&L Statement', badge: 'Synced', color: '#22c55e' }, { icon: '🏦', label: 'Balance Sheet', badge: 'Audit-Ready', color: '#00D2FF' }, { icon: '💸', label: 'Cash Flow', badge: 'Accurate', color: '#FFD700' }].map((r, i) => (
+                                                    <div key={i} className="bg-[#050a10] border border-[#00D2FF]/20 rounded-2xl p-10 flex items-center gap-8">
+                                                        <span className="text-5xl">{r.icon}</span>
+                                                        <div className="flex-1 text-4xl font-bold">{r.label}</div>
+                                                        <div className="font-mono text-2xl px-5 py-3 rounded-lg border" style={{ color: r.color, borderColor: r.color + '40', backgroundColor: r.color + '15' }}>{r.badge}</div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">1600 × 1200 PX // UPWORK_BEFORE_AFTER (JPG)</div>
+                            </div>
+                        )}
+
+                        {/* 11. UPWORK PROCESS (1600 × 1200) */}
+                        {activeMode === 'upwork-process' && (
+                            <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
+                                <div data-export-canvas className="w-[1600px] h-[1200px] bg-[#010409] text-white relative overflow-hidden flex items-center justify-center">
+                                    <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] [background-size:40px_40px]" />
+                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] blur-[200px] opacity-10 bg-[#00D2FF]" />
+
+                                    <div className="relative z-10 w-full max-w-[1400px] mx-auto text-center px-10 flex flex-col justify-center h-full">
+                                        <div className="flex items-center justify-center gap-6 mb-12 opacity-80">
+                                            <div className="w-16 h-16"><MasterLogo idSuffix="uw-process" /></div>
+                                            <div className="flex items-baseline"><span className="text-4xl font-medium lowercase text-white tracking-tighter">inspiron</span><span className="text-3xl font-light uppercase text-[#FFD700] ml-2 tracking-[0.2em]">TECH</span></div>
+                                        </div>
+                                        <h2 className="text-7xl font-black uppercase tracking-tight mb-24 font-institutional inline-block border-b-2 pb-8" style={{ borderColor: '#00D2FF' }}>
+                                            {upworkData.headline} in 4 Clear Steps
+                                        </h2>
+
+                                        <div className="grid grid-cols-4 gap-8">
+                                            {[{ no: '01', title: 'Audit', icon: '🔍', color: '#00D2FF' }, { no: '02', title: 'Design', icon: '✏️', color: '#FFD700' }, { no: '03', title: 'Migration', icon: '🔄', color: '#22c55e' }, { no: '04', title: 'Training', icon: '🎓', color: '#00D2FF' }].map((step, idx) => (
+                                                <div key={idx} className="bg-white/[0.02] border border-white/10 p-14 flex flex-col items-center rounded-2xl">
+                                                    <div className="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center font-mono text-3xl text-gray-500 mb-12 font-bold">{step.no}</div>
+                                                    <div className="text-7xl mb-12">{step.icon}</div>
+                                                    <h3 className="text-4xl font-bold uppercase tracking-widest text-white">{step.title}</h3>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">1600 × 1200 PX // UPWORK_PROCESS (JPG)</div>
+                            </div>
+                        )}
+
+                        {/* 12. UPWORK PRICING (1600 × 1200) */}
+                        {activeMode === 'upwork-pricing' && (
+                            <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
+                                <div data-export-canvas className="w-[1600px] h-[1200px] bg-[#010409] text-white relative overflow-hidden flex items-center justify-center">
+                                    <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] [background-size:40px_40px]" />
+                                    <div className="absolute top-0 right-0 w-[1000px] h-[1000px] blur-[250px] rounded-full opacity-10" style={{ backgroundColor: '#00D2FF' }} />
+
+                                    <div className="relative z-10 w-full max-w-[1400px] mx-auto text-center px-8 flex flex-col justify-center h-full py-16">
+                                        <div className="flex items-center justify-center gap-6 mb-12 opacity-80">
+                                            <div className="w-16 h-16"><MasterLogo idSuffix="uw-price" /></div>
+                                            <div className="flex items-baseline"><span className="text-4xl font-medium lowercase text-white tracking-tighter">inspiron</span><span className="text-3xl font-light uppercase text-[#FFD700] ml-2 tracking-[0.2em]">TECH</span></div>
+                                        </div>
+                                        <h2 className="text-6xl font-black uppercase tracking-tight mb-20 font-institutional">Choose Your ERP Package</h2>
+
+                                        <div className="grid grid-cols-3 gap-10 items-stretch">
+                                            {[
+                                                { tier: 'Starter', sub: 'Single company setup', items: ['Company setup', 'COA design', 'Basic reports'], featured: false },
+                                                { tier: 'Standard', sub: 'Setup + historical migration', items: ['Full setup + migration', 'Key reports', 'Training session'], featured: true },
+                                                { tier: 'Advanced', sub: 'Multi-company ERP design', items: ['Multi-entity setup', 'Custom dashboards', '90-day support'], featured: false },
+                                            ].map((plan, i) => (
+                                                <div key={i} className={`p-14 text-left flex flex-col h-full rounded-2xl border ${plan.featured ? 'bg-gradient-to-b from-[#00D2FF]/10 to-transparent border-[#00D2FF]/50 shadow-[0_0_100px_rgba(0,210,255,0.15)] -mt-6 pb-24 relative' : 'bg-white/[0.02] border-white/10 mt-10'}`}>
+                                                    {plan.featured && <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#00D2FF] text-black px-8 py-3 rounded-full text-lg font-bold uppercase tracking-widest font-mono">Most Popular</div>}
+                                                    <h3 className={`text-4xl font-bold uppercase tracking-widest mb-4 ${plan.featured ? 'text-[#00D2FF]' : 'text-gray-300'}`}>{plan.tier}</h3>
+                                                    <p className="text-gray-500 font-mono text-xl mb-12 uppercase tracking-wide">{plan.sub}</p>
+                                                    <div className="space-y-8 flex-1 border-t border-white/5 pt-12">
+                                                        {plan.items.map((li, j) => <div key={j} className="flex items-center gap-6"><span style={{ color: '#FFD700' }}>✓</span><span className="text-3xl font-light">{li}</span></div>)}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">1600 × 1200 PX // UPWORK_PRICING (JPG)</div>
+                            </div>
+                        )}
+
+                        {/* FORUM HEADER — 1110×300 for Manager.io Forum profile header */}
+                        {activeMode === 'forum-header' && (
+                            <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out origin-center flex-shrink-0 w-fit">
+                                <div data-export-canvas className={`w-[1110px] h-[300px] ${theme.bg} relative overflow-hidden flex items-center px-16 transition-colors duration-500`}>
+                                    {/* Grid */}
+                                    <div className={`absolute inset-0 ${theme.grid} [background-size:24px_24px]`} />
+                                    {/* Glow orb */}
+                                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] blur-[120px] rounded-full opacity-20" style={{ backgroundColor: '#00D2FF' }} />
+                                    {/* Left: Logo + Identity */}
+                                    <div className="relative z-10 flex items-center gap-12">
+                                        <div className="w-[100px] h-[100px] flex-shrink-0">
+                                            <MasterLogo idSuffix="forum-hdr" />
+                                        </div>
+                                        <div>
+                                            <div className="flex items-baseline gap-3 mb-1">
+                                                <span className="text-4xl font-medium lowercase text-white tracking-tighter">inspiron</span>
+                                                <span className="text-3xl font-light uppercase tracking-[0.2em]" style={{ color: '#FFD700' }}>TECH</span>
+                                            </div>
+                                            <p className="text-sm font-mono uppercase tracking-[0.2em] text-gray-400">Official Manager.io Advisor · Dhaka, Bangladesh</p>
+                                        </div>
+                                    </div>
+                                    {/* Right: Credentials */}
+                                    <div className="relative z-10 ml-auto flex flex-col items-end gap-3">
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-[11px] font-mono uppercase tracking-widest text-gray-400">ERP Architect</span>
+                                            <span className="w-[1px] h-3 bg-white/20" />
+                                            <span className="text-[11px] font-mono uppercase tracking-widest" style={{ color: '#00D2FF' }}>14+ Years</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-[11px] font-mono uppercase tracking-widest text-gray-400">50+ Clients</span>
+                                            <span className="w-[1px] h-3 bg-white/20" />
+                                            <span className="text-[11px] font-mono uppercase tracking-widest text-gray-400">15+ Industries</span>
+                                        </div>
+                                        <div className="mt-2 px-5 py-2 rounded-full border text-[10px] font-bold uppercase tracking-widest font-mono" style={{ borderColor: '#00D2FF44', color: '#00D2FF' }}>inspiron.tech</div>
+                                    </div>
+                                </div>
+                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">1110 × 300 PX // FORUM_HEADER (PNG)</div>
+                            </div>
+                        )}
+
+                        {/* FORUM CARD — 590×300 for Manager.io Forum user card background */}
+                        {activeMode === 'forum-card' && (
+                            <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out origin-center flex-shrink-0 w-fit">
+                                <div data-export-canvas className={`w-[590px] h-[300px] ${theme.bg} relative overflow-hidden flex flex-col items-center justify-center transition-colors duration-500`}>
+                                    {/* Grid */}
+                                    <div className={`absolute inset-0 ${theme.grid} [background-size:20px_20px]`} />
+                                    {/* Glow orb — centered */}
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <div className="w-[400px] h-[400px] blur-[100px] rounded-full opacity-15" style={{ backgroundColor: '#00D2FF' }} />
+                                    </div>
+                                    {/* Content */}
+                                    <div className="relative z-10 flex flex-col items-center gap-4">
+                                        <div className="w-[70px] h-[70px]">
+                                            <MasterLogo idSuffix="forum-card" />
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="flex items-baseline gap-2 justify-center">
+                                                <span className="text-2xl font-medium lowercase text-white tracking-tighter">inspiron</span>
+                                                <span className="text-xl font-light uppercase tracking-[0.2em]" style={{ color: '#FFD700' }}>TECH</span>
+                                            </div>
+                                            <p className="text-[10px] font-mono uppercase tracking-[0.15em] text-gray-400 mt-1">Manager.io Official Advisor</p>
+                                        </div>
+                                        <div className="flex items-center gap-4 mt-1">
+                                            <span className="text-[9px] font-mono uppercase tracking-widest" style={{ color: '#00D2FF' }}>inspiron.tech</span>
+                                            <span className="w-[1px] h-2 bg-white/20" />
+                                            <span className="text-[9px] font-mono uppercase tracking-widest text-gray-500">Dhaka, Bangladesh</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="mt-2 text-center text-xs text-gray-500 font-mono opacity-50">590 × 300 PX // FORUM_CARD (PNG)</div>
                             </div>
                         )}
 
@@ -711,15 +1206,14 @@ export default function SocialAssetsPage() {
                         {/* Export Hint */}
                         <div className="absolute bottom-6 flex items-center gap-4">
                             <button
-                                onClick={() => alert("Please use OS screenshot tools to capture the asset. A native export module is under development.")}
-                                className="bg-[#00D2FF]/10 hover:bg-[#00D2FF]/20 border border-[#00D2FF]/30 text-[#00D2FF] px-6 py-3 rounded-full flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(0,210,255,0.1)] group">
-                                <ShieldCheck size={14} className="group-hover:scale-110 transition-transform" />
-                                EXPORT SYSTEM ASSET
+                                onClick={handleExport}
+                                disabled={isExporting}
+                                className="bg-[#00D2FF]/10 hover:bg-[#00D2FF]/20 disabled:opacity-50 disabled:cursor-wait border border-[#00D2FF]/30 text-[#00D2FF] px-6 py-3 rounded-full flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(0,210,255,0.1)] group">
+                                <Download size={14} className={isExporting ? 'animate-bounce' : 'group-hover:scale-110 transition-transform'} />
+                                {isExporting ? 'EXPORTING...' : activeMode.startsWith('upwork-') ? 'EXPORT JPG' : 'EXPORT PNG'}
                             </button>
                             <span className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">
-                                {isMac
-                                    ? 'Cmd+Shift+4 for pixel-perfect capture'
-                                    : 'Win+Shift+S for pixel-perfect capture'}
+                                Requires: <code className="text-electric-cyan">npm i html2canvas</code>
                             </span>
                         </div>
                     </div>
@@ -729,20 +1223,4 @@ export default function SocialAssetsPage() {
     );
 }
 
-// ─── TECHNICAL COMPONENT PRIMITIVES ─────────────────────────────────────────
 
-const TechInput = ({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) => (
-    <div className="space-y-1 group">
-        <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold font-mono group-hover:text-electric-cyan transition-colors">{label}</label>
-        <input type="text" value={value} onChange={e => onChange(e.target.value)} spellCheck={false}
-            className="w-full bg-black/40 border border-white/10 rounded px-3 py-3 text-xs text-white focus:outline-none focus:border-electric-cyan focus:bg-electric-cyan/5 font-mono transition-all" />
-    </div>
-);
-
-const TechTextArea = ({ label, value, onChange, rows }: { label: string; value: string; onChange: (v: string) => void; rows: number }) => (
-    <div className="space-y-1 group">
-        <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold font-mono group-hover:text-electric-cyan transition-colors">{label}</label>
-        <textarea value={value} onChange={e => onChange(e.target.value)} rows={rows} spellCheck={false}
-            className="w-full bg-black/40 border border-white/10 rounded px-3 py-3 text-xs text-white focus:outline-none focus:border-electric-cyan focus:bg-electric-cyan/5 font-mono transition-all resize-none" />
-    </div>
-);
