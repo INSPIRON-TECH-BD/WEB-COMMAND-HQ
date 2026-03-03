@@ -395,28 +395,6 @@ export default function SocialAssetsPage() {
                             })}
                         </div>
                     </div>
-<<<<<<< HEAD
-                    {/* Row 2: sub-mode pills */}
-                    <div className="h-9 flex items-center gap-1 pb-2 overflow-x-auto scrollbar-none border-t border-white/5">
-                        {NAV_GROUPS.find(g => g.modes.includes(activeMode as never))?.modes.map((modeId) => {
-                            const platform = (PLATFORMS as readonly typeof PLATFORMS[number][]).find(p => p.id === modeId);
-                            if (!platform) return null;
-                            return (
-                                <button
-                                    key={modeId}
-                                    onClick={() => setActiveMode(modeId as ActiveMode)}
-                                    className={`flex items-center gap-1.5 px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${activeMode === modeId
-                                        ? 'bg-electric-cyan text-deep-navy-black shadow-[0_0_12px_rgba(0,210,255,0.3)]'
-                                        : 'text-gray-500 hover:text-white hover:bg-white/5'
-                                        }`}
-                                >
-                                    <platform.icon size={11} />
-                                    {platform.label}
-                                    <span className="text-[8px] opacity-60 font-mono">{platform.canvas}</span>
-                                </button>
-                            );
-                        })}
-=======
                     <div className="flex gap-1 bg-white/5 p-1 rounded-lg border border-white/5 overflow-x-auto scrollbar-none">
                         {(PLATFORMS as readonly typeof PLATFORMS[number][]).map((mode) => (
                             <button
@@ -431,7 +409,6 @@ export default function SocialAssetsPage() {
                                 <span className="hidden md:inline">{mode.label}</span>
                             </button>
                         ))}
->>>>>>> c5444db22a0d7196024e48dc144dd11aa014f576
                     </div>
                 </div>
             </nav>
@@ -479,11 +456,7 @@ export default function SocialAssetsPage() {
                                     <InstitutionalInput label="Metric 2 Lbl" value={linkedinData.metric2Lbl} onChange={v => setLinkedinData({ ...linkedinData, metric2Lbl: v })} />
                                 </div>
                                 <div className="h-px bg-white/10" />
-<<<<<<< HEAD
-                                <InstitutionalInput label="Website / CTA" value={linkedinData.website} onChange={v => setLinkedinData({ ...linkedinData, website: v })} />
-=======
                                 <TechInput label="Website / CTA" value={linkedinData.website} onChange={v => setLinkedinData({ ...linkedinData, website: v })} />
->>>>>>> c5444db22a0d7196024e48dc144dd11aa014f576
                             </div>
                         )}
 
@@ -536,19 +509,6 @@ export default function SocialAssetsPage() {
                             </div>
                         )}
 
-<<<<<<< HEAD
-
-                        {/* INSTAGRAM CONTROLS */}
-                        {activeMode.startsWith('instagram') && (
-                            <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
-                                <InstitutionalInput label="Headline" value={instagramData.headline}
-                                    onChange={v => setInstagramData({ ...instagramData, headline: v })} />
-                                <InstitutionalInput label="Gold Highlight" value={instagramData.highlight}
-                                    onChange={v => setInstagramData({ ...instagramData, highlight: v })} />
-                                <InstitutionalTextArea label="Sub-Narrative" value={instagramData.subtext}
-                                    onChange={v => setInstagramData({ ...instagramData, subtext: v })} rows={3} />
-                                <InstitutionalInput label="CTA" value={instagramData.cta}
-=======
                         {/* INSTAGRAM CONTROLS */}
                         {activeMode.startsWith('instagram') && (
                             <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
@@ -559,7 +519,6 @@ export default function SocialAssetsPage() {
                                 <TechTextArea label="Sub-Narrative" value={instagramData.subtext}
                                     onChange={v => setInstagramData({ ...instagramData, subtext: v })} rows={3} />
                                 <TechInput label="CTA" value={instagramData.cta}
->>>>>>> c5444db22a0d7196024e48dc144dd11aa014f576
                                     onChange={v => setInstagramData({ ...instagramData, cta: v })} />
                             </div>
                         )}
@@ -638,11 +597,7 @@ export default function SocialAssetsPage() {
                         )}
                     </div>
                     <div className="mt-auto p-6 border-t border-white/10 text-[10px] text-gray-600 font-mono text-center">
-<<<<<<< HEAD
-                        INSPIRON_SOCIAL_GENERATOR_V2.14
-=======
                         INSPIRON_SOCIAL_GENERATOR_V2.13
->>>>>>> c5444db22a0d7196024e48dc144dd11aa014f576
                     </div>
                 </aside>
 
@@ -1279,8 +1234,4 @@ export default function SocialAssetsPage() {
     );
 }
 
-<<<<<<< HEAD
-
-=======
 // ─── TECHNICAL COMPONENT PRIMITIVES ─────────────────────────────────────────
->>>>>>> c5444db22a0d7196024e48dc144dd11aa014f576
