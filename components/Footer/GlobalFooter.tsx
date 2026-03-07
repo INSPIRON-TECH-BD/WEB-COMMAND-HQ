@@ -50,7 +50,7 @@ export const GlobalFooter = () => {
 
                     {/* COL 1 · INTELLIGENCE */}
                     <div className="col-span-2 md:col-span-1 space-y-5">
-                        <RefinedLogo size={40} />
+                        <RefinedLogo size={48} />
                         <p className="font-institutional text-white/70 text-sm leading-relaxed">
                             I Architect Logic.
                         </p>
