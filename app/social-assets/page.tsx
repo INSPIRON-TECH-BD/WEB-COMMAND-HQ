@@ -172,6 +172,8 @@ export default function SocialAssetsPage() {
     // ─── STATE ARCHITECTURE ─────────────────────────────────────────────────
     const [activeMode, setActiveMode] = useState<ActiveMode>('linkedin');
     const [renderMode, setRenderMode] = useState<RenderMode>('dark');
+    const [showSafeZone, setShowSafeZone] = useState(true);
+    const [auditDensity, setAuditDensity] = useState(5);
 
     // FIX 4: Scale derived from mode, synced via useEffect
     const [scale, setScale] = useState(MODE_SCALES['linkedin']);
@@ -285,6 +287,10 @@ export default function SocialAssetsPage() {
         const target = document.querySelector('[data-export-canvas]') as HTMLElement;
         if (!target) return;
         setIsExporting(true);
+
+        const safeZones = document.querySelectorAll('[data-safezone]');
+        safeZones.forEach(el => (el as HTMLElement).style.display = 'none');
+
         const isUpwork = activeMode.startsWith('upwork-');
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -332,6 +338,7 @@ export default function SocialAssetsPage() {
         } catch {
             alert('Export failed — ensure html2canvas is installed: npm i html2canvas');
         } finally {
+            safeZones.forEach(el => (el as HTMLElement).style.display = '');
             setIsExporting(false);
         }
     }, [activeMode, renderMode]);
@@ -632,6 +639,14 @@ export default function SocialAssetsPage() {
                                 className="w-24 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-electric-cyan" />
                             <span className="text-[10px] font-mono text-electric-cyan w-8 text-right">{Math.round(scale * 100)}%</span>
                         </div>
+
+                        <button
+                            onClick={() => setShowSafeZone(!showSafeZone)}
+                            className={`flex items-center gap-2 px-4 py-1.5 rounded-full border transition-all ${showSafeZone ? 'bg-orange-500/20 border-orange-500/50 text-orange-400' : 'bg-black/40 border-white/10 text-gray-400 hover:text-white'}`}
+                        >
+                            <ShieldCheck size={14} />
+                            <span className="text-[10px] font-mono uppercase tracking-widest hidden md:inline">Safe Zone</span>
+                        </button>
                     </div>
 
                     {/* ─── RENDER STAGE ──────────────────────────────────── */}
@@ -639,7 +654,15 @@ export default function SocialAssetsPage() {
 
                         {/* 1. LINKEDIN (1584 × 396) */}
                         {activeMode === 'linkedin' && (
-                            <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
+                            <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit relative">
+                                {/* SAFE ZONE toggle overlay */}
+                                {showSafeZone && (
+                                    <div data-safezone className="absolute inset-0 pointer-events-none z-30">
+                                        <div className="absolute left-[8%] bottom-0 w-[240px] h-[160px] border-2 border-dashed border-orange-500 bg-orange-500/10 flex items-center justify-center">
+                                            <span className="text-orange-500 font-mono text-[10px] font-bold tracking-widest text-center px-2">MOBILE PROFILE<br/>OVERLAP</span>
+                                        </div>
+                                    </div>
+                                )}
                                 <div data-export-canvas className={`w-[1584px] h-[396px] ${theme.bg} relative overflow-hidden flex items-center justify-between px-24 ring-1 ring-white/5 transition-colors duration-500`}>
                                     <div className={`absolute inset-0 ${theme.grid} [background-size:24px_24px]`} />
                                     <div className="absolute right-0 top-0 w-[600px] h-[600px] blur-[120px] rounded-full opacity-20" style={{ backgroundColor: '#00D2FF' }} />
@@ -685,13 +708,17 @@ export default function SocialAssetsPage() {
                         {/* 2a. FACEBOOK PERSONAL COVER (820 x 312) */}
                         {activeMode === 'facebook-personal' && (
                             <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
-                                {/* SAFE ZONE overlay — outside canvas, never exported */}
-                                <div className="absolute inset-0 pointer-events-none z-30">
-                                    <div className="absolute left-1/2 top-1/2 w-[640px] h-[230px] -translate-x-1/2 -translate-y-1/2 border border-dashed border-white/20 rounded" />
-                                    <div className="absolute bottom-0 left-8 w-[168px] h-[168px] rounded-full border-2 border-dashed border-yellow-400/40 flex items-end justify-center pb-1">
-                                        <span className="text-[8px] text-yellow-400/60 font-mono">PIC OVERLAP</span>
+                                {/* SAFE ZONE toggle overlay */}
+                                {showSafeZone && (
+                                    <div data-safezone className="absolute inset-0 pointer-events-none z-30">
+                                        <div className="absolute left-1/2 top-1/2 w-[640px] h-[230px] -translate-x-1/2 -translate-y-1/2 border-2 border-dashed border-orange-500/40 bg-orange-500/5 rounded flex items-center justify-center">
+                                            <span className="text-orange-500/40 font-mono text-[8px] font-bold tracking-widest uppercase">Safe Content Area (Mobile)</span>
+                                        </div>
+                                        <div className="absolute bottom-0 left-8 w-[168px] h-[168px] rounded-full border-2 border-dashed border-orange-500 bg-black/40 flex items-center justify-center backdrop-blur-sm shadow-[0_0_20px_rgba(249,115,22,0.2)]">
+                                            <span className="text-[10px] text-orange-400 font-mono font-bold tracking-widest text-center px-2">AVATAR<br/>OVERLAP</span>
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                                 <div data-export-canvas className={`w-[820px] h-[312px] ${theme.bg} relative overflow-hidden flex items-center justify-center text-center ${theme.border} border transition-colors duration-500`}>
                                     <div className={`absolute inset-0 ${theme.grid} [background-size:20px_20px]`} />
                                     <div className="relative z-10 px-12 py-6 max-w-[580px]">
@@ -717,11 +744,15 @@ export default function SocialAssetsPage() {
                         {/* 2b. FACEBOOK PAGE COVER (820 x 360) */}
                         {activeMode === 'facebook-page' && (
                             <div style={{ transform: `scale(${scale})` }} className="transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 w-fit">
-                                {/* SAFE ZONE overlay — outside canvas, never exported */}
-                                <div className="absolute inset-0 pointer-events-none z-30">
-                                    <div className="absolute left-1/2 top-1/2 w-[640px] h-[240px] -translate-x-1/2 -translate-y-1/2 border border-dashed border-white/20 rounded" />
-                                    <div className="absolute bottom-4 left-6 text-[8px] text-yellow-400/60 font-mono uppercase">Logo Zone</div>
-                                </div>
+                                {/* SAFE ZONE toggle overlay */}
+                                {showSafeZone && (
+                                    <div data-safezone className="absolute inset-0 pointer-events-none z-30">
+                                        <div className="absolute left-1/2 top-1/2 w-[640px] h-[240px] -translate-x-1/2 -translate-y-1/2 border-2 border-dashed border-orange-500/40 bg-orange-500/5 rounded flex items-center justify-center">
+                                            <span className="text-orange-500/40 font-mono text-[8px] font-bold tracking-widest uppercase">Visible on Mobile Profile</span>
+                                        </div>
+                                        <div className="absolute bottom-4 left-6 px-3 py-1 bg-black/60 border border-orange-500 border-dashed rounded text-[8px] text-orange-400 font-mono font-bold uppercase tracking-widest">Logo / Title Zone</div>
+                                    </div>
+                                )}
                                 <div data-export-canvas className={`w-[820px] h-[360px] ${theme.bg} relative overflow-hidden flex items-center justify-center text-center ${theme.border} border transition-colors duration-500`}>
                                     <div className={`absolute inset-0 ${theme.grid} [background-size:20px_20px]`} />
                                     <div className="relative z-10 px-16 py-10 max-w-[640px]">
@@ -917,7 +948,18 @@ export default function SocialAssetsPage() {
 
                         {/* 7. WHATSAPP BUSINESS COVER (1211 × 681) */}
                         {activeMode === 'whatsapp-business-cover' && (
-                            <div style={{ transform: `scale(${scale})` }} className="w-fit transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0">
+                            <div style={{ transform: `scale(${scale})` }} className="w-fit transition-transform duration-200 ease-out shadow-2xl origin-center flex-shrink-0 relative">
+                                {/* SAFE ZONE toggle overlay */}
+                                {showSafeZone && (
+                                    <div data-safezone className="absolute inset-0 pointer-events-none z-30">
+                                        <div className="absolute left-0 top-1/2 w-full h-[400px] -translate-y-1/2 border-y-2 border-dashed border-orange-500/50 bg-orange-500/5 flex items-center justify-center">
+                                            <span className="text-orange-500/60 font-mono text-[10px] tracking-widest absolute top-4 pb-2 font-bold uppercase">Visible on Mobile Profile View</span>
+                                        </div>
+                                        <div className="absolute left-1/2 top-8 w-[240px] h-[240px] -translate-x-1/2 rounded-full border-2 border-dashed border-orange-500 bg-black/40 flex items-center justify-center backdrop-blur-sm shadow-[0_0_20px_rgba(249,115,22,0.2)]">
+                                            <span className="text-[10px] text-orange-400 font-mono font-bold tracking-widest text-center px-2 uppercase leading-tight">Avatar<br/>Overlap</span>
+                                        </div>
+                                    </div>
+                                )}
                                 <div data-export-canvas className={`w-[1211px] h-[681px] ${theme.bg} relative overflow-hidden flex items-center justify-center text-center ${theme.border} border transition-colors duration-500`}>
                                     <div className="absolute inset-0 bg-gradient-to-r from-electric-cyan/20 via-transparent to-emerald-400/20" />
                                     <div className={`absolute inset-0 ${theme.grid} [background-size:30px_30px]`} />
