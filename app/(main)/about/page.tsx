@@ -12,6 +12,7 @@ import {
     Cpu,
     Award,
 } from 'lucide-react';
+import { SiLinkedin, SiGithub, SiUpwork, SiFacebook, SiInstagram } from 'react-icons/si';
 
 export const metadata: Metadata = {
     title: 'About MD ABU HASAN | INSPIRON TECH — Official Manager.io Partner Bangladesh',
@@ -98,7 +99,7 @@ const timeline = [
 // ─── CREDENTIALS ────────────────────────────────────────────────────────────
 const credentials = [
     {
-        label: 'Official Manager.io Advisor',
+        label: 'Official Manager.io Partner',
         sublabel: 'Listed in the Manager.io Advisors directory for Bangladesh',
         link: 'https://www.manager.io/advisors',
         linkText: 'View listing ↗',
@@ -169,15 +170,38 @@ export default function AboutPage() {
                             <Calendar size={14} className="text-action-gold" />
                             Since April 2011
                         </span>
-                        <a
-                            href="https://www.linkedin.com/in/cyberhasan/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 hover:text-electric-cyan transition-colors"
-                        >
-                            <ExternalLink size={14} />
-                            linkedin.com/in/cyberhasan
-                        </a>
+                        <div className="flex items-center gap-4">
+                            <a href="https://www.linkedin.com/in/cyberhasan/"
+                                target="_blank" rel="noopener noreferrer"
+                                title="LinkedIn"
+                                className="text-gray-500 hover:text-electric-cyan transition-colors">
+                                <SiLinkedin size={16} />
+                            </a>
+                            <a href="https://github.com/CyberHasan"
+                                target="_blank" rel="noopener noreferrer"
+                                title="GitHub"
+                                className="text-gray-500 hover:text-white/70 transition-colors">
+                                <SiGithub size={16} />
+                            </a>
+                            <a href="https://www.upwork.com/freelancers/CyberHasan"
+                                target="_blank" rel="noopener noreferrer"
+                                title="Upwork"
+                                className="text-gray-500 hover:text-electric-cyan transition-colors">
+                                <SiUpwork size={16} />
+                            </a>
+                            <a href="https://www.facebook.com/CyberHasan/"
+                                target="_blank" rel="noopener noreferrer"
+                                title="Facebook"
+                                className="text-gray-500 hover:text-white/70 transition-colors">
+                                <SiFacebook size={16} />
+                            </a>
+                            <a href="https://www.instagram.com/cyber.hasan/"
+                                target="_blank" rel="noopener noreferrer"
+                                title="Instagram"
+                                className="text-gray-500 hover:text-white/70 transition-colors">
+                                <SiInstagram size={16} />
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -214,8 +238,8 @@ export default function AboutPage() {
                             <p className="text-gray-500 text-xs uppercase tracking-wider">Industries Architected</p>
                         </div>
                         <div>
-                            <div className="text-5xl font-black text-action-gold mb-2">50+</div>
-                            <p className="text-gray-500 text-xs uppercase tracking-wider">Transformations<br />0.1% Error Tolerance</p>
+                            <div className="text-5xl font-black text-action-gold mb-2">100+</div>
+                            <p className="text-gray-500 text-xs uppercase tracking-wider">Migrations<br />0.1% Error Tolerance</p>
                         </div>
                     </div>
                 </div>

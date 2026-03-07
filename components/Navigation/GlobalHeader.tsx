@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { MessageSquareCode, Menu } from 'lucide-react';
 import { RefinedLogo } from '../Branding/RefinedLogo';
 import { TerminalDatapad } from './TerminalDatapad';
@@ -17,6 +18,10 @@ const NAV_LINKS = [
 
 export const GlobalHeader = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const pathname = usePathname();
+
+    // Hide the site nav on the pitch deck — it's a standalone presentation
+    if (pathname?.startsWith('/pitch-deck')) return null;
 
     return (
         <>

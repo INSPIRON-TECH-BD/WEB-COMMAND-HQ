@@ -1133,7 +1133,7 @@ export default function SocialAssetsPage() {
                                             <span className="text-[11px] font-mono uppercase tracking-widest" style={{ color: '#00D2FF' }}>14+ Years</span>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <span className="text-[11px] font-mono uppercase tracking-widest text-gray-400">50+ Clients</span>
+                                            <span className="text-[11px] font-mono uppercase tracking-widest text-gray-400">100+ Migrations</span>
                                             <span className="w-[1px] h-3 bg-white/20" />
                                             <span className="text-[11px] font-mono uppercase tracking-widest text-gray-400">15+ Industries</span>
                                         </div>

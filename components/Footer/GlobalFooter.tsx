@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { MessageSquareCode, ExternalLink } from 'lucide-react';
+import { SiLinkedin, SiGithub, SiUpwork, SiFacebook, SiInstagram } from 'react-icons/si';
 import { RefinedLogo } from '../Branding/RefinedLogo';
 
 const DIRECTORY = [
@@ -135,25 +136,41 @@ export const GlobalFooter = () => {
                     <p className="font-mono text-[9px] text-white/20 tracking-widest uppercase text-center md:text-left">
                         © 2026 INSPIRON TECH. ALL LOGIC ARCHITECTED IN DHAKA-BD.
                     </p>
-                    <div className="flex gap-6">
+                    <div className="flex items-center gap-5">
                         <a href="https://www.linkedin.com/in/cyberhasan/"
                             target="_blank" rel="noopener noreferrer"
-                            className="font-mono text-[10px] text-white/40 hover:text-white/70 tracking-widest transition-colors">
-                            LINKEDIN ↗
+                            title="LinkedIn"
+                            className="text-white/40 hover:text-electric-cyan transition-colors">
+                            <SiLinkedin size={16} />
                         </a>
                         <a href="https://github.com/INSPIRON-TECH-BD"
                             target="_blank" rel="noopener noreferrer"
-                            className="font-mono text-[10px] text-white/40 hover:text-white/70 tracking-widest transition-colors">
-                            GITHUB ↗
+                            title="GitHub"
+                            className="text-white/40 hover:text-white/70 transition-colors">
+                            <SiGithub size={16} />
                         </a>
-                        <a href="https://www.upwork.com/freelancers/~011085e2a7cde3f437"
+                        <a href="https://www.upwork.com/freelancers/CyberHasan"
                             target="_blank" rel="noopener noreferrer"
-                            className="font-mono text-[10px] text-electric-cyan hover:underline tracking-widest">
-                            UPWORK ↗
+                            title="Upwork"
+                            className="text-white/40 hover:text-electric-cyan transition-colors">
+                            <SiUpwork size={16} />
+                        </a>
+                        <a href="https://www.facebook.com/inspironTECH"
+                            target="_blank" rel="noopener noreferrer"
+                            title="Facebook"
+                            className="text-white/40 hover:text-white/70 transition-colors">
+                            <SiFacebook size={16} />
+                        </a>
+                        <a href="https://www.instagram.com/inspiron_tech"
+                            target="_blank" rel="noopener noreferrer"
+                            title="Instagram"
+                            className="text-white/40 hover:text-white/70 transition-colors">
+                            <SiInstagram size={16} />
                         </a>
                         <a href="https://www.manager.io/advisors"
                             target="_blank" rel="noopener noreferrer"
-                            className="font-mono text-[10px] text-action-gold hover:underline tracking-widest">
+                            title="Manager.io Partner"
+                            className="text-action-gold hover:text-action-gold/80 transition-colors font-mono text-[10px] tracking-widest">
                             MANAGER.IO ↗
                         </a>
                     </div>

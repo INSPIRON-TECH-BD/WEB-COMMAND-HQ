@@ -118,9 +118,9 @@ export default function LandingPage() {
                             <p className="text-gray-500 text-sm uppercase tracking-wider">Industries Architected</p>
                         </div>
                         <div>
-                            <div className="text-5xl font-black text-action-gold mb-2">50+</div>
+                            <div className="text-5xl font-black text-action-gold mb-2">100+</div>
                             <p className="text-gray-500 text-sm uppercase tracking-wider">
-                                Transformations · 0.1% Error Tolerance
+                                Migrations · 0.1% Error Tolerance
                             </p>
                         </div>
                     </div>
