@@ -1491,21 +1491,25 @@ export default function SocialAssetsPage() {
                                         width:           `${logoW}px`,
                                         height:          `${logoH}px`,
                                         borderRadius:    activeMode === 'logo-round' ? '50%' : '0',
-                                        overflow:        activeMode === 'logo-round' ? 'hidden' : 'visible',
+                                        overflow:        'hidden',
                                         backgroundColor: logoBg ?? undefined,
                                         backgroundImage: !logoBg
                                             ? 'repeating-conic-gradient(#808080 0% 25%, #b0b0b0 0% 50%) 0 0 / 20px 20px'
                                             : undefined,
-                                        display:         'flex',
-                                        alignItems:      'center',
-                                        justifyContent:  'center',
-                                        padding:         `${exportConfig.padding}px`,
-                                        boxSizing:       'border-box',
+                                        position: 'relative',
+                                        boxSizing: 'border-box' as const,
                                     }}>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 358.846 350.3"
-                                        style={{ width: '100%', height: '100%', display: 'block' }}>
+                                        style={{
+                                            position:            'absolute',
+                                            top:                 `${exportConfig.padding}px`,
+                                            left:                `${exportConfig.padding}px`,
+                                            width:               `${logoW - exportConfig.padding * 2}px`,
+                                            height:              `${logoH - exportConfig.padding * 2}px`,
+                                            display:             'block',
+                                        }}>
                                         <defs>
                                             <mask id="inspiron-gap-logo-export"
                                                 x="-1075.154" y="-1075" width="3000" height="3000" maskUnits="userSpaceOnUse">
