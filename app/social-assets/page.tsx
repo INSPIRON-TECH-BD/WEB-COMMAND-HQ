@@ -418,10 +418,31 @@ export default function SocialAssetsPage() {
             target.style.padding = prevPadding;
             blurOrbs.forEach(el => el.style.removeProperty('visibility'));
 
+            let finalCanvas = cvs;
+
+            if (activeMode === 'logo-round') {
+                // Create a new canvas with same dimensions
+                const circleCanvas = document.createElement('canvas');
+                circleCanvas.width = cvs.width;
+                circleCanvas.height = cvs.height;
+                const ctx = circleCanvas.getContext('2d');
+                if (ctx) {
+                    const r = cvs.width / 2;
+                    // Draw circular clip path
+                    ctx.beginPath();
+                    ctx.arc(r, r, r, 0, Math.PI * 2);
+                    ctx.closePath();
+                    ctx.clip();
+                    // Draw the html2canvas output into the clipped circle
+                    ctx.drawImage(cvs, 0, 0);
+                    finalCanvas = circleCanvas;
+                }
+            }
+
             const ext = isJpg ? 'jpg' : 'png';
             const link = document.createElement('a');
             link.download = `inspiron_${activeMode}_${exportConfig.scale}x_${Date.now()}.${ext}`;
-            link.href = cvs.toDataURL(isJpg ? 'image/jpeg' : 'image/png', isJpg ? 0.95 : 1.0);
+            link.href = finalCanvas.toDataURL(isJpg ? 'image/jpeg' : 'image/png', isJpg ? 0.95 : 1.0);
             link.click();
         } catch {
             alert('Export failed — ensure html2canvas is installed: npm i html2canvas');
