@@ -2,12 +2,11 @@
 
 import React from 'react';
 import './print.css';
+import { RefinedLogo } from '@/components/Branding/RefinedLogo';
 
 const Logo = () => (
-  <div className="font-[900] tracking-[0.05em] text-xl font-sans">
-    <span style={{ color: '#FFFFFF' }}>inspir</span>
-    <span style={{ color: '#FFD700' }}>on</span>{' '}
-    <span style={{ color: '#00D2FF' }}>TECH</span>
+  <div style={{ WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
+    <RefinedLogo size={32} />
   </div>
 );
 
@@ -427,6 +426,9 @@ const PageSix = () => (
     <div className="w-full h-[1px] bg-[rgba(255,215,0,0.4)] mb-8" />
 
     <div className="border border-[rgba(255,215,0,0.5)] bg-[rgba(255,215,0,0.05)] rounded-2xl p-8 text-center mt-auto mb-4 mx-8 shadow-2xl">
+      <div className="flex justify-center mb-6" style={{ WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>
+        <RefinedLogo size={28} />
+      </div>
       <h3 className="text-[20px] text-white font-bold mb-2">Ready to Move From Individual-Driven to System-Driven?</h3>
       <p className="text-[14px] text-[rgba(255,255,255,0.6)] mb-8">Available immediately. Expert-level engagement. Contract-to-hire welcome.</p>
       
