@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import { RefinedLogo } from "@/components/Branding/RefinedLogo";
 
 export default function NobinAgroCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -512,8 +513,8 @@ export default function NobinAgroCarousel() {
       
       {/* Top Bar */}
       <div className="absolute top-0 left-0 right-0 p-5 md:p-8 flex justify-between items-center z-20 pointer-events-none nav-glass border-b border-white/5">
-        <div className="text-white font-black tracking-widest text-sm md:text-base drop-shadow-md uppercase">
-          inspir<span className="text-[#FFD700]">on</span> <span className="text-[#00D2FF]">TECH</span>
+        <div className="scale-75 md:scale-[0.8] origin-left">
+          <RefinedLogo />
         </div>
         <div className="text-[11px] md:text-xs font-bold bg-[#010409]/80 px-4 py-1.5 rounded-full border border-white/10 tracking-[0.1em]">
           <span className="text-[#FFD700]">{(currentSlide + 1).toString().padStart(2, "0")}</span>

@@ -126,7 +126,7 @@ const credentials = [
     {
         label: 'Upwork Verified Freelancer',
         sublabel: 'Manager.io · Accounting · IT Consulting',
-        link: 'https://www.upwork.com/freelancers/CyberHasan',
+        link: 'https://www.upwork.com/freelancers/cyberhasan',
         linkText: 'Verify ↗',
     },
     {
@@ -183,7 +183,7 @@ export default function AboutPage() {
                                 className="text-gray-500 hover:text-white/70 transition-colors">
                                 <SiGithub size={16} />
                             </a>
-                            <a href="https://www.upwork.com/freelancers/CyberHasan"
+                            <a href="https://www.upwork.com/freelancers/cyberhasan"
                                 target="_blank" rel="noopener noreferrer"
                                 title="Upwork"
                                 className="text-gray-500 hover:text-electric-cyan transition-colors">

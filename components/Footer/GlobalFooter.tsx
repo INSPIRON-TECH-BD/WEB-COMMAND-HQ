@@ -149,7 +149,7 @@ export const GlobalFooter = () => {
                             className="text-white/40 hover:text-white/70 transition-colors">
                             <SiGithub size={16} />
                         </a>
-                        <a href="https://www.upwork.com/freelancers/CyberHasan"
+                        <a href="https://www.upwork.com/freelancers/cyberhasan"
                             target="_blank" rel="noopener noreferrer"
                             title="Upwork"
                             className="text-white/40 hover:text-electric-cyan transition-colors">
