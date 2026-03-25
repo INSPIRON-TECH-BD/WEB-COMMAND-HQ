@@ -141,7 +141,6 @@ export default function UpworkAssetsStudio() {
         return () => window.removeEventListener('resize', calculateScale);
     }, [calculateScale]);
 
-    /* ─── EXPORT ──────────────────────────────────────────────────────────── */
     const handleExport = async () => {
         setIsExporting(true);
         try {
@@ -151,32 +150,16 @@ export default function UpworkAssetsStudio() {
             const orbs = el.querySelectorAll<HTMLElement>('[data-blur-orb]');
             orbs.forEach(o => (o.style.display = 'none'));
 
-            let dataUrl: string | null = null;
-
-            try {
-                const domtoimage = await import('dom-to-image-more');
-                dataUrl = await domtoimage.default.toJpeg(el, {
-                    quality: 0.95,
-                    bgcolor: '#010409',
-                    width: 1600,
-                    height: 1200,
-                    style: { transform: 'none', transformOrigin: 'top left' },
-                });
-            } catch (domErr) {
-                console.warn('dom-to-image failed, falling back to html2canvas:', domErr);
-            }
-
-            if (!dataUrl) {
-                const { default: html2canvas } = await import('html2canvas');
-                const canvas = await html2canvas(el, {
-                    scale: 1,
-                    useCORS: true,
-                    backgroundColor: '#010409',
-                    allowTaint: true,
-                    logging: false,
-                });
-                dataUrl = canvas.toDataURL('image/jpeg', 0.95);
-            }
+            const { default: html2canvas } = await import('html2canvas');
+            const canvas = await html2canvas(el, {
+                scale: window.devicePixelRatio || 2, // High DPI capture
+                useCORS: true,
+                backgroundColor: '#010409',
+                width: 1600,
+                height: 1200,
+                logging: false,
+            });
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
 
             orbs.forEach(o => (o.style.display = ''));
 
