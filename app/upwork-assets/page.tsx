@@ -140,12 +140,23 @@ export default function UpworkAssetsStudio() {
 
             const { default: html2canvas } = await import('html2canvas');
             const canvas = await html2canvas(el, {
-                scale: window.devicePixelRatio || 2, // High DPI capture
+                scale: window.devicePixelRatio || 2,
                 useCORS: true,
                 backgroundColor: '#010409',
                 width: 1600,
                 height: 1200,
                 logging: false,
+                onclone: (clonedDoc) => {
+                    // html2canvas strips word-spacing from custom @font-face glyphs.
+                    // Injecting a style tag into the cloned document is the ONLY
+                    // reliable way to force correct spacing before pixel capture.
+                    const style = clonedDoc.createElement('style');
+                    style.innerHTML = `
+                        * { word-spacing: 0.15em !important; letter-spacing: 0 !important; }
+                        .font-mono * { word-spacing: 0.1em !important; letter-spacing: 0.05em !important; }
+                    `;
+                    clonedDoc.head.appendChild(style);
+                },
             });
             const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
 
