@@ -192,6 +192,75 @@ export default function CaseStudiesPage() {
                 </div>
             </section>
 
+            {/* Case Study 4: Argus Properties */}
+            <section className="py-24 px-8 border-b border-white/5">
+                <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <div className="text-electric-cyan font-bold tracking-widest uppercase mb-4 text-sm">Case Study #04 — Real Estate Brokerage</div>
+                        <h2 className="font-institutional text-3xl md:text-5xl font-medium uppercase tracking-tight mb-6">
+                            Argus Properties
+                        </h2>
+                        <h3 className="text-xl text-action-gold font-medium mb-6">
+                            Multi-Region · Pakistan &amp; UAE
+                        </h3>
+                        <p className="text-xl text-gray-300 mb-8 font-light leading-relaxed">
+                            A commission-based property brokerage operating across Karachi, Islamabad, Bahria Town Karachi, and Dubai — requiring division-level financial isolation with unified group reporting.
+                        </p>
+
+                        <div className="space-y-8">
+                            <div>
+                                <h3 className="text-action-gold font-bold uppercase tracking-wider text-sm mb-2">The Challenge</h3>
+                                <p className="text-gray-400 leading-relaxed">
+                                    4 divisions, 15+ real estate projects, 30-agent unified supplier ledger. Commission income and service income needed clean separation. PKR and AED multi-currency invoicing required.
+                                </p>
+                            </div>
+                            <div>
+                                <h3 className="text-electric-cyan font-bold uppercase tracking-wider text-sm mb-2">The Architecture</h3>
+                                <ul className="space-y-2 text-gray-400">
+                                    <li className="flex gap-3">
+                                        <Layers size={20} className="text-electric-cyan shrink-0" />
+                                        <span><strong>Divisions:</strong> Karachi, Islamabad, Bahria Town, Dubai — each with isolated P&amp;L and balance sheet.</span>
+                                    </li>
+                                    <li className="flex gap-3">
+                                        <TrendingUp size={20} className="text-electric-cyan shrink-0" />
+                                        <span><strong>Project Tagging:</strong> Per-scheme project tracking across 15+ active developments.</span>
+                                    </li>
+                                    <li className="flex gap-3">
+                                        <BookOpen size={20} className="text-electric-cyan shrink-0" />
+                                        <span><strong>Custom Themes:</strong> HTML/CSS invoice themes for PKR (Pakistan) and AED (Dubai) operations.</span>
+                                    </li>
+                                </ul>
+                                <div className="mt-8">
+                                    <Link href="/case-studies/argus-properties" className="inline-flex items-center gap-2 text-action-gold hover:text-white font-bold tracking-widest uppercase text-sm border border-action-gold/30 rounded-xl px-6 py-3 hover:bg-action-gold/10 transition-all glow-cyan cursor-pointer">
+                                        <Printer size={16} /> View Case Study &rarr;
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-white/5 p-10 rounded-[40px] border border-white/10">
+                        <div className="grid grid-cols-2 gap-8 text-center">
+                            <div className="p-6 bg-black/20 rounded-2xl">
+                                <div className="text-4xl font-bold text-white mb-2">4</div>
+                                <div className="text-xs uppercase tracking-widest text-gray-500">Divisions</div>
+                            </div>
+                            <div className="p-6 bg-black/20 rounded-2xl">
+                                <div className="text-4xl font-bold text-action-gold mb-2">15+</div>
+                                <div className="text-xs uppercase tracking-widest text-gray-500">Projects</div>
+                            </div>
+                            <div className="p-6 bg-black/20 rounded-2xl">
+                                <div className="text-4xl font-bold text-electric-cyan mb-2">30</div>
+                                <div className="text-xs uppercase tracking-widest text-gray-500">Agents Tracked</div>
+                            </div>
+                            <div className="p-6 bg-black/20 rounded-2xl">
+                                <div className="text-4xl font-bold text-white mb-2">PKR/AED</div>
+                                <div className="text-xs uppercase tracking-widest text-gray-500">Multi-Currency</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* CTA */}
             <section className="py-20 px-8 bg-gradient-to-t from-electric-cyan/[0.05] to-transparent text-center">
                 <div className="max-w-4xl mx-auto">
