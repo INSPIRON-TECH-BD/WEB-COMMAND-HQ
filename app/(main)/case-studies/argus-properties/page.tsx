@@ -203,7 +203,7 @@ function SlideCanvas({ slide, idx }: { slide: typeof SLIDES[0]; idx: number }) {
 
             {/* Header */}
             <div style={{ position: "absolute", top: 22, left: 24, right: 24, display: "flex", alignItems: "center", justifyContent: "space-between", zIndex: 10 }}>
-                <RefinedIcon size={28} />
+                <RefinedLogo size={28} />
                 <div style={{ fontFamily: "monospace", fontSize: 11, color: GRAY, border: `1px solid rgba(0,210,255,0.3)`, borderRadius: 9999, padding: "4px 12px" }}>
                     {num} / {String(TOTAL).padStart(2, "0")}
                 </div>
@@ -461,7 +461,7 @@ function ResultsContent({ s }: { s: any }) {
         <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
             <Badge text={s.badge} />
             <h1 style={{ fontSize: 26, fontWeight: 900, color: WHITE, textTransform: "uppercase", lineHeight: 1.15, marginBottom: 16, whiteSpace: "pre-line" }}>{s.headline}</h1>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 16 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 24, flex: 1, alignContent: "center" }}>
                 {s.results.map((r: string, i: number) => (
                     <div key={i} style={{ backgroundColor: "rgba(0,210,255,0.07)", border: "1px solid rgba(0,210,255,0.25)", borderRadius: 12, padding: "14px 16px", display: "flex", alignItems: "center", gap: 10 }}>
                         <span style={{ color: "#22c55e", fontSize: 16, fontWeight: 700 }}>✅</span>
@@ -469,7 +469,7 @@ function ResultsContent({ s }: { s: any }) {
                     </div>
                 ))}
             </div>
-            <div style={{ border: `1px solid rgba(255,215,0,0.3)`, borderRadius: 14, padding: "16px 20px", backgroundColor: "rgba(255,215,0,0.05)", flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center", gap: 8 }}>
+            <div style={{ border: `1px solid rgba(255,215,0,0.3)`, borderRadius: 14, padding: "16px 20px", backgroundColor: "rgba(255,215,0,0.05)", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center", gap: 8 }}>
                 <div style={{ fontSize: 13, fontWeight: 700, color: GOLD, textTransform: "uppercase", letterSpacing: "0.1em" }}>{s.cta.title}</div>
                 <div style={{ fontSize: 12, color: WHITE, fontFamily: "monospace" }}>{s.cta.contact}</div>
                 <div style={{ fontSize: 10, color: CYAN, textTransform: "uppercase", letterSpacing: "0.15em", marginTop: 4 }}>{s.cta.badge}</div>
