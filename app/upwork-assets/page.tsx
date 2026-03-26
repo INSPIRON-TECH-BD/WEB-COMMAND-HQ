@@ -80,6 +80,7 @@ function SlideCanvas({ slide, idx }: { slide: typeof SLIDES[0]; idx: number }) {
     return (
         <div
             id={`slide-canvas-${idx}`}
+            className="font-institutional"
             style={{
                 width: 1600,
                 height: 1200,
@@ -87,12 +88,11 @@ function SlideCanvas({ slide, idx }: { slide: typeof SLIDES[0]; idx: number }) {
                 position: "relative",
                 overflow: "hidden",
                 flexShrink: 0,
-                fontFamily: "Inter, sans-serif",
                 boxSizing: "border-box",
                 padding: "80px",
                 display: "flex",
                 flexDirection: "column",
-                border: "1px solid rgba(255,255,255,0.05)"
+                border: "0px solid transparent"
             }}
         >
             {/* Global Grid Overlay */}
@@ -128,17 +128,17 @@ function SlideCanvas({ slide, idx }: { slide: typeof SLIDES[0]; idx: number }) {
 
 function HeroContent({ s }: { s: any }) {
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center" }}>
-            <div style={{ display: "inline-block", padding: "16px 32px", border: `1px solid rgba(0,210,255,0.3)`, backgroundColor: "rgba(0,210,255,0.1)", color: CYAN, fontWeight: 900, fontSize: 24, letterSpacing: "0.3em", textTransform: "uppercase", borderRadius: 9999, marginBottom: 64, backdropFilter: "blur(12px)" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, width: "100%", textAlign: "center" }}>
+            <div style={{ display: "inline-block", padding: "16px 32px", border: `2px solid rgba(0,210,255,0.3)`, backgroundColor: "rgba(0,210,255,0.1)", color: CYAN, fontWeight: 900, fontSize: 24, letterSpacing: "0.2em", textTransform: "uppercase", borderRadius: 9999, marginBottom: 64, backdropFilter: "blur(12px)" }}>
                 {s.tag}
             </div>
-            <h1 style={{ fontSize: 130, fontWeight: 900, color: WHITE, lineHeight: 1.1, letterSpacing: "-0.02em", marginBottom: 24, maxWidth: 1400 }}>
+            <h1 style={{ fontSize: 130, fontWeight: 900, color: WHITE, lineHeight: 1.2, marginBottom: 24, maxWidth: 1400, width: "100%" }}>
                 {s.headline}
             </h1>
-            <h2 style={{ fontSize: 90, fontWeight: 300, fontStyle: "italic", color: GOLD, lineHeight: 1.1, marginBottom: 64, maxWidth: 1400 }}>
+            <h2 style={{ fontSize: 90, fontWeight: 300, fontStyle: "italic", color: GOLD, lineHeight: 1.2, marginBottom: 64, maxWidth: 1400, width: "100%" }}>
                 {s.highlight}
             </h2>
-            <p style={{ fontSize: 36, color: GRAY, maxWidth: 1100, lineHeight: 1.6, fontFamily: "monospace" }}>
+            <p className="font-mono" style={{ fontSize: 36, color: GRAY, maxWidth: 1100, lineHeight: 1.6 }}>
                 {s.subtext}
             </p>
         </div>
@@ -148,21 +148,22 @@ function HeroContent({ s }: { s: any }) {
 function BeforeAfterContent({ s }: { s: any }) {
     return (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, width: "100%" }}>
-            <div style={{ textAlign: "center", marginBottom: 80 }}>
-                <div style={{ color: CYAN, fontWeight: 900, fontSize: 24, letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: 24 }}>{s.tag}</div>
-                <h1 style={{ fontSize: 80, fontWeight: 900, color: WHITE, lineHeight: 1.1 }}>
+            <div style={{ textAlign: "center", marginBottom: 80, width: "100%" }}>
+                <div style={{ display: "inline-block", color: CYAN, fontWeight: 900, fontSize: 24, letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 24 }}>{s.tag}</div>
+                <h1 style={{ fontSize: 80, fontWeight: 900, color: WHITE, lineHeight: 1.2 }}>
                     {s.headline} <span style={{ color: GOLD, fontStyle: "italic", fontWeight: 300 }}>{s.highlight}</span>
                 </h1>
             </div>
             
-            <div style={{ display: "flex", gap: 64, width: "100%", flex: 1 }}>
-                <div style={{ flex: 1, backgroundColor: "rgba(15,23,42,0.8)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 32, padding: 64, position: "relative", backdropFilter: "blur(20px)" }}>
-                    <div style={{ position: "absolute", top: 0, left: 48, transform: "translateY(-50%)", backgroundColor: "rgba(127,29,29,0.9)", color: WHITE, padding: "12px 32px", borderRadius: 9999, fontWeight: 900, fontSize: 24, letterSpacing: "0.2em", border: "1px solid rgba(239,68,68,0.5)" }}>BEFORE INSPIRON</div>
+            {/* html2canvas safe layout using exact percentages instead of gap/flex:1 */}
+            <div style={{ display: "flex", justifyContent: "space-between", width: "100%", flex: 1 }}>
+                <div style={{ width: "48%", backgroundColor: "rgba(15,23,42,0.8)", border: "2px solid rgba(239,68,68,0.2)", borderRadius: 32, padding: 64, position: "relative", backdropFilter: "blur(20px)" }}>
+                    <div style={{ position: "absolute", top: 0, left: 48, transform: "translateY(-50%)", backgroundColor: "rgba(127,29,29,0.9)", color: WHITE, padding: "12px 32px", borderRadius: 9999, fontWeight: 900, fontSize: 24, letterSpacing: "0.1em", border: "1px solid rgba(239,68,68,0.5)" }}>BEFORE INSPIRON</div>
                     <div style={{ fontSize: 100, marginBottom: 32, color: "#ef4444" }}>⚠️</div>
                     <p style={{ fontSize: 34, color: "#d1d5db", fontWeight: 300, lineHeight: 1.6 }}>Manual processes across Excel. Data silos. No unified visibility. Prone to audit failures.</p>
                 </div>
-                <div style={{ flex: 1, backgroundColor: "rgba(0,210,255,0.1)", border: `1px solid rgba(0,210,255,0.3)`, borderRadius: 32, padding: 64, position: "relative", backdropFilter: "blur(20px)" }}>
-                    <div style={{ position: "absolute", top: 0, left: 48, transform: "translateY(-50%)", backgroundColor: CYAN, color: NAVY, padding: "12px 32px", borderRadius: 9999, fontWeight: 900, fontSize: 24, letterSpacing: "0.2em", boxShadow: "0 0 30px rgba(0,210,255,0.4)" }}>AFTER INSPIRON</div>
+                <div style={{ width: "48%", backgroundColor: "rgba(0,210,255,0.1)", border: `2px solid rgba(0,210,255,0.3)`, borderRadius: 32, padding: 64, position: "relative", backdropFilter: "blur(20px)" }}>
+                    <div style={{ position: "absolute", top: 0, left: 48, transform: "translateY(-50%)", backgroundColor: CYAN, color: NAVY, padding: "12px 32px", borderRadius: 9999, fontWeight: 900, fontSize: 24, letterSpacing: "0.1em", boxShadow: "0 0 30px rgba(0,210,255,0.4)" }}>AFTER INSPIRON</div>
                     <div style={{ fontSize: 100, marginBottom: 32, color: CYAN }}>🛡️</div>
                     <p style={{ fontSize: 34, color: WHITE, fontWeight: 300, lineHeight: 1.6 }}>{s.subtext}</p>
                 </div>
@@ -181,24 +182,25 @@ function ProcessContent({ s }: { s: any }) {
 
     return (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, width: "100%" }}>
-            <div style={{ textAlign: "center", marginBottom: 100 }}>
-                <div style={{ color: GOLD, fontWeight: 900, fontSize: 24, letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: 24 }}>{s.tag}</div>
-                <h1 style={{ fontSize: 90, fontWeight: 900, color: WHITE, lineHeight: 1.1 }}>{s.headline}</h1>
-                <p style={{ fontSize: 40, color: GRAY, marginTop: 24, fontStyle: "italic" }}>"{s.highlight}"</p>
+            <div style={{ textAlign: "center", marginBottom: 120, width: "100%" }}>
+                <div style={{ display: "inline-block", color: GOLD, fontWeight: 900, fontSize: 24, letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 24 }}>{s.tag}</div>
+                <h1 style={{ fontSize: 90, fontWeight: 900, color: WHITE, lineHeight: 1.2 }}>{s.headline}</h1>
+                <p style={{ fontSize: 40, color: GRAY, marginTop: 24, fontStyle: "italic", lineHeight: 1.2 }}>"{s.highlight}"</p>
             </div>
             
-            <div style={{ display: "flex", gap: 32, width: "100%", padding: "0 32px" }}>
+            {/* html2canvas safe layout using exact percentages instead of gap/flex:1 */}
+            <div style={{ display: "flex", justifyContent: "space-between", width: "100%", padding: "0 32px" }}>
                 {steps.map((st, i) => (
-                    <div key={i} style={{ flex: 1, backgroundImage: "linear-gradient(to bottom right, rgba(15,23,42,1), rgba(2,6,23,1))", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 32, padding: "64px 32px", position: "relative", textAlign: "center" }}>
-                        <div style={{ position: "absolute", top: -40, left: "50%", transform: "translateX(-50%)", width: 80, height: 80, borderRadius: "50%", border: `2px solid ${CYAN}`, backgroundColor: "rgba(0,210,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 32, color: CYAN }}>
+                    <div key={i} style={{ width: "23%", backgroundImage: "linear-gradient(to bottom right, rgba(15,23,42,1), rgba(2,6,23,1))", border: "2px solid rgba(255,255,255,0.1)", borderRadius: 32, padding: "64px 32px", position: "relative", textAlign: "center", boxSizing: "border-box" }}>
+                        <div style={{ position: "absolute", top: -40, left: "50%", marginLeft: -40, width: 80, height: 80, borderRadius: "50%", border: `2px solid ${CYAN}`, backgroundColor: "rgba(0,210,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 32, color: CYAN, boxSizing: "border-box" }}>
                             0{i + 1}
                         </div>
-                        <div style={{ color: GOLD, fontWeight: 900, fontSize: 18, letterSpacing: "0.2em", marginTop: 16, marginBottom: 16 }}>{st.label}</div>
-                        <div style={{ fontSize: 28, color: WHITE, fontWeight: 300 }}>{st.title}</div>
+                        <div style={{ color: GOLD, fontWeight: 900, fontSize: 18, letterSpacing: "0.1em", marginTop: 16, marginBottom: 16 }}>{st.label}</div>
+                        <div style={{ fontSize: 28, color: WHITE, fontWeight: 300, lineHeight: 1.4 }}>{st.title}</div>
                     </div>
                 ))}
             </div>
-            <div style={{ marginTop: 80, backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", padding: "24px 64px", borderRadius: 24, color: WHITE, fontSize: 28, fontFamily: "monospace" }}>
+            <div className="font-mono" style={{ marginTop: 80, backgroundColor: "rgba(255,255,255,0.05)", border: "2px solid rgba(255,255,255,0.1)", padding: "24px 64px", borderRadius: 24, color: WHITE, fontSize: 28, textAlign: "center", display: "inline-block" }}>
                 {s.subtext}
             </div>
         </div>
@@ -228,6 +230,8 @@ export default function UpworkAssetsRefinedStudio() {
             setScale(Math.min(scaleX, scaleY, 1));
         };
         calculateScale();
+        // Give fonts time to load, then recalc scale just in case
+        setTimeout(calculateScale, 500);
         window.addEventListener('resize', calculateScale);
         return () => window.removeEventListener('resize', calculateScale);
     }, []);
@@ -238,17 +242,19 @@ export default function UpworkAssetsRefinedStudio() {
             const el = document.getElementById(`slide-canvas-${idx}`);
             if (!el) return;
 
-            // Hide orbs during capture to prevent blurring artifacts in html2canvas if needed
-            const orbs = el.querySelectorAll<HTMLElement>("[data-blur-orb]");
-            // Optionally orbs.forEach(o => (o.style.display = "none")); 
-            // Left active because upwork assets look better with orbs if html2canvas renders them okay.
+            // Wait a microtick to ensure DOM is perfectly ready
+            await new Promise(r => setTimeout(r, 100));
 
             const { default: html2canvas } = await import("html2canvas");
             const canvas = await html2canvas(el, {
                 scale: 1, // 1600x1200 is inherently sufficient resolution
                 useCORS: true, 
                 backgroundColor: NAVY,
-                logging: false
+                logging: false,
+                width: 1600,
+                height: 1200,
+                windowWidth: 1600,
+                windowHeight: 1200,
             });
             
             const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
@@ -276,16 +282,16 @@ export default function UpworkAssetsRefinedStudio() {
     };
 
     return (
-        <div style={{ height: "100vh", backgroundColor: "#050a10", color: WHITE, fontFamily: "Inter, sans-serif", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        <div className="font-institutional" style={{ height: "100vh", backgroundColor: "#050a10", color: WHITE, display: "flex", flexDirection: "column", overflow: "hidden" }}>
 
             {/* ─── NAV ─── */}
             <nav style={{ flexShrink: 0, zIndex: 50, backgroundColor: "rgba(1,4,9,0.95)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(255,255,255,0.07)", height: 56, display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "space-between", padding: "0 24px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
                     <RefinedLogo size={24} />
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        <Link href="/" style={{ fontSize: 11, fontFamily: "monospace", color: GRAY, textDecoration: "none", letterSpacing: "0.2em" }}>← HOME</Link>
+                        <Link href="/" className="font-mono" style={{ fontSize: 11, color: GRAY, textDecoration: "none", letterSpacing: "0.2em" }}>← HOME</Link>
                         <span style={{ color: "rgba(255,255,255,0.2)" }}>|</span>
-                        <span style={{ fontSize: 11, fontFamily: "monospace", color: "#374151", letterSpacing: "0.15em" }}>UPWORK ASSET STUDIO V3.0</span>
+                        <span className="font-mono" style={{ fontSize: 11, color: "#374151", letterSpacing: "0.15em" }}>UPWORK ASSET STUDIO V3.1</span>
                     </div>
                 </div>
 
@@ -362,7 +368,7 @@ export default function UpworkAssetsRefinedStudio() {
                         >
                             <div style={{ width: 140, height: 105, backgroundColor: NAVY, borderRadius: 8, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, position: "relative", overflow: "hidden" }}>
                                 <div style={{ position: "absolute", top: -20, right: -20, width: 40, height: 40, backgroundColor: CYAN, opacity: 0.1, filter: "blur(10px)", borderRadius: "50%" }}></div>
-                                <span style={{ fontSize: 12, fontFamily: "monospace", color: activeSlide === i ? CYAN : GRAY, fontWeight: 700 }}>{String(i + 1).padStart(2, "0")}</span>
+                                <span className="font-mono" style={{ fontSize: 12, color: activeSlide === i ? CYAN : GRAY, fontWeight: 700 }}>{String(i + 1).padStart(2, "0")}</span>
                                 <span style={{ fontSize: 9, color: GRAY, textTransform: "uppercase", letterSpacing: "0.1em", padding: "0 8px" }}>{sl.label}</span>
                             </div>
                         </button>
