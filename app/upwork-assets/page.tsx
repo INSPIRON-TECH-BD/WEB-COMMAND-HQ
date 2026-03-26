@@ -1,631 +1,374 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import Link from 'next/link';
-import { RefinedLogo, RefinedIcon } from '@/components/Branding/RefinedLogo';
-import { Download, Info } from 'lucide-react';
+import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { RefinedLogo, RefinedIcon } from "@/components/Branding/RefinedLogo";
+import { Download } from "lucide-react";
 
-/* ─── TYPES ─────────────────────────────────────────────────────────────── */
-type ActiveMode = 'uw-hero' | 'uw-before-after' | 'uw-process' | 'uw-pricing';
+/* ─── BRAND TOKENS ─────────────────────────────────────────────────────────── */
+const CYAN  = "#00D2FF";
+const GOLD  = "#FFD700";
+const NAVY  = "#010409";
+const WHITE = "#FFFFFF";
+const GRAY  = "#9CA3AF";
 
-interface UpworkData {
-    tag: string;
-    headline: string;
-    highlight: string;
-    subtext: string;
-    name: string;
-    role: string;
-    website: string;
+/* ─── SLIDE DATA PRE-CONFIGURED ────────────────────────────────────────────── */
+const SLIDES = [
+    {
+        id: "a1-erp-hero",
+        label: "A1 ERP Hero",
+        type: "hero",
+        tag: "ENTERPRISE CLOUD ERP",
+        headline: "Manager.io Accounting",
+        highlight: "Complete Setup from Scratch",
+        subtext: "Chart of Accounts · Database Migration · Custom Dashboards · Automation Rules",
+    },
+    {
+        id: "a2-erp-before-after",
+        label: "A2 ERP B/A",
+        type: "before-after",
+        tag: "ERP IMPLEMENTATION",
+        headline: "Manual Spreadsheets",
+        highlight: "to Automated Cloud",
+        subtext: "Turn fragmented financial data into fully reconciled, audit-ready core systems.",
+    },
+    {
+        id: "b1-migration-hero",
+        label: "B1 Migration",
+        type: "hero",
+        tag: "ZERO-LOSS DATA MIGRATION",
+        headline: "Clean Migration",
+        highlight: "from QuickBooks · Tally · Excel",
+        subtext: "Full audit trail · 0.1% tolerance · Verified",
+    },
+    {
+        id: "c1-bpmn-hero",
+        label: "C1 BPMN Hero",
+        type: "hero",
+        tag: "BPMN 2.0 · PROCESS ARCHITECTURE",
+        headline: "Business Processes",
+        highlight: "Made Clear",
+        subtext: "As-Is / To-Be · Swim-Lane Diagrams · SOPs",
+    },
+    {
+        id: "c2-bpmn-process",
+        label: "C2 Process",
+        type: "process",
+        tag: "BPMN 2.0 · PROCESS FLOW",
+        headline: "Business Processes",
+        highlight: "Made Clear",
+        subtext: "Zero-Loss Protocol Enforced at Every Stage",
+    },
+    {
+        id: "d1-dashboard-hero",
+        label: "D1 Dashboard",
+        type: "hero",
+        tag: "AUDIT-READY FINANCIAL REPORTS",
+        headline: "Your KPI Dashboard",
+        highlight: "Built Right",
+        subtext: "P&L · Balance Sheet · Cash Flow · Management Reports",
+    }
+];
+
+const TOTAL = SLIDES.length;
+
+/* ─── SLIDE CANVAS ──────────────────────────────────────────────────────────── */
+function SlideCanvas({ slide, idx }: { slide: typeof SLIDES[0]; idx: number }) {
+    const s = slide as any;
+    const num = String(idx + 1).padStart(2, "0");
+
+    return (
+        <div
+            id={`slide-canvas-${idx}`}
+            style={{
+                width: 1600,
+                height: 1200,
+                backgroundColor: NAVY,
+                position: "relative",
+                overflow: "hidden",
+                flexShrink: 0,
+                fontFamily: "Inter, sans-serif",
+                boxSizing: "border-box",
+                padding: "80px",
+                display: "flex",
+                flexDirection: "column",
+                border: "1px solid rgba(255,255,255,0.05)"
+            }}
+        >
+            {/* Global Grid Overlay */}
+            <div style={{
+                position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+                backgroundImage: `linear-gradient(to right,rgba(0,210,255,0.08) 1px,transparent 1px),linear-gradient(to bottom,rgba(0,210,255,0.08) 1px,transparent 1px)`,
+                backgroundSize: "40px 40px",
+            }} />
+
+            {/* Glowing Orbs */}
+            <div data-blur-orb="true" style={{
+                position: "absolute", top: -400, right: -400,
+                width: 1200, height: 1200, borderRadius: "50%",
+                backgroundColor: CYAN, opacity: 0.1, filter: "blur(250px)", pointerEvents: "none", zIndex: 0
+            }} />
+
+            {/* Bottom Right Watermark */}
+            <div style={{ position: "absolute", bottom: 64, right: 64, opacity: 0.4, zIndex: 10 }}>
+                <RefinedIcon size={80} />
+            </div>
+
+            {/* Content Switcher */}
+            <div style={{ position: "relative", zIndex: 10, flex: 1, display: "flex", flexDirection: "column", height: "100%", width: "100%" }}>
+                {s.type === "hero" && <HeroContent s={s} />}
+                {s.type === "before-after" && <BeforeAfterContent s={s} />}
+                {s.type === "process" && <ProcessContent s={s} />}
+            </div>
+        </div>
+    );
+}
+
+/* ─── INDIVIDUAL SLIDE COMPONENTS ───────────────────────────────────────────── */
+
+function HeroContent({ s }: { s: any }) {
+    return (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center" }}>
+            <div style={{ display: "inline-block", padding: "16px 32px", border: `1px solid rgba(0,210,255,0.3)`, backgroundColor: "rgba(0,210,255,0.1)", color: CYAN, fontWeight: 900, fontSize: 24, letterSpacing: "0.3em", textTransform: "uppercase", borderRadius: 9999, marginBottom: 64, backdropFilter: "blur(12px)" }}>
+                {s.tag}
+            </div>
+            <h1 style={{ fontSize: 130, fontWeight: 900, color: WHITE, lineHeight: 1.1, letterSpacing: "-0.02em", marginBottom: 24, maxWidth: 1400 }}>
+                {s.headline}
+            </h1>
+            <h2 style={{ fontSize: 90, fontWeight: 300, fontStyle: "italic", color: GOLD, lineHeight: 1.1, marginBottom: 64, maxWidth: 1400 }}>
+                {s.highlight}
+            </h2>
+            <p style={{ fontSize: 36, color: GRAY, maxWidth: 1100, lineHeight: 1.6, fontFamily: "monospace" }}>
+                {s.subtext}
+            </p>
+        </div>
+    );
+}
+
+function BeforeAfterContent({ s }: { s: any }) {
+    return (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, width: "100%" }}>
+            <div style={{ textAlign: "center", marginBottom: 80 }}>
+                <div style={{ color: CYAN, fontWeight: 900, fontSize: 24, letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: 24 }}>{s.tag}</div>
+                <h1 style={{ fontSize: 80, fontWeight: 900, color: WHITE, lineHeight: 1.1 }}>
+                    {s.headline} <span style={{ color: GOLD, fontStyle: "italic", fontWeight: 300 }}>{s.highlight}</span>
+                </h1>
+            </div>
+            
+            <div style={{ display: "flex", gap: 64, width: "100%", flex: 1 }}>
+                <div style={{ flex: 1, backgroundColor: "rgba(15,23,42,0.8)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 32, padding: 64, position: "relative", backdropFilter: "blur(20px)" }}>
+                    <div style={{ position: "absolute", top: 0, left: 48, transform: "translateY(-50%)", backgroundColor: "rgba(127,29,29,0.9)", color: WHITE, padding: "12px 32px", borderRadius: 9999, fontWeight: 900, fontSize: 24, letterSpacing: "0.2em", border: "1px solid rgba(239,68,68,0.5)" }}>BEFORE INSPIRON</div>
+                    <div style={{ fontSize: 100, marginBottom: 32, color: "#ef4444" }}>⚠️</div>
+                    <p style={{ fontSize: 34, color: "#d1d5db", fontWeight: 300, lineHeight: 1.6 }}>Manual processes across Excel. Data silos. No unified visibility. Prone to audit failures.</p>
+                </div>
+                <div style={{ flex: 1, backgroundColor: "rgba(0,210,255,0.1)", border: `1px solid rgba(0,210,255,0.3)`, borderRadius: 32, padding: 64, position: "relative", backdropFilter: "blur(20px)" }}>
+                    <div style={{ position: "absolute", top: 0, left: 48, transform: "translateY(-50%)", backgroundColor: CYAN, color: NAVY, padding: "12px 32px", borderRadius: 9999, fontWeight: 900, fontSize: 24, letterSpacing: "0.2em", boxShadow: "0 0 30px rgba(0,210,255,0.4)" }}>AFTER INSPIRON</div>
+                    <div style={{ fontSize: 100, marginBottom: 32, color: CYAN }}>🛡️</div>
+                    <p style={{ fontSize: 34, color: WHITE, fontWeight: 300, lineHeight: 1.6 }}>{s.subtext}</p>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function ProcessContent({ s }: { s: any }) {
+    const steps = [
+        { title: "Architecture Review", label: "PHASE 1" },
+        { title: "Logic Mapping",       label: "PHASE 2" },
+        { title: "System Migration",    label: "PHASE 3" },
+        { title: "Go-Live Handover",    label: "PHASE 4" }
+    ];
+
+    return (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, width: "100%" }}>
+            <div style={{ textAlign: "center", marginBottom: 100 }}>
+                <div style={{ color: GOLD, fontWeight: 900, fontSize: 24, letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: 24 }}>{s.tag}</div>
+                <h1 style={{ fontSize: 90, fontWeight: 900, color: WHITE, lineHeight: 1.1 }}>{s.headline}</h1>
+                <p style={{ fontSize: 40, color: GRAY, marginTop: 24, fontStyle: "italic" }}>"{s.highlight}"</p>
+            </div>
+            
+            <div style={{ display: "flex", gap: 32, width: "100%", padding: "0 32px" }}>
+                {steps.map((st, i) => (
+                    <div key={i} style={{ flex: 1, backgroundImage: "linear-gradient(to bottom right, rgba(15,23,42,1), rgba(2,6,23,1))", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 32, padding: "64px 32px", position: "relative", textAlign: "center" }}>
+                        <div style={{ position: "absolute", top: -40, left: "50%", transform: "translateX(-50%)", width: 80, height: 80, borderRadius: "50%", border: `2px solid ${CYAN}`, backgroundColor: "rgba(0,210,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 32, color: CYAN }}>
+                            0{i + 1}
+                        </div>
+                        <div style={{ color: GOLD, fontWeight: 900, fontSize: 18, letterSpacing: "0.2em", marginTop: 16, marginBottom: 16 }}>{st.label}</div>
+                        <div style={{ fontSize: 28, color: WHITE, fontWeight: 300 }}>{st.title}</div>
+                    </div>
+                ))}
+            </div>
+            <div style={{ marginTop: 80, backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", padding: "24px 64px", borderRadius: 24, color: WHITE, fontSize: 28, fontFamily: "monospace" }}>
+                {s.subtext}
+            </div>
+        </div>
+    );
 }
 
 
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MAIN STUDIO OVERHAUL
+   ═══════════════════════════════════════════════════════════════════════════════ */
+export default function UpworkAssetsRefinedStudio() {
+    const [activeSlide, setActiveSlide] = useState(0);
+    const [exporting, setExporting] = useState(false);
+    const [scale, setScale] = useState(0.4);
 
-/* ─── PRESETS ────────────────────────────────────────────────────────────── */
-const PRESETS: Record<string, Partial<UpworkData>> = {
-    'ERP Setup': {
-        tag: 'Official Manager.io Partner',
-        headline: 'Manager.io ERP',
-        highlight: 'Setup & Data Migration',
-        subtext: 'Clean COA  ·  Zero-Loss Migration  ·  Audit-Ready Reports',
-    },
-    'Data Migration': {
-        tag: 'Zero-Loss Data Migration',
-        headline: 'Clean Migration',
-        highlight: 'from QuickBooks · Tally · Excel',
-        subtext: 'Full audit trail  ·  Opening balance verification  ·  0.1% tolerance',
-    },
-    'BPMN Mapping': {
-        tag: 'BPMN 2.0 · Process Architecture',
-        headline: 'Business Processes',
-        highlight: 'Made Clear',
-        subtext: 'As-Is / To-Be  ·  Swim-Lane Diagrams  ·  SOPs  ·  Automation-Ready',
-    },
-    'Dashboard': {
-        tag: 'Audit-Ready Financial Reports',
-        headline: 'Your KPI Dashboard',
-        highlight: 'Built Right',
-        subtext: 'P&L  ·  Balance Sheet  ·  Cash Flow  ·  Management Reports',
-    },
-};
-
-/* ─── SIDEBAR INPUT ──────────────────────────────────────────────────────── */
-const SidebarInput = ({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) => (
-    <div>
-        <label className="block text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500 mb-2">{label}</label>
-        <input
-            type="text"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#00D2FF] text-white transition-colors placeholder:text-gray-600"
-        />
-    </div>
-);
-
-/* ─── PROCESS STEPS DATA ─────────────────────────────────────────────────── */
-const PROCESS_STEPS = [
-    { num: '01', emoji: '🔍', title: 'AUDIT',     color: '#00D2FF', sub: 'Understand your business' },
-    { num: '02', emoji: '✏️', title: 'DESIGN',    color: '#FFD700', sub: 'Build your Chart of Accounts' },
-    { num: '03', emoji: '🔄', title: 'MIGRATION', color: '#22c55e', sub: 'Configure & migrate data' },
-    { num: '04', emoji: '🎓', title: 'TRAINING',  color: '#00D2FF', sub: 'Train, verify, launch' },
-];
-
-/* ─── PRICING TIERS ──────────────────────────────────────────────────────── */
-const PRICING_TIERS = [
-    {
-        name: 'Starter',
-        featured: false,
-        items: ['Company setup', 'COA design', 'Basic reports', '5-day delivery'],
-    },
-    {
-        name: 'Standard',
-        featured: true,
-        items: ['Full setup + migration', 'Key reports configured', 'Training session', 'Opening balance verification', '12-day delivery'],
-    },
-    {
-        name: 'Advanced',
-        featured: false,
-        items: ['Multi-entity setup', 'Custom dashboards', 'Inter-company billing', '90-day support'],
-    },
-];
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   UPWORK PORTFOLIO ASSET STUDIO — V2.2
-   INSPIRON TECH · MD ABU HASAN
-   4 canvas modes · 1600×1200px · JPG 0.95 export
-   FIX V2.2: Hero canvas layout — reduced font sizes, fixed text collision,
-             whiteSpace nowrap on highlight, removed subtext border artifact,
-             replaced Tailwind className flex with inline styles in canvas
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-export default function UpworkAssetsStudio() {
-    const [activeMode, setActiveMode] = useState<ActiveMode>('uw-hero');
-    const [isExporting, setIsExporting] = useState(false);
-
-    const [uwData, setUwData] = useState<UpworkData>({
-        tag: 'Official Manager.io Partner',
-        headline: 'Manager.io ERP',
-        highlight: 'Setup & Data Migration',
-        subtext: 'Clean COA  ·  Zero-Loss Migration  ·  Audit-Ready Reports',
-        name: 'MD ABU HASAN',
-        role: 'Founder & ERP Architect',
-        website: 'inspiron.tech',
-    });
-
-    const [scale, setScale] = useState(0.38);
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    const calculateScale = useCallback(() => {
-        if (!containerRef.current) return;
-        const c = containerRef.current;
-        const pad = 80;
-        const sx = (c.clientWidth - pad) / 1600;
-        const sy = (c.clientHeight - pad) / 1200;
-        setScale(Math.max(0.15, Math.min(sx, sy, 0.85)));
-    }, []);
+    const stageRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        const calculateScale = () => {
+            if (!stageRef.current) return;
+            const container = stageRef.current;
+            const padding = 64;
+            const availableW = container.clientWidth - padding;
+            const availableH = container.clientHeight - padding;
+            const scaleX = availableW / 1600;
+            const scaleY = availableH / 1200;
+            setScale(Math.min(scaleX, scaleY, 1));
+        };
         calculateScale();
         window.addEventListener('resize', calculateScale);
         return () => window.removeEventListener('resize', calculateScale);
-    }, [calculateScale]);
+    }, []);
 
-    const handleExport = async () => {
-        setIsExporting(true);
+    const exportSlide = async (idx: number) => {
+        setExporting(true);
         try {
-            const el = document.getElementById('data-export-canvas');
+            const el = document.getElementById(`slide-canvas-${idx}`);
             if (!el) return;
 
-            const orbs = el.querySelectorAll<HTMLElement>('[data-blur-orb]');
-            orbs.forEach(o => (o.style.display = 'none'));
+            // Hide orbs during capture to prevent blurring artifacts in html2canvas if needed
+            const orbs = el.querySelectorAll<HTMLElement>("[data-blur-orb]");
+            // Optionally orbs.forEach(o => (o.style.display = "none")); 
+            // Left active because upwork assets look better with orbs if html2canvas renders them okay.
 
-            const { default: html2canvas } = await import('html2canvas');
+            const { default: html2canvas } = await import("html2canvas");
             const canvas = await html2canvas(el, {
-                scale: window.devicePixelRatio || 2,
-                useCORS: true,
-                backgroundColor: '#010409',
-                width: 1600,
-                height: 1200,
-                windowWidth: 1600,
-                windowHeight: 1200,
-                logging: false,
-                onclone: (clonedDoc: Document) => {
-                    // html2canvas v1.4.1: onclone receives ONE argument (the cloned document).
-                    // We must querySelector the canvas root ourselves, then walk all text nodes
-                    // replacing U+0020 (space) with U+00A0 (NBSP) — which always has a
-                    // measurable glyph width even with custom @font-face fonts.
-                    const root = clonedDoc.getElementById('data-export-canvas');
-                    if (!root) return;
-                    const walk = (node: Node) => {
-                        if (node.nodeType === Node.TEXT_NODE && node.textContent) {
-                            node.textContent = node.textContent.replace(/ /g, '\u00A0');
-                        } else {
-                            node.childNodes.forEach(walk);
-                        }
-                    };
-                    walk(root);
-                },
+                scale: 1, // 1600x1200 is inherently sufficient resolution
+                useCORS: true, 
+                backgroundColor: NAVY,
+                logging: false
             });
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
-
-            orbs.forEach(o => (o.style.display = ''));
+            
+            const dataUrl = canvas.toDataURL("image/jpeg", 0.95);
 
             if (dataUrl) {
-                const a = document.createElement('a');
-                a.download = `inspiron_${activeMode}_1x_${Date.now()}.jpg`;
+                const a = document.createElement("a");
+                a.download = `upwork-${SLIDES[idx].id}.jpg`;
                 a.href = dataUrl;
                 a.click();
             }
-        } catch (err) {
-            console.error('Export failed:', err);
+        } catch (e) {
+            console.error("Export failed:", e);
         } finally {
-            setIsExporting(false);
+            setExporting(false);
         }
     };
 
-    const applyPreset = (key: string) => {
-        const p = PRESETS[key];
-        if (p) setUwData(prev => ({ ...prev, ...p }));
+    const exportAll = async () => {
+        for (let i = 0; i < TOTAL; i++) {
+            setActiveSlide(i);
+            await new Promise(r => setTimeout(r, 400));
+            await exportSlide(i);
+            await new Promise(r => setTimeout(r, 200));
+        }
     };
 
-    /* ─── CANVAS RENDERERS ────────────────────────────────────────────────── */
-
-    /* ── HERO (V2.2 FIXED) ──────────────────────────────────────────────────
-       Changes vs V2.1:
-       • Headline font-size: 110px → 88px  (prevents overflow at 1600px width)
-       • Headline marginBottom: 16px → 32px (clear gap before highlight)
-       • Headline whiteSpace: nowrap
-       • Highlight font-size: 85px → 68px  (fits without wrapping)
-       • Highlight whiteSpace: nowrap, border: none, background: none, padding: 0
-       • Subtext font-size: 30px → 26px, border: none, background: none, padding: 0
-       • Logo wordmark: Tailwind className → inline style (safe for export canvas)
-       • Tag badge: whiteSpace: nowrap added
-    ────────────────────────────────────────────────────────────────────────── */
-    const renderHero = () => (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center' }}>
-            {/* Logo + Wordmark — inline only, no Tailwind inside canvas */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '40px' }}>
-                <RefinedIcon size={64} />
-                <div style={{ display: 'flex', alignItems: 'baseline' }}>
-                    <span style={{ fontSize: '28px', fontWeight: 500, textTransform: 'lowercase', color: '#FFFFFF' }}>inspiron</span>
-                    <span style={{ fontSize: '26px', fontWeight: 300, textTransform: 'uppercase', color: '#FFD700', marginLeft: '6px' }}>TECH</span>
-                </div>
-            </div>
-
-            {/* Tag Badge */}
-            <div style={{
-                padding: '14px 40px',
-                border: '1px solid rgba(0,210,255,0.35)',
-                backgroundColor: 'rgba(0,210,255,0.07)',
-                color: '#00D2FF',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                borderRadius: '9999px',
-                marginBottom: '48px',
-                fontSize: '18px',
-                whiteSpace: 'nowrap',
-            }}>
-                {uwData.tag}
-            </div>
-
-            {/* Headline — FIX: 88px, gap 32px, nowrap */}
-            <h1 style={{
-                fontSize: '88px',
-                fontWeight: 900,
-                color: '#FFFFFF',
-                lineHeight: 1.05,
-                marginBottom: '32px',
-                whiteSpace: 'nowrap',
-            }}>
-                {uwData.headline}
-            </h1>
-
-            {/* Highlight — FIX: 68px, nowrap, border none */}
-            <h2 style={{
-                fontSize: '68px',
-                fontWeight: 300,
-                color: '#FFD700',
-                lineHeight: 1.2,
-                marginBottom: '48px',
-                fontStyle: 'italic',
-                whiteSpace: 'nowrap',
-                border: 'none',
-                background: 'none',
-                padding: 0,
-            }}>
-                {uwData.highlight}
-            </h2>
-
-            {/* Subtext — FIX: 26px, border none, padding 0 */}
-            <p style={{
-                fontSize: '26px',
-                color: '#9CA3AF',
-                maxWidth: '1100px',
-                lineHeight: 1.6,
-                marginBottom: '56px',
-                border: 'none',
-                background: 'none',
-                padding: 0,
-            }}>
-                {uwData.subtext}
-            </p>
-
-            {/* Bottom Cards */}
-            <div style={{ display: 'flex', gap: '28px' }}>
-                {[
-                    { icon: '📊', label: 'P&L Statement', sub: 'Revenue  ·  Expenses  ·  Net' },
-                    { icon: '🏦', label: 'Balance Sheet',  sub: 'Assets  ·  Liabilities  ·  Equity' },
-                    { icon: '💸', label: 'Cash Flow',      sub: 'Inflow  ·  Outflow  ·  Reserves' },
-                ].map(c => (
-                    <div key={c.label} style={{
-                        backgroundColor: 'rgba(255,255,255,0.04)',
-                        border: '1px solid rgba(0,210,255,0.2)',
-                        borderRadius: '16px',
-                        padding: '28px 44px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        gap: '10px',
-                        boxShadow: '0 0 24px rgba(0,210,255,0.08)',
-                        minWidth: '260px',
-                    }}>
-                        <span style={{ fontSize: '34px' }}>{c.icon}</span>
-                        <span style={{ fontSize: '22px', color: '#00D2FF', fontWeight: 600 }}>{c.label}</span>
-                        <span style={{ fontSize: '13px', color: '#6B7280' }}>{c.sub}</span>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-
-    const renderBeforeAfter = () => (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '24px', opacity: 0.6 }}>
-                <RefinedIcon size={36} />
-                <div style={{ display: 'flex', alignItems: 'baseline' }}>
-                    <span style={{ fontSize: '18px', fontWeight: 500, textTransform: 'lowercase', color: '#FFFFFF' }}>inspiron</span>
-                    <span style={{ fontSize: '16px', fontWeight: 300, textTransform: 'uppercase', color: '#FFD700', marginLeft: '4px' }}>TECH</span>
-                </div>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', flex: 1, alignContent: 'center', alignItems: 'stretch' }}>
-                {/* BEFORE */}
-                <div style={{ backgroundColor: 'rgba(10,5,5,0.8)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '24px', padding: '56px', position: 'relative', overflow: 'hidden' }}>
-                    <div style={{ position: 'absolute', top: 0, right: '32px', transform: 'translateY(-50%)', backgroundColor: 'rgba(127,29,29,0.9)', color: '#FFFFFF', padding: '12px 32px', borderRadius: '9999px', fontWeight: 700, textTransform: 'uppercase', border: '1px solid rgba(239,68,68,0.5)', fontSize: '18px', zIndex: 10 }}>Before</div>
-                    <h3 style={{ fontSize: '36px', fontWeight: 300, color: '#f87171', marginBottom: '32px', marginTop: '16px' }}>
-                        {'Spreadsheets\u00A0&\u00A0broken\u00A0ERP'}
-                    </h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', opacity: 0.6 }}>
-                        {Array.from({ length: 9 }).map((_, i) => (
-                            <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                                <div style={{ width: '96px', height: '20px', backgroundColor: 'rgba(107,114,128,0.3)', borderRadius: '4px' }} />
-                                <div style={{ width: '64px', height: '20px', backgroundColor: 'rgba(107,114,128,0.2)', borderRadius: '4px' }} />
-                                <div style={{ flex: 1, height: '20px', backgroundColor: 'rgba(107,114,128,0.15)', borderRadius: '4px' }} />
-                                <div style={{ width: '80px', height: '20px', backgroundColor: 'rgba(234,179,8,0.2)', borderRadius: '4px' }} />
-                            </div>
-                        ))}
-                    </div>
-                    <p style={{ fontSize: '18px', color: '#6B7280', marginTop: '32px', border: 'none' }}>{'???\u00A0errors\u00A0\u00B7\u00A0no\u00A0audit\u00A0trail'}</p>
-                </div>
-
-                {/* AFTER */}
-                <div style={{ backgroundColor: 'rgba(0,210,255,0.04)', border: '1px solid rgba(0,210,255,0.3)', borderRadius: '24px', padding: '56px', position: 'relative', overflow: 'hidden' }}>
-                    <div style={{ position: 'absolute', top: 0, right: '32px', transform: 'translateY(-50%)', backgroundColor: '#00D2FF', color: '#010409', padding: '12px 32px', borderRadius: '9999px', fontWeight: 900, textTransform: 'uppercase', fontSize: '18px', zIndex: 10, boxShadow: '0 0 20px rgba(0,210,255,0.4)' }}>After</div>
-                    <h3 style={{ fontSize: '36px', fontWeight: 300, color: '#00D2FF', marginBottom: '40px', marginTop: '16px' }}>
-                        {'Stable\u00A0Manager.io\u00A0accounting\u00A0core'}
-                    </h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                        {[
-                            { icon: '📈', label: 'P&L\u00A0Statement', status: 'Synced',      color: '#22c55e' },
-                            { icon: '🏦', label: 'Balance\u00A0Sheet',  status: 'Audit-Ready', color: '#00D2FF' },
-                            { icon: '💸', label: 'Cash\u00A0Flow',      status: 'Accurate',    color: '#FFD700' },
-                        ].map(r => (
-                            <div key={r.label} style={{ backgroundColor: '#050a10', border: '1px solid rgba(0,210,255,0.2)', borderRadius: '16px', padding: '28px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 0 16px rgba(0,210,255,0.06)' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                                    <span style={{ fontSize: '36px' }}>{r.icon}</span>
-                                    <span style={{ fontSize: '24px', color: '#FFFFFF', fontWeight: 500 }}>{r.label}</span>
-                                </div>
-                                <span style={{ padding: '8px 24px', borderRadius: '9999px', fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', backgroundColor: `${r.color}20`, color: r.color, border: `1px solid ${r.color}40` }}>{r.status}</span>
-                            </div>
-                        ))}
-                    </div>
-                    <p style={{ fontSize: '18px', color: 'rgba(0,210,255,0.6)', marginTop: '32px', border: 'none' }}>{'0\u00A0errors\u00A0\u00B7\u00A0full\u00A0reconciliation'}</p>
-                </div>
-            </div>
-        </div>
-    );
-
-    const renderProcess = () => (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'space-between' }}>
-            <div style={{ textAlign: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '32px', opacity: 0.8 }}>
-                    <RefinedIcon size={52} />
-                    <div style={{ display: 'flex', alignItems: 'baseline' }}>
-                        <span style={{ fontSize: '22px', fontWeight: 500, textTransform: 'lowercase', color: '#FFFFFF' }}>inspiron</span>
-                        <span style={{ fontSize: '20px', fontWeight: 300, textTransform: 'uppercase', color: '#FFD700', marginLeft: '4px' }}>TECH</span>
-                    </div>
-                </div>
-                <div style={{ color: '#9CA3AF', fontWeight: 700, textTransform: 'uppercase', marginBottom: '24px', fontSize: '18px' }}>DELIVERY PROTOCOL</div>
-                <h1 style={{ fontSize: '72px', fontWeight: 900, color: '#FFFFFF', lineHeight: 1.1, borderBottom: '2px solid #00D2FF', paddingBottom: '16px', display: 'inline-block' }}>
-                    Your Setup in 4 Clear Steps
-                </h1>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '32px', width: '100%', flex: 1, alignItems: 'center', paddingTop: '48px', paddingBottom: '32px' }}>
-                {PROCESS_STEPS.map(s => (
-                    <div key={s.num} style={{ backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '48px', textAlign: 'center', position: 'relative' }}>
-                        <div style={{ width: '80px', height: '80px', borderRadius: '50%', border: `2px solid ${s.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '30px', fontWeight: 900, position: 'absolute', top: '-40px', left: '50%', transform: 'translateX(-50%)', color: s.color, backgroundColor: `${s.color}15` }}>
-                            {s.num}
-                        </div>
-                        <div style={{ fontSize: '70px', marginTop: '24px', marginBottom: '24px' }}>{s.emoji}</div>
-                        <h3 style={{ fontSize: '30px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '12px', color: s.color }}>{s.title}</h3>
-                        <p style={{ fontSize: '20px', color: '#9CA3AF' }}>{s.sub}</p>
-                    </div>
-                ))}
-            </div>
-
-            <div style={{ backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', padding: '24px 56px', fontSize: '20px', color: '#FFFFFF' }}>
-                Zero-Loss Protocol  ·  0.1% Error Tolerance  ·  Every Stage Verified
-            </div>
-        </div>
-    );
-
-    const renderPricing = () => (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', paddingTop: '32px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '24px', opacity: 0.8 }}>
-                <RefinedIcon size={52} />
-                <div style={{ display: 'flex', alignItems: 'baseline' }}>
-                    <span style={{ fontSize: '22px', fontWeight: 500, textTransform: 'lowercase', color: '#FFFFFF' }}>inspiron</span>
-                    <span style={{ fontSize: '20px', fontWeight: 300, textTransform: 'uppercase', color: '#FFD700', marginLeft: '4px' }}>TECH</span>
-                </div>
-            </div>
-            <h1 style={{ fontSize: '68px', fontWeight: 900, color: '#FFFFFF', lineHeight: 1.1, marginBottom: '8px' }}>
-                Choose Your <span style={{ color: '#00D2FF' }}>ERP Package</span>
-            </h1>
-            <p style={{ fontSize: '24px', color: '#9CA3AF', marginBottom: '56px', border: 'none', padding: 0 }}>{uwData.subtext}</p>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '32px', width: '100%', alignItems: 'stretch', flex: 1, maxHeight: '750px' }}>
-                {PRICING_TIERS.map(tier => (
-                    <div
-                        key={tier.name}
-                        style={{
-                            borderRadius: '24px',
-                            padding: '48px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            position: 'relative',
-                            ...(tier.featured
-                                ? { background: 'linear-gradient(to bottom, rgba(0,210,255,0.1), transparent)', border: '2px solid rgba(0,210,255,0.5)', marginTop: '-16px', paddingBottom: '64px' }
-                                : { backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', marginTop: '24px' }
-                            ),
-                        }}
-                    >
-                        {tier.featured && (
-                            <div style={{ position: 'absolute', top: '-20px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#00D2FF', color: '#010409', padding: '10px 32px', borderRadius: '9999px', fontWeight: 900, textTransform: 'uppercase', fontSize: '14px', whiteSpace: 'nowrap' }}>
-                                Most Popular
-                            </div>
-                        )}
-                        <h3 style={{ fontSize: '36px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '32px', color: tier.featured ? '#00D2FF' : '#FFFFFF' }}>
-                            {tier.name}
-                        </h3>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', flex: 1 }}>
-                            {tier.items.map(item => (
-                                <div key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-                                    <span style={{ color: '#FFD700', fontSize: '24px', marginTop: '2px' }}>✓</span>
-                                    <span style={{ fontSize: '20px', color: '#D1D5DB' }}>{item}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            <div style={{ marginTop: 'auto', paddingTop: '32px', textAlign: 'center' }}>
-                <p style={{ fontSize: '18px', color: '#9CA3AF', border: 'none' }}>{uwData.website}  ·  {uwData.name}  ·  {uwData.role}</p>
-            </div>
-        </div>
-    );
-
-    /* ─── MODE BUTTONS ────────────────────────────────────────────────────── */
-    const modes: { id: ActiveMode; label: string }[] = [
-        { id: 'uw-hero',         label: 'Hero' },
-        { id: 'uw-before-after', label: 'Before / After' },
-        { id: 'uw-process',      label: 'Process' },
-        { id: 'uw-pricing',      label: 'Pricing' },
-    ];
-
-    /* ═══════════════════════════════════════════════════════════════════════
-       RENDER
-       ═══════════════════════════════════════════════════════════════════════ */
     return (
-        <div className="min-h-screen bg-deep-navy-black text-institutional-white font-institutional selection:bg-electric-cyan selection:text-black flex flex-col overflow-hidden">
+        <div style={{ height: "100vh", backgroundColor: "#050a10", color: WHITE, fontFamily: "Inter, sans-serif", display: "flex", flexDirection: "column", overflow: "hidden" }}>
 
-            {/* ─── HUD NAV ──────────────────────────────────────────────── */}
-            <nav className="sticky top-0 z-50 bg-deep-navy-black/90 backdrop-blur-lg border-b border-white/10 shrink-0 h-14 flex items-center justify-between px-6">
-                <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-3 pr-6 border-r border-white/10">
-                        <RefinedLogo size={22} />
+            {/* ─── NAV ─── */}
+            <nav style={{ flexShrink: 0, zIndex: 50, backgroundColor: "rgba(1,4,9,0.95)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(255,255,255,0.07)", height: 56, display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "space-between", padding: "0 24px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+                    <RefinedLogo size={24} />
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                        <Link href="/" style={{ fontSize: 11, fontFamily: "monospace", color: GRAY, textDecoration: "none", letterSpacing: "0.2em" }}>← HOME</Link>
+                        <span style={{ color: "rgba(255,255,255,0.2)" }}>|</span>
+                        <span style={{ fontSize: 11, fontFamily: "monospace", color: "#374151", letterSpacing: "0.15em" }}>UPWORK ASSET STUDIO V3.0</span>
                     </div>
-                    <Link href="/" className="text-gray-500 hover:text-white text-[10px] font-mono tracking-widest transition-colors hidden md:block">← HOME</Link>
-                    <Link href="/social-assets" className="text-gray-500 hover:text-white text-[10px] font-mono tracking-widest transition-colors hidden sm:block">Social Studio →</Link>
-                    <Link href="/pitch-deck/upwork-portfolio" className="text-gray-500 hover:text-white text-[10px] font-mono tracking-widest transition-colors hidden sm:block">Pitch Deck →</Link>
                 </div>
-                <div className="text-[10px] text-gray-600 font-mono tracking-widest hidden lg:block">
-                    UPWORK PORTFOLIO STUDIO // V2.2 // ACTIVE
-                </div>
-                <div className="flex gap-1.5">
-                    {modes.map(m => (
+
+                {/* Slide tabs */}
+                <div style={{ display: "flex", gap: 6 }}>
+                    {SLIDES.map((sl, i) => (
                         <button
-                            key={m.id}
-                            onClick={() => setActiveMode(m.id)}
-                            className={`px-4 py-2 rounded text-[10px] font-bold uppercase tracking-widest transition-all ${
-                                activeMode === m.id
-                                    ? 'bg-[#14a800] text-white shadow-[0_0_12px_rgba(20,168,0,0.3)]'
-                                    : 'text-gray-400 hover:text-white hover:bg-white/5'
-                            }`}
+                            key={i}
+                            onClick={() => setActiveSlide(i)}
+                            style={{ padding: "6px 12px", borderRadius: 8, fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", border: "none", cursor: "pointer", transition: "all 0.15s", backgroundColor: activeSlide === i ? CYAN : "transparent", color: activeSlide === i ? NAVY : GRAY }}
                         >
-                            {m.label}
+                            {String(i + 1).padStart(2, "0")} — {sl.label}
                         </button>
                     ))}
                 </div>
+
+                <div style={{ display: "flex", gap: 12 }}>
+                    <button
+                        onClick={() => exportSlide(activeSlide)}
+                        disabled={exporting}
+                        style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 16px", borderRadius: 8, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", border: `1px solid ${CYAN}40`, backgroundColor: `${CYAN}10`, color: CYAN, cursor: "pointer" }}
+                    >
+                        <Download size={14} /> Export JPG
+                    </button>
+                    <button
+                        onClick={exportAll}
+                        disabled={exporting}
+                        style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 16px", borderRadius: 8, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", border: "none", backgroundColor: GOLD, color: NAVY, cursor: "pointer" }}
+                    >
+                        {exporting ? "Exporting..." : "Export All 6"}
+                    </button>
+                </div>
             </nav>
 
-            {/* ─── MAIN ─────────────────────────────────────────────────── */}
-            <main className="flex-1 flex flex-col lg:flex-row h-[calc(100vh-56px)] overflow-hidden min-w-0">
-
-                {/* ─── SIDEBAR CONTROLS ──────────────────────────────────── */}
-                <aside className="w-full lg:w-[420px] bg-deep-navy-black border-r border-white/10 overflow-y-auto shrink-0 z-10 p-6 flex flex-col">
-                    <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-[#14a800] mb-6 border-b border-white/10 pb-4 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#14a800] animate-pulse" />
-                        Upwork Canvas Editor
-                    </h2>
-
-                    {/* Presets */}
-                    <div className="mb-6">
-                        <label className="block text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500 mb-3">Quick Presets</label>
-                        <div className="grid grid-cols-2 gap-2">
-                            {Object.keys(PRESETS).map(k => (
-                                <button
-                                    key={k}
-                                    onClick={() => applyPreset(k)}
-                                    className="px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-gray-300 hover:border-[#14a800]/50 hover:text-white transition-all text-left"
-                                >
-                                    {k}
-                                </button>
-                            ))}
-                        </div>
+            {/* ─── CANVAS STAGE ─── */}
+            <main style={{ flex: 1, display: "flex", flexDirection: "column", padding: "0", overflow: "hidden", position: "relative" }}>
+                
+                {/* Visual Stage wrapper to center scaled content */}
+                <div ref={stageRef} style={{ flex: 1, display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "center", backgroundColor: "#020610", overflow: "hidden" }}>
+                    
+                    <div style={{ 
+                        width: 1600, height: 1200, 
+                        transform: `scale(${scale})`, 
+                        transformOrigin: "center center", 
+                        boxShadow: `0 0 100px rgba(0,210,255,0.08), 0 0 0 1px rgba(0,210,255,0.1)`, 
+                        borderRadius: 16,
+                        overflow: "hidden",
+                        flexShrink: 0
+                    }}>
+                        <SlideCanvas slide={SLIDES[activeSlide]} idx={activeSlide} />
                     </div>
 
-                    {/* Form Fields */}
-                    <div className="space-y-5 flex-1">
-                        <SidebarInput label="Tag / Eyebrow" value={uwData.tag}      onChange={v => setUwData(p => ({ ...p, tag: v }))} />
-                        <SidebarInput label="Headline"      value={uwData.headline} onChange={v => setUwData(p => ({ ...p, headline: v }))} />
-                        <div>
-                            <label className="block text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500 mb-2">Highlight (Gold)</label>
-                            <input
-                                type="text"
-                                value={uwData.highlight}
-                                onChange={e => setUwData(p => ({ ...p, highlight: e.target.value }))}
-                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#FFD700] text-[#FFD700] transition-colors"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500 mb-2">Subtext</label>
-                            <textarea
-                                value={uwData.subtext}
-                                onChange={e => setUwData(p => ({ ...p, subtext: e.target.value }))}
-                                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#00D2FF] text-white transition-colors resize-none"
-                                rows={3}
-                            />
-                        </div>
-                        <div className="border-t border-white/5 pt-5">
-                            <SidebarInput label="Name"    value={uwData.name}    onChange={v => setUwData(p => ({ ...p, name: v }))} />
-                        </div>
-                        <SidebarInput label="Role"    value={uwData.role}    onChange={v => setUwData(p => ({ ...p, role: v }))} />
-                        <SidebarInput label="Website" value={uwData.website} onChange={v => setUwData(p => ({ ...p, website: v }))} />
-                    </div>
+                </div>
 
-                    {/* System Note */}
-                    <div className="mt-6 bg-[#14a800]/10 border border-[#14a800]/30 rounded-lg px-4 py-3 text-[11px] text-[#14a800] font-mono">
-                        &gt;&gt; EXPORT: JPG 0.95q — dom-to-image-more (SVG engine)<br />
-                        &gt;&gt; CANVAS: 1600×1200px · 4:3 · Blur orbs hidden on export<br />
-                        &gt;&gt; V2.2: Hero layout fix — font sizes, nowrap, no border artifact
-                    </div>
+                {/* Hidden canvases for export (Full resolution renders ready for html2canvas) */}
+                <div style={{ position: "absolute", left: -9999, top: 0, visibility: "hidden" }}>
+                    {SLIDES.map((sl, i) => i !== activeSlide && (
+                        <SlideCanvas key={i} slide={sl} idx={i} />
+                    ))}
+                </div>
 
-                    {/* Pro tip */}
-                    <div className="mt-3 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-[11px] text-gray-400">
-                        <div className="flex items-start gap-2">
-                            <Info size={14} className="text-[#00D2FF] mt-0.5 shrink-0" />
-                            <div>
-                                <span className="text-[#00D2FF] font-bold">Cleanest export:</span> Right-click the canvas → Inspect → select the <code className="text-[#FFD700]">#data-export-canvas</code> node → right-click → <span className="text-white">Capture node screenshot</span>. Uses browser&apos;s native renderer — perfect text every time.
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Export Button */}
-                    <button
-                        onClick={handleExport}
-                        disabled={isExporting}
-                        className="mt-6 w-full bg-[#14a800] hover:bg-[#14a800]/90 text-white font-bold uppercase tracking-widest py-4 rounded-xl flex items-center justify-center gap-3 transition-all disabled:opacity-50 shadow-[0_0_20px_rgba(20,168,0,0.2)]"
-                    >
-                        {isExporting ? <span className="animate-spin text-xl">◌</span> : <Download size={18} />}
-                        {isExporting ? 'Exporting...' : 'Export JPG (0.95)'}
-                    </button>
-                </aside>
-
-                {/* ─── CANVAS STAGE ──────────────────────────────────────── */}
-                <section
-                    ref={containerRef}
-                    className="flex-1 bg-deep-navy-black flex items-center justify-center overflow-hidden relative"
-                    style={{
-                        backgroundImage: 'radial-gradient(circle at center, rgba(255,255,255,0.02) 1px, transparent 1px)',
-                        backgroundSize: '24px 24px',
-                    }}
-                >
-                    <div className="absolute top-4 right-4 text-[10px] font-mono text-gray-600 z-10">
-                        {(scale * 100).toFixed(0)}% · 1600×1200
-                    </div>
-
-                    <div style={{ transform: `scale(${scale})` }} className="origin-center transition-transform duration-300 ease-out">
-                        {/* ═══ THE EXPORT CANVAS ═══ */}
-                        <div
-                            id="data-export-canvas"
-                            className="font-institutional"
-                            style={{ width: '1600px', height: '1200px', backgroundColor: '#010409', padding: '64px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', border: '1px solid rgba(255,255,255,0.05)', wordSpacing: '0.15em' }}
+                {/* Bottom Thumbnails Strip */}
+                <div style={{ height: 140, backgroundColor: "rgba(1,4,9,0.95)", borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "center", gap: 16, padding: "0 32px" }}>
+                    {SLIDES.map((sl, i) => (
+                        <button
+                            key={i}
+                            onClick={() => setActiveSlide(i)}
+                            style={{ 
+                                border: `2px solid ${activeSlide === i ? CYAN : "rgba(255,255,255,0.05)"}`, 
+                                borderRadius: 12, backgroundColor: "transparent", cursor: "pointer", padding: 4, transition: "all 0.2s",
+                                transform: activeSlide === i ? "translateY(-4px)" : "none",
+                                boxShadow: activeSlide === i ? `0 8px 30px rgba(0,210,255,0.15)` : "none"
+                            }}
                         >
-                            {/* Grid Overlay */}
-                            <div style={{
-                                position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
-                                backgroundImage: 'linear-gradient(to right, rgba(0,210,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,210,255,0.03) 1px, transparent 1px)',
-                                backgroundSize: '40px 40px',
-                            }} />
-
-                            {/* Blur Orbs (hidden on export) */}
-                            <div data-blur-orb style={{ position: 'absolute', top: '-300px', right: '-300px', width: '900px', height: '900px', backgroundColor: '#00D2FF', borderRadius: '50%', opacity: 0.07, pointerEvents: 'none', zIndex: 0, filter: 'blur(200px)' }} />
-                            <div data-blur-orb style={{ position: 'absolute', bottom: '-300px', left: '-300px', width: '800px', height: '800px', backgroundColor: '#FFD700', borderRadius: '50%', opacity: 0.04, pointerEvents: 'none', zIndex: 0, filter: 'blur(200px)' }} />
-
-                            {/* Watermark Logo */}
-                            <div style={{ position: 'absolute', bottom: '48px', right: '48px', zIndex: 50, opacity: 0.5 }}>
-                                <RefinedIcon size={72} />
+                            <div style={{ width: 140, height: 105, backgroundColor: NAVY, borderRadius: 8, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, position: "relative", overflow: "hidden" }}>
+                                <div style={{ position: "absolute", top: -20, right: -20, width: 40, height: 40, backgroundColor: CYAN, opacity: 0.1, filter: "blur(10px)", borderRadius: "50%" }}></div>
+                                <span style={{ fontSize: 12, fontFamily: "monospace", color: activeSlide === i ? CYAN : GRAY, fontWeight: 700 }}>{String(i + 1).padStart(2, "0")}</span>
+                                <span style={{ fontSize: 9, color: GRAY, textTransform: "uppercase", letterSpacing: "0.1em", padding: "0 8px" }}>{sl.label}</span>
                             </div>
+                        </button>
+                    ))}
+                </div>
 
-                            {/* Website Watermark */}
-                            <div style={{ position: 'absolute', bottom: '56px', left: '64px', zIndex: 50, color: '#9CA3AF', opacity: 0.4, fontSize: '18px' }}>
-                                {uwData.website}
-                            </div>
-
-                            {/* Horizontal accent line */}
-                            <div style={{ position: 'absolute', bottom: '120px', left: '64px', right: '64px', height: '1px', backgroundColor: 'rgba(0,210,255,0.15)', zIndex: 5 }} />
-
-                            {/* ─── DYNAMIC CONTENT ─── */}
-                            <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%' }}>
-                                {activeMode === 'uw-hero'         && renderHero()}
-                                {activeMode === 'uw-before-after' && renderBeforeAfter()}
-                                {activeMode === 'uw-process'      && renderProcess()}
-                                {activeMode === 'uw-pricing'      && renderPricing()}
-                            </div>
-                        </div>
-                    </div>
-                </section>
             </main>
         </div>
     );
