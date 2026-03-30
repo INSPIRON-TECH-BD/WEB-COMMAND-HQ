@@ -74,7 +74,7 @@ export default function ContactPage() {
                                     </div>
                                 </a>
 
-                                <a href="mailto:consult@inspirontech.bd" className="flex items-start gap-6 group">
+                                <a href="mailto:hello@inspiron.tech" className="flex items-start gap-6 group">
                                     <div className="p-4 bg-white/5 border border-white/10 rounded-2xl group-hover:border-white/30 transition-colors">
                                         <Mail className="text-white" size={24} />
                                     </div>
